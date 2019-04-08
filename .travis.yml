@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+  - node
+cache: npm
+services:
+  - postgresql
+  - redis-server
+before_install:
+  - psql -c 'CREATE DATABASE TicketerRewrite;' -U postgres
+install:
+  - npm install
+script:
+  - npm test
+  - npm run coverage
+env:
+  -WEBHOOK_URL=https://discordapp.com/api/webhooks/564884796485009419/fGjn_NOrD9QcWt_3x-mk0oMP0yN9EuIPBygpcYqQlUHFZC0HMybKj7GcUCxSxad-GwU4
+after_failure:
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh failure $WEBHOOK_URL
