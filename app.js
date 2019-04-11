@@ -2,31 +2,16 @@ const { CommandoClient } = require('discord.js-commando');
 const Discord = require('discord.js');
 require('dotenv').config();
 const path = require('path');
-const fetch = require('node-fetch');
+const pg = require('./controllers/postgres.controller');
+const redis = require('./controllers/redis.controller');
 
-var utils = require("./utils/utils.js");
-
-const redis = require("async-redis").createClient();
-const { Pool } = require('pg');
-const pg = new Pool({
-    connectionString: process.env.CONNECTION_STRING,
-  });
-pg.connect((err, client, release) => {
-    if (err) {
-        return console.error('Error acquiring client', err.stack);
-    }
-    pg.query("CREATE TABLE IF NOT EXISTS servers(serverid varchar PRIMARY KEY, currentticket smallint DEFAULT 1, setup boolean DEFAULT FALSE, userid varchar);");
-    pg.query("CREATE TABLE IF NOT EXISTS premium(userid varchar, serverid varchar DEFAULT 0, key varchar, enabled boolean DEFAULT FALSE, paymentid varchar DEFAULT 0);");
-    pg.query("CREATE TABLE IF NOT EXISTS tickets(userid varchar, ticketid varchar, serverid varchar);")
-})
-
-const bot = new CommandoClient({
+const client = new CommandoClient({
     commandPrefix: process.env.DEFAULT_PREFIX,
     owner: process.env.OWNERS.split(","),
     invite: process.env.INVITE
-})
+});
 
-bot.registry
+client.registry
     .registerDefaultTypes()
     .registerGroups([
         ['tickets', 'Ticket commands'],
@@ -40,11 +25,22 @@ bot.registry
     .registerDefaultCommands()
     .registerCommandsIn(path.join(__dirname, 'commands'))
 
-bot.once('ready', async() => {
-    console.log(`Logged in as ${bot.user.tag}! (${bot.user.id})`)
-    bot.user.setActivity('Ticketer', {type: "PLAYING"})
+client.once('ready', async() => {
+    console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
+    client.user.setActivity(`${client.guilds.size} Guilds`, {type: "LISTENING"});
+    client.redis = redis;
+    client.db = pg;
+    console.log("Database properties succesfully linked")
+    console.log("Checking PG Tables");
+    await pg.query("CREATE TABLE IF NOT EXISTS servers(serverid varchar PRIMARY KEY, currentticket smallint DEFAULT 1, setup boolean DEFAULT FALSE, userid varchar);");
+    await pg.query("CREATE TABLE IF NOT EXISTS premium(userid varchar, serverid varchar, key varchar, enabled boolean DEFAULT FALSE, paymentid varchar DEFAULT 0);");
+    await pg.query("CREATE TABLE IF NOT EXISTS blacklist(userid varchar, serverid varchar);");
+    await pg.query("CREATE TABLE IF NOT EXISTS payments(userid varchar, paymentid varchar);");
+    await pg.query("CREATE TABLE IF NOT EXISTS votes(userid varchar PRIMARY KEY, count smallint);");
+    console.log("PG Tables Checked");
     })
+    
 
-bot.on('error', console.error)
+client.on('error', console.error)
 
-bot.login(process.env.BOT_TOKEN)
+client.login(process.env.BOT_TOKEN)
