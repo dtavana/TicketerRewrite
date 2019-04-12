@@ -9,13 +9,13 @@ module.exports = class SetCleanAll extends Command {
 			aliases: [],
 			group: 'settings',
 			memberName: 'setcleanall',
-            description: 'Sets whether the bot should delete all invocations of commands (true: On, false: Off)',
+            description: 'Sets whether the bot should delete all invocations of commands (`true`: On**, `false`: Off**)',
             guildOnly: true,
             //TODO: Add validation for premium
             args: [
                 {
                     key: 'cleanAll',
-                    prompt: 'Please enter the desired value for cleanAll (true: On, false: Off)',
+                    prompt: 'Sets whether the bot should delete all invocations of commands (`true`: On**, `false`: Off**)',
                     type: 'boolean'
                 }
             ]
