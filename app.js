@@ -4,6 +4,7 @@ require('dotenv').config();
 const path = require('path');
 const pg = require('./controllers/postgres.controller');
 const redis = require('./controllers/redis.controller');
+const redisUtils = require('./utils/redisUtils');
 
 const client = new CommandoClient({
     commandPrefix: process.env.DEFAULT_PREFIX,
@@ -38,7 +39,9 @@ client.once('ready', async() => {
     await pg.query("CREATE TABLE IF NOT EXISTS payments(userid varchar, paymentid varchar);");
     await pg.query("CREATE TABLE IF NOT EXISTS votes(userid varchar PRIMARY KEY, count smallint);");
     console.log("PG Tables Checked");
-    })
+    console.log("Starting Redis Sub Pipeline")
+    redisUtils.initSub(client, client.redis)
+})
     
 
 client.on('error', console.error)
