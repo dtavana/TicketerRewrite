@@ -24,7 +24,7 @@ module.exports = {
         let guild = options.guild;
 
         let cleanAll = await redisUtils.fetch(client, guild.id, "cleanAll");
-        client.setTimeout(utils.cleanMessages, 10000, cleanAll, cleanNew, messages)
+        client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages)
     },
     sendCleanSuccess: async(options) => {
         const successEmbed = new Discord.RichEmbed()

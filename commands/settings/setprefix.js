@@ -1,7 +1,6 @@
 const { Command } = require('discord.js-commando')
 const Discord = require('discord.js')
 const messageUtils = require('../../utils/messageUtils')
-const redisUtils = require('../../utils/redisUtils')
 
 module.exports = class SetPrefix extends Command {
 	constructor(client) {
@@ -24,10 +23,11 @@ module.exports = class SetPrefix extends Command {
     }
     
     async run(msg, {prefix}) {
-        let res = await redisUtils.setFetch(this.client, msg.guild.id, "prefix", prefix);
+        let res = await this.client.provider.set(msg.guild.id, "prefix", prefix);
+        msg.guild.commandPrefix = prefix;
         await messageUtils.sendSuccess({
             target: msg.channel, 
-            valString: `Old Prefix: \`${res.oldValue}\`\n\nNew Prefix: \`${prefix}\``,
+            valString: `Old Prefix: \`${res}\`\n\nNew Prefix: \`${prefix}\``,
             client: this.client,
             messages: [msg],
             guild: msg.guild

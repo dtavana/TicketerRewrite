@@ -1,7 +1,6 @@
 const { Command } = require('discord.js-commando')
 const Discord = require('discord.js')
 const messageUtils = require('../../utils/messageUtils')
-const redisUtils = require('../../utils/redisUtils')
 
 module.exports = class SetCleanAll extends Command {
 	constructor(client) {
@@ -24,10 +23,10 @@ module.exports = class SetCleanAll extends Command {
     }
     
     async run(msg, {cleanAll}) {
-        let res = await redisUtils.setFetch(this.client, msg.guild.id, "cleanAll", cleanAll);
+        let res = await this.client.provider.set(msg.guild.id, "cleanAll", cleanAll);
         await messageUtils.sendSuccess({
             target: msg.channel, 
-            valString: `Old Clean All: ${res.oldValue}\n\nNew Clean All: \`${cleanAll}\``,
+            valString: `Old Clean All: \`${res}\`\n\nNew Clean All: \`${cleanAll}\``,
             client: this.client,
             messages: [msg],
             guild: msg.guild

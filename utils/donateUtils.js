@@ -8,11 +8,11 @@ module.exports = {
         return key;
     },
     saveCredit: async(client, options) => {
-        await client.db.none("INSERT INTO premium (userid, key, paymentid) VALUES (${userId}, ${key}, ${paymentid});", options);
+        await client.provider.pg.none("INSERT INTO premium (userid, key, paymentid) VALUES (${userId}, ${key}, ${paymentid});", options);
     },
     removeCredit: async(client, paymentId) => {
-        let key = await client.db.one("SELECT key FROM premium WHERE paymentId = $1;", paymentId);
-        await client.db.none("DELETE FROM premium WHERE paymentId = $1;", paymentId);
+        let key = await client.provider.pg.one("SELECT key FROM premium WHERE paymentId = $1;", paymentId);
+        await client.provider.pg.none("DELETE FROM premium WHERE paymentId = $1;", paymentId);
         return key;
     }
 }

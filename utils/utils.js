@@ -1,5 +1,5 @@
 module.exports = {
-    cleanMessages: async(cleanmessages) => {
+    cleanMessages: async(clean, messages) => {
         if(clean) {
             for(let message of messages) {
                 message.delete();
