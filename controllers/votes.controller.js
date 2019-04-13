@@ -5,16 +5,16 @@ module.exports = {
     send: async(client, message) => {
         let data = JSON.parse(message);
 
-        let userId = message.userId;
-        let isWeekend = message.isWeekend;
+        let userId = data.userId;
+        let isWeekend = data.isWeekend;
         //TODO: check if user should receive credit
-        //let receiveCredit = message.receiveCredit;
+        //let receiveCredit = data.receiveCredit;
         //TODO: get current votes
         //let curVotes = ;
         let neededVotes = Number(process.env.NEEDED_VOTES);
 
         let user = client.fetchUser(userId);
-        let channel = client.channels.get(process.env.VOTES_CHANNEL);
+        let channel = client.channels.get(process.env.VOTES_LOG);
 
         let publicString;
         let privateString;

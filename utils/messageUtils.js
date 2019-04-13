@@ -31,7 +31,8 @@ module.exports = {
             .setColor("#00FF00")
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
-            .setDescription(options.valString)
+            .setDescription(options.valString);
+        
         
         let embedMessage = await options.target.send(successEmbed);
 
