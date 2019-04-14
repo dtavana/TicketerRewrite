@@ -24,11 +24,11 @@ module.exports = {
         let privateString;
 
         if(added) {
-            publicString =  `${user.tag} just purchased one month of premium. Key: \`${key}\``;
+            publicString =  `\`${user.tag}\` just purchased one month of premium. Key: \`${key}\``;
             privateString = `You have had one premium credit: \`${key}\` added to your account! Use the \`redeem\` command to get started!`;
         }
         else {
-            publicString =  `${user.tag} just had a premium credited removed. Key: \`${key}\``;
+            publicString =  `\`${user.tag}\` just had a premium credited removed. Key: \`${key}\``;
             privateString = `You have had one premium credit removed: \`${key}\` added to your account! Use the \`redeem\` command to get started!`;
         }
 

@@ -47,16 +47,6 @@ class TicketerProvider extends SettingProvider {
 				throw new Error(error);
 			}
 		})
-		this.sub.subscribe(process.env.API_GUILD_CHANNEL, (err, count) => {
-			if(err) {
-				throw new Error(error);
-			}
-		})
-		this.sub.subscribe(process.env.API_TICKET_CHANNEL, (err, count) => {
-			if(err) {
-				throw new Error(error);
-			}
-		})
 		
 		
 		// Listen for changes

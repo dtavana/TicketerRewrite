@@ -1,8 +1,8 @@
-const { Command } = require('discord.js-commando')
+const PremiumCommand  = require('../premium-command')
 const Discord = require('discord.js')
 const messageUtils = require('../../utils/messageUtils')
 
-module.exports = class SetCleanAll extends Command {
+module.exports = class SetCleanAll extends PremiumCommand {
 	constructor(client) {
 		super(client, {
 			name: 'setcleanall',
@@ -23,6 +23,16 @@ module.exports = class SetCleanAll extends Command {
     }
     
     async run(msg, {cleanAll}) {
+        let premium = await this.checkPremium(this.client, msg);
+        if(!premium) {
+            return await messageUtils.sendError({
+                target: msg.channel, 
+                valString: `This is a premium command. Please use the ${msg.guild.commandPrefix}upgrade command in order to purchase premium.`,
+                client: this.client,
+                messages: [msg],
+                guild: msg.guild
+            });
+        }
         let res = await this.client.provider.set(msg.guild.id, "cleanAll", cleanAll);
         await messageUtils.sendSuccess({
             target: msg.channel, 

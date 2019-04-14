@@ -1,8 +1,6 @@
 require('dotenv').config();
 const votesController = require('./votes.controller')
 const donateController = require('./donate.controller')
-const guildController = require('./guild.controller')
-const ticketController = require('./ticket.controller')
 
 module.exports = {
     handleIncomingMessage: async(client, channel, message) => {
@@ -13,15 +11,6 @@ module.exports = {
             case process.env.DONATE_CHANNEL:
                 await donateController.send(client, message)
                 break;
-            /*
-                case process.env.API_GUILD_CHANNEL:
-                await guildController.send(client, message)
-                break;
-            case process.env.API_TICKET_CHANNEL:
-                await ticketController.send(client, message)
-                break;
-            */
-
         }
     }
 }

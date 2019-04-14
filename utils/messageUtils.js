@@ -26,13 +26,34 @@ module.exports = {
         let cleanAll = await redisUtils.fetch(client, guild.id, "cleanAll");
         client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages)
     },
+    sendError: async(options) => {
+        const errorEmbed = new Discord.RichEmbed()
+            .setTitle("Error ❌")
+            .setColor("#FF0000")
+            .setTimestamp()
+            .setFooter(process.env.FOOTER_TEXT)
+            .setDescription(options.valString)
+        
+        let embedMessage = await options.target.send(errorEmbed);
+
+        let client = options.client || null;
+        if(client === null){
+            return;
+        }
+        let messages = options.messages;
+        messages.push(embedMessage);
+
+        let guild = options.guild;
+
+        let cleanAll = await redisUtils.fetch(client, guild.id, "cleanAll");
+        client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages)
+    },
     sendCleanSuccess: async(options) => {
         const successEmbed = new Discord.RichEmbed()
             .setColor("#00FF00")
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
             .setDescription(options.valString);
-        
         
         let embedMessage = await options.target.send(successEmbed);
 
