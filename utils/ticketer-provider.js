@@ -26,11 +26,15 @@ class TicketerProvider extends SettingProvider {
 
 		// Load all settings
 		const guilds = await this.pg.manyOrNone('SELECT serverid FROM premium WHERE enabled = True;');
-		for(const guildId of guilds) {
+		for(let guildId of guilds) {
+			guildId = guildId.serverid;
 			this.guilds.push(guildId);
 			let settings;
-            settings = await this.getSettings(guildId);
-			this.setupGuild(guild, settings);
+			settings = await this.getSettings(guildId);
+			if(settings === null) {
+				continue;
+			}
+			this.setupGuild(guildId, settings);
 		}
 		
 		//Redis pipelines

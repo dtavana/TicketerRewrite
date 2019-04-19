@@ -11,7 +11,6 @@ module.exports = class SetCleanAll extends PremiumCommand {
 			memberName: 'setcleanall',
             description: 'Sets whether the bot should delete all invocations of commands (`true`: On**, `false`: Off**)',
             guildOnly: true,
-            //TODO: Add validation for premium
             args: [
                 {
                     key: 'cleanAll',

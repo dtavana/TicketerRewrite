@@ -12,14 +12,15 @@ module.exports = class SetCleanAll extends Command {
 			memberName: 'redeem',
             description: 'Redeem an available premium credit',
             guildOnly: true,
-            //TODO: Add validation for premium
 		});
     }
     
     async run(msg, {cleanAll}) {
         let credits = await donateUtils.getCredits(this.client, msg.author.id);
-        let filteredCredits = credits.filter(credit => !credit.enabled)
-        if(filteredCredits.length == 0) {
+        if(credits !== null) {
+            let filteredCredits = credits.filter(credit => !credit.enabled)
+        }
+        if(credits === null || filteredCredits.length == 0) {
             return await messageUtils.sendError({
                 target: msg.channel, 
                 valString: `You have no credits to redeem. Please use the ${msg.guild.commandPrefix}upgrade command in order to purchase premium.`,

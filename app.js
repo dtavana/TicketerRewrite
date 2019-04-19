@@ -35,7 +35,7 @@ client.registry.unregisterCommand(prefixCommand);
 
 client.once('ready', async() => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
-    client.user.setActivity(`${client.guilds.size} Guilds`, {type: "LISTENING"});
+    client.user.setActivity(`t!help | v2.0`, {type: "WATCHING"});
 })
     
 

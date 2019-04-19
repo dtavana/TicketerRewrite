@@ -1,8 +1,8 @@
-const { Command } = require('discord.js-commando')
+const PremiumCommand  = require('../premium-command')
 const Discord = require('discord.js')
 const messageUtils = require('../../utils/messageUtils')
 
-module.exports = class SetPrefix extends Command {
+module.exports = class SetPrefix extends PremiumCommand {
 	constructor(client) {
 		super(client, {
 			name: 'setprefix',
@@ -11,7 +11,6 @@ module.exports = class SetPrefix extends Command {
 			memberName: 'setprefix',
             description: 'Sets the prefix for a guild',
             guildOnly: true,
-            //TODO: Add validation for premium
             args: [
                 {
                     key: 'prefix',
@@ -23,6 +22,16 @@ module.exports = class SetPrefix extends Command {
     }
     
     async run(msg, {prefix}) {
+        let premium = await this.checkPremium(this.client, msg);
+        if(!premium) {
+            return await messageUtils.sendError({
+                target: msg.channel, 
+                valString: `This is a premium command. Please use the ${msg.guild.commandPrefix}upgrade command in order to purchase premium.`,
+                client: this.client,
+                messages: [msg],
+                guild: msg.guild
+            });
+        }
         let res = await this.client.provider.set(msg.guild.id, "prefix", prefix);
         msg.guild.commandPrefix = prefix;
         await messageUtils.sendSuccess({
