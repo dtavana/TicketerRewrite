@@ -1,9 +1,9 @@
-const { Command }  = require('discord.js-commando')
+const PremiumCommand  = require('../premium-command')
 const Discord = require('discord.js')
 const messageUtils = require('../../utils/messageUtils')
 const donateUtils = require('../../utils/donateUtils')
 
-module.exports = class SetCleanAll extends Command {
+module.exports = class SetCleanAll extends PremiumCommand {
 	constructor(client) {
 		super(client, {
 			name: 'redeem',
@@ -12,18 +12,30 @@ module.exports = class SetCleanAll extends Command {
 			memberName: 'redeem',
             description: 'Redeem an available premium credit',
             guildOnly: true,
+            userPermissions: ["MANAGE_GUILD"]
 		});
     }
     
     async run(msg, {cleanAll}) {
+        let premium = await this.checkPremium(this.client, msg);
+        if(premium) {
+            return await messageUtils.sendError({
+                target: msg.channel, 
+                valString: `This server already has premium enabled! If this is in error, join our support server using the \`${msg.guild.commandPrefix}support\` command.`,
+                client: this.client,
+                messages: [msg],
+                guild: msg.guild
+            });
+        }
         let credits = await donateUtils.getCredits(this.client, msg.author.id);
+        let filteredCredits;
         if(credits !== null) {
-            let filteredCredits = credits.filter(credit => !credit.enabled)
+            filteredCredits = credits.filter(credit => !credit.enabled)
         }
         if(credits === null || filteredCredits.length == 0) {
             return await messageUtils.sendError({
                 target: msg.channel, 
-                valString: `You have no credits to redeem. Please use the ${msg.guild.commandPrefix}upgrade command in order to purchase premium.`,
+                valString: `You have no credits to redeem. Please use the \`${msg.guild.commandPrefix}upgrade\` command in order to purchase premium.`,
                 client: this.client,
                 messages: [msg],
                 guild: msg.guild

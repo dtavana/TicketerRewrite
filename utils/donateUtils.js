@@ -12,8 +12,14 @@ module.exports = {
     enableCredit: async(client, args) => {
         await client.provider.pg.none("UPDATE premium SET enabled = True, serverid = ${serverId} WHERE key = ${key}", args);
     },
+    disableCredit: async(client, guildId) => {
+        let key = await client.provider.pg.one("SELECT key FROM premium WHERE serverid = $1;", [guildId]);
+        key = key.key;
+        await client.provider.pg.none("UPDATE premium SET enabled = False, serverid = 0 WHERE key = $1;", [key]);
+        return key;
+    },
     removeCredit: async(client, paymentId) => {
-        let key = await client.provider.pg.one("SELECT key FROM premium WHERE paymentId = $1;", paymentId);
+        let key = await client.provider.pg.one("SELECT key FROM premium WHERE paymentid = $1;", paymentId);
         await client.provider.pg.none("DELETE FROM premium WHERE paymentId = $1;", paymentId);
         return key;
     },
@@ -23,5 +29,9 @@ module.exports = {
             return null;
         }
         return credits;
+    },
+    getCreditOwner: async(client, serverId) => {
+        let userId = await client.provider.pg.oneOrNone("SELECT userid FROM premium WHERE serverid = $1;", [serverId]);
+        return userId;
     }
 }
