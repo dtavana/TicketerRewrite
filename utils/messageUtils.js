@@ -23,7 +23,7 @@ module.exports = {
 
         let guild = options.guild;
 
-        let cleanAll = await redisUtils.fetch(client, guild.id, "cleanAll");
+        let cleanAll = await client.provider.get(guild.id, "cleanAll");
         client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages)
     },
     sendError: async(options) => {
@@ -45,7 +45,7 @@ module.exports = {
 
         let guild = options.guild;
 
-        let cleanAll = await redisUtils.fetch(client, guild.id, "cleanAll");
+        let cleanAll = await client.provider.get(guild.id, "cleanAll");
         client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages)
     },
     sendCleanSuccess: async(options) => {
@@ -66,7 +66,7 @@ module.exports = {
 
         let guild = options.guild;
 
-        let cleanNew = await redisUtils.fetch(client, guild.id, "cleanNew");
+        let cleanNew = await client.provider.get(guild.id, "cleanNew");
         client.setTimeout(utils.cleanMessages, 10000, cleanNew, messages)
     }
 }

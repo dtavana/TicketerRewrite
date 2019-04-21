@@ -1,9 +1,9 @@
-const { Command }  = require('discord.js-commando')
+const TicketerCommand  = require('../ticketer-command')
 const Discord = require('discord.js')
 const messageUtils = require('../../utils/messageUtils')
 const donateUtils = require('../../utils/donateUtils')
 
-module.exports = class SetCleanAll extends Command {
+module.exports = class SetCleanAll extends TicketerCommand {
 	constructor(client) {
 		super(client, {
 			name: 'credits',
