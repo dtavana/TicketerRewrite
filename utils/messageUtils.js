@@ -1,16 +1,15 @@
 const Discord = require('discord.js');
 const utils = require('./utils');
-const redisUtils = require('./redisUtils')
 require('dotenv').config();
 
 module.exports = {
     sendSuccess: async(options) => {
         const successEmbed = new Discord.MessageEmbed()
-            .setTitle("Success ✅")
-            .setColor("#00FF00")
+            .setTitle('Success ✅')
+            .setColor('#00FF00')
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
-            .setDescription(options.valString)
+            .setDescription(options.valString);
         
         let embedMessage = await options.target.send(successEmbed);
 
@@ -23,17 +22,17 @@ module.exports = {
 
         let guild = options.guild;
 
-        let cleanAll = await client.provider.get(guild.id, "cleanAll");
-        client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages)
+        let cleanAll = await client.provider.get(guild.id, 'cleanAll');
+        client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages);
         return embedMessage;
     },
     sendError: async(options) => {
         const errorEmbed = new Discord.MessageEmbed()
-            .setTitle("Error ❌")
-            .setColor("#FF0000")
+            .setTitle('Error ❌')
+            .setColor('#FF0000')
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
-            .setDescription(options.valString)
+            .setDescription(options.valString);
         
         let embedMessage = await options.target.send(errorEmbed);
 
@@ -46,13 +45,13 @@ module.exports = {
 
         let guild = options.guild;
 
-        let cleanAll = await client.provider.get(guild.id, "cleanAll");
-        client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages)
+        let cleanAll = await client.provider.get(guild.id, 'cleanAll');
+        client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages);
         return embedMessage;
     },
     sendCleanSuccess: async(options) => {
         const successEmbed = new Discord.MessageEmbed()
-            .setColor("#00FF00")
+            .setColor('#00FF00')
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
             .setDescription(options.valString);
@@ -68,8 +67,8 @@ module.exports = {
 
         let guild = options.guild;
 
-        let cleanNew = await client.provider.get(guild.id, "cleanNew");
-        client.setTimeout(utils.cleanMessages, 10000, cleanNew, messages)
+        let cleanNew = await client.provider.get(guild.id, 'cleanNew');
+        client.setTimeout(utils.cleanMessages, 10000, cleanNew, messages);
         return embedMessage;
     }
-}
+};

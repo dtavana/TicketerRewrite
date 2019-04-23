@@ -1,14 +1,13 @@
-const PremiumCommand  = require('../premium-command')
-const Discord = require('discord.js')
-const messageUtils = require('../../utils/messageUtils')
+const PremiumCommand  = require('../premium-command');
+const messageUtils = require('../../utils/messageUtils');
 
 module.exports = class SetCleanAll extends PremiumCommand {
-	constructor(client) {
-		super(client, {
-			name: 'setcleanall',
-			aliases: [],
-			group: 'settings',
-			memberName: 'setcleanall',
+    constructor(client) {
+        super(client, {
+            name: 'setcleanall',
+            aliases: [],
+            group: 'settings',
+            memberName: 'setcleanall',
             description: 'Sets whether the bot should delete all invocations of commands (`true`: On**, `false`: Off**)',
             guildOnly: true,
             args: [
@@ -18,11 +17,11 @@ module.exports = class SetCleanAll extends PremiumCommand {
                     type: 'boolean'
                 }
             ]
-		});
+        });
     }
     
     async run(msg, {cleanAll}, fromPattern, result) {
-        let res = await this.client.provider.set(msg.guild.id, "cleanAll", cleanAll);
+        let res = await this.client.provider.set(msg.guild.id, 'cleanAll', cleanAll);
         await messageUtils.sendSuccess({
             target: msg.channel, 
             valString: `Old Clean All: \`${res}\`\n\nNew Clean All: \`${cleanAll}\``,

@@ -1,21 +1,20 @@
-const TicketerCommand  = require('../ticketer-command')
-const Discord = require('discord.js')
-const messageUtils = require('../../utils/messageUtils')
-const donateUtils = require('../../utils/donateUtils')
+const TicketerCommand  = require('../ticketer-command');
+const messageUtils = require('../../utils/messageUtils');
+const donateUtils = require('../../utils/donateUtils');
 
 module.exports = class SetCleanAll extends TicketerCommand {
-	constructor(client) {
-		super(client, {
-			name: 'withdraw',
-			aliases: [],
-			group: 'credits',
-			memberName: 'withdraw',
+    constructor(client) {
+        super(client, {
+            name: 'withdraw',
+            aliases: [],
+            group: 'credits',
+            memberName: 'withdraw',
             description: 'Withdraws a currently enabled credit. **NOTE:** Can only be run by the user who enabled premium on the server',
             guildOnly: true,
-		});
+        });
     }
     
-    async run(msg, {cleanAll}, fromPattern, result) {
+    async run(msg, fromPattern, result) {
         let ownerId = await donateUtils.getCreditOwner(this.client, msg.guild.id);
         if(ownerId === null) {
             return await messageUtils.sendError({

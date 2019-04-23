@@ -1,14 +1,13 @@
-const PremiumCommand  = require('../premium-command')
-const Discord = require('discord.js')
-const messageUtils = require('../../utils/messageUtils')
+const PremiumCommand  = require('../premium-command');
+const messageUtils = require('../../utils/messageUtils');
 
 module.exports = class SetPrefix extends PremiumCommand {
-	constructor(client) {
-		super(client, {
-			name: 'setprefix',
-			aliases: [],
-			group: 'settings',
-			memberName: 'setprefix',
+    constructor(client) {
+        super(client, {
+            name: 'setprefix',
+            aliases: [],
+            group: 'settings',
+            memberName: 'setprefix',
             description: 'Sets the prefix for a guild',
             guildOnly: true,
             args: [
@@ -18,7 +17,7 @@ module.exports = class SetPrefix extends PremiumCommand {
                     type: 'string'
                 }
             ]
-		});
+        });
     }
     
     async run(msg, {prefix}, fromPattern, result) {
@@ -32,7 +31,7 @@ module.exports = class SetPrefix extends PremiumCommand {
                 guild: msg.guild
             });
         }
-        let res = await this.client.provider.set(msg.guild.id, "prefix", prefix);
+        let res = await this.client.provider.set(msg.guild.id, 'prefix', prefix);
         msg.guild.commandPrefix = prefix;
         await messageUtils.sendSuccess({
             target: msg.channel, 

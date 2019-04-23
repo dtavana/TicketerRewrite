@@ -14,7 +14,7 @@ module.exports = {
         var key;
         if(added) {
             key = donateUtils.generateKey();
-            await donateUtils.saveCredit(client, {"userid": userId, "key": key, "paymentid": paymentId});
+            await donateUtils.saveCredit(client, {'userid': userId, 'key': key, 'paymentid': paymentId});
         }
         else {
             key = await donateUtils.removeCredit(client, paymentId);
@@ -44,4 +44,4 @@ module.exports = {
             client: null
         });
     }
-}
+};
