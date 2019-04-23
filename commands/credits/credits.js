@@ -2,7 +2,7 @@ const TicketerCommand  = require('../ticketer-command');
 const messageUtils = require('../../utils/messageUtils');
 const donateUtils = require('../../utils/donateUtils');
 
-module.exports = class SetCleanAll extends TicketerCommand {
+module.exports = class CreditsCommand extends TicketerCommand {
     constructor(client) {
         super(client, {
             name: 'credits',

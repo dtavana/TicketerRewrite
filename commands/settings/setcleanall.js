@@ -1,7 +1,7 @@
 const PremiumCommand  = require('../premium-command');
 const messageUtils = require('../../utils/messageUtils');
 
-module.exports = class SetCleanAll extends PremiumCommand {
+module.exports = class SetCleanAllCommand extends PremiumCommand {
     constructor(client) {
         super(client, {
             name: 'setcleanall',
