@@ -7,14 +7,6 @@ module.exports = class PremiumCommand extends TicketerCommand {
     constructor(client, info) {
         super(client, info);
     }
-
-    async checkPremium(client, msg) {
-        let res = await client.provider.pg.oneOrNone('SELECT key FROM premium WHERE serverid = $1;', [msg.guild.id]);
-        if(!res) {
-            return false;
-        }
-        return true;
-    }
     
     hasPermission(message) {
         if(!this.client.provider.guilds.includes(message.guild.id)) {

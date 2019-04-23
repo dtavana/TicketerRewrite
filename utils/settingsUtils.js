@@ -1,37 +1,59 @@
 module.exports = {
-    initializeServer: async(client, guild) => {
+    initializeServer: async(client, guild, ticketchannel, premium) => {
         let createdRole;
         let createdCategory;
+        let oldData;
+        let newData;
 
+        oldData = await client.provider.get(guild.id, "ticketchannels", null);
+
+        if(oldData === undefined || oldData === null) {
+            oldData = [];
+        }
+        else {
+            oldData = JSON.parse(oldData);
+        }
+
+        if(oldData.length >= 1 && !premium) {
+            return `Non premium guilds may only set **1 ticket channel**. To have up to **5 ticket channels**, consider upgrading to premium using the ${guild.commandPrefix}upgrade command.`;
+        }
+        
+        if(oldData.length >= 5) {
+            return "Premium guilds may only have up to **5 ticket channels**.";
+        }
+        
         createdRole = await guild.roles.create({
             data: {
-                name: "Ticketer Admin",
+                name: `${ticketchannel.name} Admin`,
                 color: "RED",
                 permissions: 0
             },
             reason: "Ticketer Setup"
         });
         createdCategory = await guild.channels.create(
-            "Ticketer Category",
+            `${ticketchannel.name} Category`,
             {
                 type: "category"
             }
         );
-        
-        let oldRole = await client.provider.set(guild.id, "adminRole", createdRole.id);
-        let oldCategory = await client.provider.set(guild.id, "category", createdCategory.id);
-        
-        try {
-            await guild.roles.get(oldRole).delete("Ticketer Setup");
-        }
-        catch {}
 
-        try {
-            await client.channels.get(oldCategory).delete("Ticketer Setup");
+        let ticketchannelid = ticketchannel.id
+
+        newData = {};
+        newData[ticketchannelid] = {
+            role: createdRole.id,
+            category: createdCategory.id
         }
-        catch {}
+        
+        oldData.push(newData);
+
+        newData = JSON.stringify(oldData);
+
+        console.log(newData);
+        await client.provider.set(guild.id, "ticketchannels", newData);
 
         return {
+            channel: ticketchannel,
             role: createdRole,
             category: createdCategory
         }

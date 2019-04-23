@@ -10,6 +10,7 @@ module.exports = class SetPrefixCommand extends PremiumCommand {
             memberName: 'setprefix',
             description: 'Sets the prefix for a guild',
             guildOnly: true,
+            userPermissions: ['MANAGE_GUILD'],
             args: [
                 {
                     key: 'prefix',

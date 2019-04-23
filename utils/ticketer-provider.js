@@ -99,13 +99,19 @@ class TicketerProvider extends SettingProvider {
     async set(guild, key, val) {
         guild = this.constructor.getGuildID(guild);
         let settings = await this.getSettings(guild);
-        if(!settings) {
+        let premium = await this.client.provider.pg.oneOrNone('SELECT key FROM premium WHERE serverid = $1;', [guild]);
+        if(!settings && premium) {
             this.guilds.push(guild);
         }
 		
         await this.redis.hset(guild !== 'global' ? guild : 0, key, val);
         if(guild === 'global') this.updateOtherShards(key, val);
-        return settings[key];
+        try {
+            return settings[key];
+        }
+        catch {
+            return null;
+        }
     }
 
     async remove(guild, key) {
@@ -122,8 +128,8 @@ class TicketerProvider extends SettingProvider {
     async clear(guild) {
         guild = this.constructor.getGuildID(guild);
         const settings = await this.getSettings(guild);
-        if(!settings) return;
         this.guilds = this.guilds.filter(id => id != guild);
+        if(!settings) return;
         await this.redis.del(guild !== 'global' ? guild : 0);
     }
 

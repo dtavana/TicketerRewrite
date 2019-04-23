@@ -8,6 +8,14 @@ module.exports = class TicketerCommand extends Command {
         super(client, info);
     }
 
+    async checkPremium(client, msg) {
+        let res = await client.provider.pg.oneOrNone('SELECT key FROM premium WHERE serverid = $1;', [msg.guild.id]);
+        if(!res) {
+            return false;
+        }
+        return true;
+    }
+    
     onError(err, message, args, fromPattern, result) {
         const owners = this.client.owners;
         const ownerList = owners ? owners.map((usr, i) => {

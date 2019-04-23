@@ -18,6 +18,7 @@ module.exports = class RedeemCommand extends TicketerCommand {
     }
     
     async run(msg, fromPattern, result) {
+
         let premium = await this.checkPremium(this.client, msg);
         if(premium) {
             return await messageUtils.sendError({
@@ -59,7 +60,7 @@ module.exports = class RedeemCommand extends TicketerCommand {
 
     hasPermission(message, ownerOverride = true) {
         if(this.client.provider.guilds.includes(message.guild.id)) {
-            return `This is a premium command. Please use the \`${message.guild.commandPrefix}upgrade\` command in order to purchase premium.`;
+            return `This guild already has premium enabled.`;
         }
         
         if(this.ownerOnly && (ownerOverride || !this.client.isOwner(message.author))) {
