@@ -21,56 +21,63 @@ module.exports = class TicketerCommand extends Command {
             `
         let res;
         messageUtils.sendError({
-            target: msg.channel, 
+            target: message.channel, 
             valString: resStr,
             client: this.client,
-            messages: [msg],
-            guild: msg.guild
+            messages: [message],
+            guild: message.guild
         })
-            .then(result =>  res = result)
-        return res;
+            .then(result => {
+                return result;
+            })
     }
 
     onBlock(message, reason, data) {
-        let resStr;
+        var resStr;
         switch(reason) {
 			case 'guildOnly':
-				resStr = `The \`${this.name}\` command must be used in a server channel.`;
+                resStr = `The \`${this.name}\` command must be used in a server channel.`;
+                break;
 			case 'nsfw':
-				resStr = `The \`${this.name}\` command can only be used in NSFW channels.`;
+                resStr = `The \`${this.name}\` command can only be used in NSFW channels.`;
+                break;
 			case 'permission': {
 				if(data.response) resStr = data.response;
                 else resStr = `You do not have permission to use the \`${this.name}\` command.`;
+                break;
 			}
 			case 'clientPermissions': {
 				if(data.missing.length === 1) {
-					resStr = `I need the "${permissions[data.missing[0]]}" permission for the \`${this.name}\` command to work.`
+                    resStr = `I need the "${permissions[data.missing[0]]}" permission for the \`${this.name}\` command to work.`;
+                    break;
 				}
                 else {
                     resStr = oneLine`
                         I need the following permissions for the \`${this.name}\` command to work:
                         ${data.missing.map(perm => permissions[perm]).join(', ')}
                         `
+                        break;
                 }
 			}
 			case 'throttling': {
-				resStr = `You may not use the \`${this.name}\` command again for another ${data.remaining.toFixed(1)} seconds.`
+                resStr = `You may not use the \`${this.name}\` command again for another ${data.remaining.toFixed(1)} seconds.`
+                break;
 			}
 			default:
                 resStr =  null;
         }
         if(resStr === null) return null;
-        let res;
         messageUtils.sendError({
-            target: msg.channel, 
+            target: message.channel, 
             valString: resStr,
             client: this.client,
-            messages: [msg],
-            guild: msg.guild
+            messages: [message],
+            guild: message.guild
         })
-            .then(result =>  res = result)
-        return resStr;
+            .then(result => {
+                return result;
+            })
         
-	}
+    }
 
 }

@@ -5,7 +5,7 @@ require('dotenv').config();
 
 module.exports = {
     sendSuccess: async(options) => {
-        const successEmbed = new Discord.RichEmbed()
+        const successEmbed = new Discord.MessageEmbed()
             .setTitle("Success ✅")
             .setColor("#00FF00")
             .setTimestamp()
@@ -16,7 +16,7 @@ module.exports = {
 
         let client = options.client || null;
         if(client === null){
-            return;
+            return embedMessage;
         }
         let messages = options.messages;
         messages.push(embedMessage);
@@ -25,9 +25,10 @@ module.exports = {
 
         let cleanAll = await client.provider.get(guild.id, "cleanAll");
         client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages)
+        return embedMessage;
     },
     sendError: async(options) => {
-        const errorEmbed = new Discord.RichEmbed()
+        const errorEmbed = new Discord.MessageEmbed()
             .setTitle("Error ❌")
             .setColor("#FF0000")
             .setTimestamp()
@@ -47,9 +48,10 @@ module.exports = {
 
         let cleanAll = await client.provider.get(guild.id, "cleanAll");
         client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages)
+        return embedMessage;
     },
     sendCleanSuccess: async(options) => {
-        const successEmbed = new Discord.RichEmbed()
+        const successEmbed = new Discord.MessageEmbed()
             .setColor("#00FF00")
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
@@ -68,5 +70,6 @@ module.exports = {
 
         let cleanNew = await client.provider.get(guild.id, "cleanNew");
         client.setTimeout(utils.cleanMessages, 10000, cleanNew, messages)
+        return embedMessage;
     }
 }

@@ -21,23 +21,13 @@ module.exports = class SetCleanAll extends PremiumCommand {
 		});
     }
     
-    async run(msg, {cleanAll}) {
-        let premium = await this.checkPremium(this.client, msg);
-        if(!premium) {
-            return await messageUtils.sendError({
-                target: msg.channel, 
-                valString: `This is a premium command. Please use the ${msg.guild.commandPrefix}upgrade command in order to purchase premium.`,
-                client: this.client,
-                messages: [msg],
-                guild: msg.guild
-            });
-        }
+    async run(msg, {cleanAll}, fromPattern, result) {
         let res = await this.client.provider.set(msg.guild.id, "cleanAll", cleanAll);
         await messageUtils.sendSuccess({
             target: msg.channel, 
             valString: `Old Clean All: \`${res}\`\n\nNew Clean All: \`${cleanAll}\``,
             client: this.client,
-            messages: [msg],
+            messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild
         });
 

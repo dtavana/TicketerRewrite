@@ -15,7 +15,7 @@ module.exports = class SetCleanAll extends TicketerCommand {
 		});
     }
     
-    async run(msg, {cleanAll}) {
+    async run(msg, {cleanAll}, fromPattern, result) {
         let credits = await donateUtils.getCredits(this.client, msg.author.id);
         let filteredCredits = credits.filter(credit => !credit.enabled)
         if(credits === null) {
@@ -23,7 +23,7 @@ module.exports = class SetCleanAll extends TicketerCommand {
                 target: msg.channel, 
                 valString: `You have no credits. Please use the ${msg.guild.commandPrefix}upgrade command in order to purchase premium.`,
                 client: this.client,
-                messages: [msg],
+                messages: [msg].concat(result.prompts, result.answers),
                 guild: msg.guild
             });
         }
@@ -41,7 +41,7 @@ module.exports = class SetCleanAll extends TicketerCommand {
             target: msg.channel, 
             valString: embedStr,
             client: this.client,
-            messages: [msg],
+            messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild
         });
     }

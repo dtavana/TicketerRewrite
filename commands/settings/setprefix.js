@@ -21,14 +21,14 @@ module.exports = class SetPrefix extends PremiumCommand {
 		});
     }
     
-    async run(msg, {prefix}) {
+    async run(msg, {prefix}, fromPattern, result) {
         let premium = await this.checkPremium(this.client, msg);
         if(!premium) {
             return await messageUtils.sendError({
                 target: msg.channel, 
                 valString: `This is a premium command. Please use the ${msg.guild.commandPrefix}upgrade command in order to purchase premium.`,
                 client: this.client,
-                messages: [msg],
+                messages: [msg].concat(result.prompts, result.answers),
                 guild: msg.guild
             });
         }
@@ -38,7 +38,7 @@ module.exports = class SetPrefix extends PremiumCommand {
             target: msg.channel, 
             valString: `Old Prefix: \`${res}\`\n\nNew Prefix: \`${prefix}\``,
             client: this.client,
-            messages: [msg],
+            messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild
         });
 
