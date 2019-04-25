@@ -67,8 +67,6 @@ module.exports = {
 
         let guild = options.guild;
 
-        let cleanNew = await client.provider.get(guild.id, 'cleanNew');
-        client.setTimeout(utils.cleanMessages, 10000, cleanNew, messages);
         return embedMessage;
     }
 };

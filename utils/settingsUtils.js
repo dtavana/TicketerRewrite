@@ -1,14 +1,71 @@
 module.exports = {
-    initializeServer: async(client, guild, ticketchannel, premium) => {
-        let createdRole;
+    initializeRoles: async(client, guild) => {
+        let createdAdminRole;
+        let createdModeratorRole;
         let createdCategory;
+
+        let adminRole = await client.provider.get(guild.id, "adminRole", null);
+        let moderatorRole = await client.provider.get(guild.id, "moderatorRole", null);
+
+        try {
+            adminRole = await guild.roles.fetch(adminRole);
+            adminRole.delete("Rerunning Ticketer Role Setup;")
+        }
+        catch() {}
+
+        try {
+            moderatorRole = await guild.roles.fetch(moderatorRole);
+            moderatorRole.delete("Rerunning Ticketer Role Setup;")
+        }
+        catch {}
+        
+
+        createdAdminRole = await guild.roles.create({
+            data: {
+                name: `Ticketer Admin`,
+                color: "RED",
+                permissions: 0
+            },
+            reason: "Ticketer Setup"
+        });
+        createdModeratorRole = await guild.roles.create({
+            data: {
+                name: `Ticketer Moderator`,
+                color: "GREEN",
+                permissions: 0
+            },
+            reason: "Ticketer Setup"
+        });
+
+        await client.provider.set(guild.id, "adminRole", createdAdminRole.id);
+        await client.provider.set(guild.id, "moderatorRole", createdModeratorRole.id);
+
+        return {
+            adminRole: createdAdminRole,
+            moderatorRole: createdModeratorRole
+        };
+    }
+    
+    /*
+    initializeServer: async(client, guild, ticketchannel, premium) => {
+        let createdAdminRole;
+        let createdModeratorRole;
+        let createdCategory;
+        let ticketchannelname;
         let oldData;
         let newData;
+
+        if(!ticketchannel) {
+            ticketchannelname = "Ticketer";
+        }
+        else {
+            ticketchannelname = ticetchannel.name;
+        }
 
         oldData = await client.provider.get(guild.id, "ticketchannels", null);
 
         if(oldData === undefined || oldData === null) {
-            oldData = [];
+            oldData = {};
         }
         else {
             oldData = JSON.parse(oldData);
@@ -22,16 +79,24 @@ module.exports = {
             return "Premium guilds may only have up to **5 ticket channels**.";
         }
         
-        createdRole = await guild.roles.create({
+        createdAdminRole = await guild.roles.create({
             data: {
-                name: `${ticketchannel.name} Admin`,
+                name: `Ticketer Admin`,
                 color: "RED",
                 permissions: 0
             },
             reason: "Ticketer Setup"
         });
+        createdModeratorRole = await guild.roles.create({
+            data: {
+                name: `Ticketer Moderator`,
+                color: "GREEN",
+                permissions: 0
+            },
+            reason: "Ticketer Setup"
+        });
         createdCategory = await guild.channels.create(
-            `${ticketchannel.name} Category`,
+            `${ticketchannelname} Category`,
             {
                 type: "category"
             }
@@ -39,23 +104,22 @@ module.exports = {
 
         let ticketchannelid = ticketchannel.id
 
-        newData = {};
-        newData[ticketchannelid] = {
-            role: createdRole.id,
-            category: createdCategory.id
+        oldData[ticketchannelid] = {
+            "adminRole": createdAdminRole.id,
+            "moderatorRole": createdModeratorRole.id,
+            "category": createdCategory.id
         }
         
-        oldData.push(newData);
-
         newData = JSON.stringify(oldData);
 
-        console.log(newData);
         await client.provider.set(guild.id, "ticketchannels", newData);
 
         return {
             channel: ticketchannel,
-            role: createdRole,
+            adminRole: createdAdminRole,
+            moderatorRole: createdModeratorRole,
             category: createdCategory
         }
     }
+    */
 };
