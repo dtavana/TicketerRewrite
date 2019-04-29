@@ -11,7 +11,7 @@ module.exports = {
             adminRole = await guild.roles.fetch(adminRole);
             adminRole.delete("Rerunning Ticketer Role Setup;")
         }
-        catch() {}
+        catch {}
 
         try {
             moderatorRole = await guild.roles.fetch(moderatorRole);
@@ -44,28 +44,19 @@ module.exports = {
             adminRole: createdAdminRole,
             moderatorRole: createdModeratorRole
         };
-    }
-    
-    /*
-    initializeServer: async(client, guild, ticketchannel, premium) => {
-        let createdAdminRole;
-        let createdModeratorRole;
+    },
+    initializeChannels: async(client, guild, ticketchannel, premium) => {
         let createdCategory;
         let ticketchannelname;
         let oldData;
         let newData;
 
-        if(!ticketchannel) {
-            ticketchannelname = "Ticketer";
-        }
-        else {
-            ticketchannelname = ticetchannel.name;
-        }
-
+        ticketchannelname = ticketchannel.name;
+        
         oldData = await client.provider.get(guild.id, "ticketchannels", null);
 
         if(oldData === undefined || oldData === null) {
-            oldData = {};
+            oldData = [];
         }
         else {
             oldData = JSON.parse(oldData);
@@ -78,23 +69,7 @@ module.exports = {
         if(oldData.length >= 5) {
             return "Premium guilds may only have up to **5 ticket channels**.";
         }
-        
-        createdAdminRole = await guild.roles.create({
-            data: {
-                name: `Ticketer Admin`,
-                color: "RED",
-                permissions: 0
-            },
-            reason: "Ticketer Setup"
-        });
-        createdModeratorRole = await guild.roles.create({
-            data: {
-                name: `Ticketer Moderator`,
-                color: "GREEN",
-                permissions: 0
-            },
-            reason: "Ticketer Setup"
-        });
+
         createdCategory = await guild.channels.create(
             `${ticketchannelname} Category`,
             {
@@ -103,12 +78,11 @@ module.exports = {
         );
 
         let ticketchannelid = ticketchannel.id
-
-        oldData[ticketchannelid] = {
-            "adminRole": createdAdminRole.id,
-            "moderatorRole": createdModeratorRole.id,
-            "category": createdCategory.id
-        }
+        
+        oldData.push({
+            channelid: ticketchannelid,
+            categoryid: createdCategory.id
+        })
         
         newData = JSON.stringify(oldData);
 
@@ -116,10 +90,7 @@ module.exports = {
 
         return {
             channel: ticketchannel,
-            adminRole: createdAdminRole,
-            moderatorRole: createdModeratorRole,
             category: createdCategory
         }
     }
-    */
 };
