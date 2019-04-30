@@ -2,7 +2,7 @@ const TicketerCommand  = require('../ticketer-command');
 const messageUtils = require('../../utils/messageUtils');
 const settingsUtils = require('../../utils/settingsUtils');
 
-module.exports = class SetupRolesCommand extends TicketerCommand {
+module.exports = class SetupChannelCommand extends TicketerCommand {
     constructor(client) {
         super(client, {
             name: 'setupchannel',
@@ -15,8 +15,8 @@ module.exports = class SetupRolesCommand extends TicketerCommand {
             args: [
                 {
                     key: 'channel',
-                    prompt: 'Please enter the desired ticket channel',
-                    type: 'channel'
+                    prompt: 'Please enter the desired ticket channel **OR** enter \`false\` to not restrict creation of tickets to a channel. **NOTE:** If you set this to \`false\`, the will override all other categories.',
+                    type: 'channel|boolean'
                 }
             ]
         });
@@ -36,9 +36,18 @@ module.exports = class SetupRolesCommand extends TicketerCommand {
             });
         }
 
+        let resString;
+
+        if(!channels.channel) {
+            resString = `I have bound **NO CHANNEL** to the ${channels.category.name}. All tickets created will be placed under the \`${channels.category.name}\`.`;
+        }
+        else {
+            resString = `I have bound ${channels.channel.toString()} to the \`${channels.category.name}\`. All tickets created in ${channels.channel.toString()} will be placed under the \`${channels.category.name}\`.`;
+        }
+
         await messageUtils.sendSuccess({
             target: msg.channel, 
-            valString: `I have bound ${channels.channel.toString()} to the category ${channels.category.name}. All tickets created in ${channels.channel.toString()} will be placed under the ${channels.category.name} category.`,
+            valString: resString,
             client: this.client,
             messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild

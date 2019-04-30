@@ -48,10 +48,19 @@ module.exports = {
     initializeChannels: async(client, guild, ticketchannel, premium) => {
         let createdCategory;
         let ticketchannelname;
+        let ticketchannelid;
         let oldData;
         let newData;
+        
 
-        ticketchannelname = ticketchannel.name;
+        if(!ticketchannel) {
+            ticketchannelname = "Ticketer";
+            ticketchannelid = false;
+        }
+        else {
+            ticketchannelname = ticketchannel.name;
+            ticketchannelid = ticketchannel.id
+        } 
         
         oldData = await client.provider.get(guild.id, "ticketchannels", null);
 
@@ -76,8 +85,6 @@ module.exports = {
                 type: "category"
             }
         );
-
-        let ticketchannelid = ticketchannel.id
         
         oldData.push({
             channelid: ticketchannelid,
