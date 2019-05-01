@@ -81,7 +81,7 @@ module.exports = {
             .setColor('#FF0000')
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
-            .setDescription(`**${closer.name}** closed **${channelName}**\n\n**Reason:** ${reason}\n\n**Original Author:** ${originalAuthor}\n\n**Support Time:** ${timeString}`);
+            .setDescription(`**${closer.tag}** closed \`${channelName}\`\n\n**Reason:** \`${reason}\`\n\n**Original Author:** \`${originalAuthor}\`\n\n**Support Time:** \`${timeString}\``);
     
         let embedMessage = await logChannel.send(errorEmbed);
         return embedMessage;

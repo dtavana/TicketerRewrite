@@ -96,13 +96,14 @@ module.exports = {
         if(!author) {
             return `${channel.toString()} was not detected as a open ticket!`;
         }
+        console.log(author)
 
-        author = await guild.members.get(author);
+        author = await client.users.get(author);
         if(!author) {
             author = "Not found";
         }
         else {
-            author = author.name;
+            author = author.tag;
         }
 
         let createdAt = channel.createdAt;
