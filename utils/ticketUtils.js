@@ -3,7 +3,7 @@ module.exports = {
         let contextid = context.id;
         let channels = await client.provider.get(guild, "ticketchannels", null);
         if(!channels) {
-            return `The guild administrators has not setup a ticket channel yet! If you are a guild administrator, please use the \`${guild.commandPrefix}\`command in order to setup the guild.`;
+            return `The guild administrators has not setup a ticket channel yet! If you are a guild administrator, please use the \`${guild.commandPrefix}\`setupchannel in order to setup the guild.`;
         }
 
         channels = JSON.parse(channels);
@@ -100,7 +100,6 @@ module.exports = {
         if(!author) {
             return `${channel.toString()} was not detected as a open ticket!`;
         }
-        console.log(author)
 
         author = await client.users.get(author);
         if(!author) {
