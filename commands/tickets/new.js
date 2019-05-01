@@ -42,7 +42,7 @@ module.exports = class NewCommand extends TicketerCommand {
             let moderatorRole = await this.client.provider.get(msg.guild, "moderatorRole", null);
             adminRole = await guild.roles.get(adminRole);
             moderatorRole = await guild.roles.get(moderatorRole);
-            if(!msg.member.roles.has(adminRole) && !msg.member.roles.had(moderatorRole)) {
+            if(!msg.member.roles.has(adminRole) && !msg.member.roles.has(moderatorRole)) {
                 return await messageUtils.sendError({
                     target: msg.channel, 
                     valString: `In order to tag the user as the subject, you must have the ${adminRole.toString()} role. If you believe this is in error, make sure you have the role.`,
@@ -79,7 +79,12 @@ module.exports = class NewCommand extends TicketerCommand {
             client: null
         });
 
-        await messageUtils.sendOpenedTicket(this.client, channel.name, target.tag, msg.guild)
+        let welcomeMessage = await this.client.provider.get(msg.guild, "welcomeMessage", null);
+        if(!welcomeMessage) {
+            welcomeMessage = "Thank you for opening a new ticket. Support will be with you shortly.";
+        }
+
+        await messageUtils.sendOpenedTicket(this.client, channel, welcomeMessage, subject, msg.guild)
 
 
     }

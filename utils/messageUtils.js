@@ -86,7 +86,8 @@ module.exports = {
         let embedMessage = await logChannel.send(closeEmbed);
         return embedMessage;
     },
-    sendOpenedTicket: async(client, channelName, authorName, guild) => {
+
+    sendOpenedTicket: async(client, target, welcomeMessage, subject, guild, ) => {
         let logChannel = await client.provider.get(guild, "logChannel", null);
         logChannel = await guild.channels.get(logChannel);
         if(!logChannel) {
@@ -94,13 +95,13 @@ module.exports = {
         }
         
         const openEmbed = new Discord.MessageEmbed()
-            .setTitle('Log :notepad_spiral:')
-            .setColor('#00FF00')
+            .setColor('LUMINOUS_VIVID_PINK')
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
-            .setDescription(`**${authorName}** created a new ticket: \`${channelName}\``);
+            .setDescription(welcomeMessage)
+            .addField("**Subject**", subject);
     
-        let embedMessage = await logChannel.send(openEmbed);
+        let embedMessage = await target.send(openEmbed);
         return embedMessage;
     },
 };

@@ -22,6 +22,15 @@ module.exports = class SetLogChannelCommand extends TicketerCommand {
     }
     
     async run(msg, {logChannel}, fromPattern, result) {
+        await logChannel.overwritePermissions(this.client.user, {
+            'SEND_MESSAGES': true,
+            'VIEW_CHANNEL': true,
+            'USE_EXTERNAL_EMOJIS': true
+
+        },
+        "Ticketer Setup"
+        );
+        
         let res = await this.client.provider.set(msg.guild.id, 'logChannel', logChannel.id);
         res = await msg.guild.channels.get(res);
         if(!res) {

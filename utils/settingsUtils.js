@@ -52,6 +52,14 @@ module.exports = {
         let oldData;
         let newData;
         
+        await ticketchannel.overwritePermissions(client.user, {
+            'SEND_MESSAGES': true,
+            'VIEW_CHANNEL': true,
+            'USE_EXTERNAL_EMOJIS': true
+
+        },
+        "Ticketer Setup"
+        );
 
         if(!ticketchannel) {
             ticketchannelname = "Ticketer";
