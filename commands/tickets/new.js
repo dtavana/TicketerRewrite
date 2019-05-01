@@ -38,10 +38,14 @@ module.exports = class NewCommand extends TicketerCommand {
             }
         }
         if(subject instanceof User) {
-            if(!msg.member.permissions.has("MANAGE_GUILD")) {
+            let adminRole = await this.client.provider.get(msg.guild, "adminRole", null);
+            let moderatorRole = await this.client.provider.get(msg.guild, "moderatorRole", null);
+            adminRole = await guild.roles.get(adminRole);
+            moderatorRole = await guild.roles.get(moderatorRole);
+            if(!msg.member.roles.has(adminRole) && !msg.member.roles.had(moderatorRole)) {
                 return await messageUtils.sendError({
                     target: msg.channel, 
-                    valString: `In order to tag the user as the subject, you must have the **Administrator** permission or the **Manage Server** permission. If you believe this is in error, make sure you have the role.`,
+                    valString: `In order to tag the user as the subject, you must have the ${adminRole.toString()} role. If you believe this is in error, make sure you have the role.`,
                     client: this.client,
                     messages: [msg].concat(result.prompts, result.answers),
                     guild: msg.guild
@@ -57,7 +61,7 @@ module.exports = class NewCommand extends TicketerCommand {
             }
         }
 
-        let channel = await ticketUtils.openTicket(this.client, msg.guild, msg.channel);
+        let channel = await ticketUtils.openTicket(this.client, msg.guild, msg.channel, msg.author);
 
         if(typeof channel === "string") {
             return await messageUtils.sendError({
@@ -74,6 +78,8 @@ module.exports = class NewCommand extends TicketerCommand {
             valString: `${msg.author.toString()} your ticket has been opened, click here: ${channel.toString()}`,
             client: null
         });
+
+        await messageUtils.sendLog
 
 
     }

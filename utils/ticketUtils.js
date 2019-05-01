@@ -1,5 +1,5 @@
 module.exports = {
-    openTicket: async(client, guild, context) => {
+    openTicket: async(client, guild, context, user) => {
         let contextid = context.id;
         let channels = await client.provider.get(guild, "ticketchannels", null);
         if(!channels) {
@@ -45,7 +45,7 @@ module.exports = {
         moderatorRole = await guild.roles.get(moderatorRole);
         let category = await guild.channels.get(ticketchannel.categoryid)
 
-        let channel = guild.channels.create(
+        let createdChannel = await guild.channels.create(
             `${ticketPrefix}-${currentTicket}`,
             {
                 type: "text",
@@ -54,7 +54,65 @@ module.exports = {
 
             }
         )
-        return channel;
+
+        let openTickets = await client.provider.get(guild, "openTickets", null);
+        let allOpenTickets = await client.provider.redis.get("openTickets");
+
+        if(!allOpenTickets) {
+            allOpenTickets = 0;
+        }
+        else {
+            allOpenTickets = parseInt(allOpenTickets)
+        }
+
+        if(!openTickets) {
+            openTickets = 0;
+        }
+        else {
+            openTickets = parseInt(openTickets)
+        }
+        allOpenTickets += 1;
+        openTickets += 1;
+
+        await client.provider.set(guild, createdChannel.id, user.id);
+        await client.provider.set(guild, "openTickets", openTickets);
+        await client.provider.redis.set("allOpenTickets", allOpenTickets);
+
+        return createdChannel;
     },
+
+    closeTicket: async(client, guild, channel, member) => {
+        let adminRole = await client.provider.get(guild, "adminRole", null);
+        adminRole = await guild.roles.get(adminRole);
+
+        let adminClose = await client.provider.get(guild, "adminClose", null);
+
+        if(!member.roles.has(adminRole) && adminClose) {
+            return `The guild administrators have required the ${adminRole.toString()} role to close tickets. If you believe this is in error, make sure you have the admin role.`;
+        }
+
+
+        let author = await client.provider.get(guild, channel.id, null);
+        if(!author) {
+            return `${channel.toString()} was not detected as a open ticket!`;
+        }
+
+        author = await guild.members.get(author);
+        if(!author) {
+            author = "Not found";
+        }
+        else {
+            author = author.name;
+        }
+
+        let createdAt = channel.createdAt;
+
+        await channel.delete("Closing Ticketer Ticket");
+
+        return {
+            "createdAt": createdAt,
+            "originalAuthor": author
+        };
+    }
     
 };

@@ -68,5 +68,22 @@ module.exports = {
         let guild = options.guild;
 
         return embedMessage;
-    }
+    },
+    sendClosedTicket: async(client, channelName, originalAuthor, reason, timeString, guild, closer) => {
+        let logChannel = await client.provider.get(guild, "logChannel", null);
+        logChannel = await guild.channels.get(logChannel);
+        if(!logChannel) {
+            return;
+        }
+        
+        const errorEmbed = new Discord.MessageEmbed()
+            .setTitle('Log :notepad_spiral:')
+            .setColor('#FF0000')
+            .setTimestamp()
+            .setFooter(process.env.FOOTER_TEXT)
+            .setDescription(`**${closer.name}** closed **${channelName}**\n\n**Reason:** ${reason}\n\n**Original Author:** ${originalAuthor}\n\n**Support Time:** ${timeString}`);
+    
+        let embedMessage = await logChannel.send(errorEmbed);
+        return embedMessage;
+    },
 };
