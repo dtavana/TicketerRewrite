@@ -79,7 +79,7 @@ module.exports = class NewCommand extends TicketerCommand {
             client: null
         });
 
-        await messageUtils.sendLog
+        await messageUtils.sendOpenedTicket(this.client, channel.name, target.tag, msg.guild)
 
 
     }

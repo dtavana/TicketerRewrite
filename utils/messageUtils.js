@@ -76,14 +76,31 @@ module.exports = {
             return;
         }
         
-        const errorEmbed = new Discord.MessageEmbed()
+        const closeEmbed = new Discord.MessageEmbed()
             .setTitle('Log :notepad_spiral:')
             .setColor('#FF0000')
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
             .setDescription(`**${closer.tag}** closed \`${channelName}\`\n\n**Reason:** \`${reason}\`\n\n**Original Author:** \`${originalAuthor}\`\n\n**Support Time:** \`${timeString}\``);
     
-        let embedMessage = await logChannel.send(errorEmbed);
+        let embedMessage = await logChannel.send(closeEmbed);
+        return embedMessage;
+    },
+    sendOpenedTicket: async(client, channelName, authorName, guild) => {
+        let logChannel = await client.provider.get(guild, "logChannel", null);
+        logChannel = await guild.channels.get(logChannel);
+        if(!logChannel) {
+            return;
+        }
+        
+        const openEmbed = new Discord.MessageEmbed()
+            .setTitle('Log :notepad_spiral:')
+            .setColor('#00FF00')
+            .setTimestamp()
+            .setFooter(process.env.FOOTER_TEXT)
+            .setDescription(`**${authorName}** created a new ticket: \`${channelName}\``);
+    
+        let embedMessage = await logChannel.send(openEmbed);
         return embedMessage;
     },
 };
