@@ -91,16 +91,26 @@ class TicketerProvider extends SettingProvider {
     }
 
     async get(guild, key, defVal) {
-        const settings = await this.getSettings(this.constructor.getGuildID(guild));
+        if(typeof guild !== "string") {
+            guild = this.constructor.getGuildID(guild);
+        }
+        const settings = await this.getSettings(guild);
+        
         return settings ? typeof settings[key] !== null ? settings[key] : defVal : defVal;
     }
 
     async set(guild, key, val) {
-        guild = this.constructor.getGuildID(guild);
-        let settings = await this.getSettings(guild);
-        let premium = await this.client.provider.pg.oneOrNone('SELECT key FROM premium WHERE serverid = $1;', [guild]);
-        if(!settings && premium) {
-            this.guilds.push(guild);
+        let checkPremium = false;
+        if(typeof guild !== "string") {
+            guild = this.constructor.getGuildID(guild);
+            checkPremium = true;
+        }
+        const settings = await this.getSettings(guild);
+        if(checkPremium) {
+            let premium = await this.client.provider.pg.oneOrNone('SELECT key FROM premium WHERE serverid = $1;', [guild]);
+            if(!settings && premium) {
+                this.guilds.push(guild);
+            }
         }
 		
         await this.redis.hset(guild !== 'global' ? guild : 0, key, val);
@@ -114,7 +124,9 @@ class TicketerProvider extends SettingProvider {
     }
 
     async remove(guild, key) {
-        guild = this.constructor.getGuildID(guild);
+        if(typeof guild !== "string") {
+            guild = this.constructor.getGuildID(guild);
+        }
         const settings = await this.getSettings(guild);
         if(!settings || typeof settings[key] === null) return undefined;
 
@@ -125,10 +137,10 @@ class TicketerProvider extends SettingProvider {
     }
 
     async clear(guild) {
-        guild = this.constructor.getGuildID(guild);
-        const settings = await this.getSettings(guild);
-        this.guilds = this.guilds.filter(id => id != guild);
-        if(!settings) return;
+        if(typeof guild !== "string") {
+            guild = this.constructor.getGuildID(guild);
+            this.guilds = this.guilds.filter(id => id != guild);
+        }
         await this.redis.del(guild !== 'global' ? guild : 0);
     }
 

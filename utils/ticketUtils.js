@@ -1,7 +1,10 @@
+const Discord = require('discord.js');
+
 module.exports = {
     openTicket: async(client, guild, context, user) => {
         let contextid = context.id;
         let channels = await client.provider.get(guild, "ticketchannels", null);
+        
         if(!channels) {
             return `The guild administrators has not setup a ticket channel yet! If you are a guild administrator, please use the \`${guild.commandPrefix}\`setupchannel in order to setup the guild.`;
         }
@@ -39,7 +42,7 @@ module.exports = {
         let adminRole = await client.provider.get(guild, "adminRole", null);
         let moderatorRole = await client.provider.get(guild, "moderatorRole", null);
         if(!adminRole || !moderatorRole) {
-            `The guild administrators has not setup the Ticketer Admin roles. If you are an administrator, please run the ${guild.commandPrefix}setuproles command.`;
+           return  `The guild administrators has not setup the Ticketer Admin roles. If you are an administrator, please run the ${guild.commandPrefix}setuproles command.`;
         }
         adminRole = await guild.roles.get(adminRole);
         moderatorRole = await guild.roles.get(moderatorRole);
@@ -61,6 +64,7 @@ module.exports = {
 
         let openTickets = await client.provider.get(guild, "openTickets", null);
         let allOpenTickets = await client.provider.redis.get("openTickets");
+        let handledTickets = await client.provider.redis.get("handledTickets");
 
         if(!allOpenTickets) {
             allOpenTickets = 0;
@@ -78,7 +82,7 @@ module.exports = {
         allOpenTickets += 1;
         openTickets += 1;
 
-        await client.provider.set(guild, createdChannel.id, user.id);
+        await client.provider.set(`${guild.id}-channels`, createdChannel.id, user.id);
         await client.provider.set(guild, "openTickets", openTickets);
         await client.provider.redis.set("allOpenTickets", allOpenTickets);
 
@@ -96,10 +100,36 @@ module.exports = {
         }
 
 
-        let author = await client.provider.get(guild, channel.id, null);
+        let author = await client.provider.get(`${guild.id}-channels`, channel.id, null);
         if(!author) {
             return `${channel.toString()} was not detected as a open ticket!`;
         }
+
+        let openTickets = await client.provider.get(guild, "openTickets", null);
+        let allOpenTickets = await client.provider.redis.get("openTickets");
+        let handledTickets = await client.provider.redis.get("handledTickets");
+
+        if(!allOpenTickets) {
+            allOpenTickets = 0;
+        }
+        else {
+            allOpenTickets = parseInt(allOpenTickets)
+        }
+        if(!openTickets) {
+            openTickets = 0;
+        }
+        else {
+            openTickets = parseInt(openTickets)
+        }
+        if(!handledTickets) {
+            handledTickets = 0;
+        }
+        else {
+            handledTickets = parseInt(handledTickets)
+        }
+        allOpenTickets -= 1;
+        openTickets -= 1;
+        handledTickets += 1;
 
         author = await client.users.get(author);
         if(!author) {
@@ -112,6 +142,11 @@ module.exports = {
         let createdAt = channel.createdAt;
 
         await channel.delete("Closing Ticketer Ticket");
+        await client.provider.remove(`${guild.id}-channels`, channel.id);
+        await client.provider.set(guild, "openTickets", openTickets);
+        await client.provider.redis.set("allOpenTickets", allOpenTickets);
+        await client.provider.redis.set("handledTickets", handledTickets);
+
 
         return {
             "createdAt": createdAt,

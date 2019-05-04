@@ -69,6 +69,30 @@ module.exports = {
 
         return embedMessage;
     },
+    sendWaiting: async(options) => {
+        const waitingEmbed = new Discord.MessageEmbed()
+        .setTitle("Are you sure you would like to perform the following")    
+        .setColor('YELLOW')
+        .setTimestamp()
+        .setFooter(process.env.FOOTER_TEXT)
+        .addField("**Action**", options.valString)
+        
+        let embedMessage = await options.target.send(waitingEmbed);
+        await embedMessage.react("✅");
+        await embedMessage.react("🚫")
+
+        return embedMessage;
+    },
+    cleanWaiting: async(options) => {
+        let client = options.client || null;
+        if(client === null){
+            return;
+        }
+        let messages = options.messages;
+        let guild = options.guild;
+        let cleanAll = await client.provider.get(guild.id, 'cleanAll');
+        client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages);
+    },
     sendClosedTicket: async(client, channelName, originalAuthor, reason, timeString, guild, closer) => {
         let logChannel = await client.provider.get(guild, "logChannel", null);
         logChannel = await guild.channels.get(logChannel);
@@ -88,12 +112,6 @@ module.exports = {
     },
 
     sendOpenedTicket: async(client, target, welcomeMessage, subject, guild, ) => {
-        let logChannel = await client.provider.get(guild, "logChannel", null);
-        logChannel = await guild.channels.get(logChannel);
-        if(!logChannel) {
-            return;
-        }
-        
         const openEmbed = new Discord.MessageEmbed()
             .setColor('LUMINOUS_VIVID_PINK')
             .setTimestamp()
