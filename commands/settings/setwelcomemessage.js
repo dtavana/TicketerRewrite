@@ -25,7 +25,7 @@ module.exports = class SetWelcomeMessage extends PremiumCommand {
         if(welcomeMessage.length > 2000) {
             return await messageUtils.sendError({
                 target: msg.channel, 
-                valString: `Welcome message must be under 2000 characters.`,
+                valString: 'Welcome message must be under 2000 characters.',
                 client: this.client,
                 messages: [msg].concat(result.prompts, result.answers),
                 guild: msg.guild

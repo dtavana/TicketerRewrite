@@ -16,7 +16,7 @@ module.exports = class CloseCommand extends TicketerCommand {
                 {
                     key: 'reason',
                     type: 'string',
-                    prompt: "Please enter the desired reason.",
+                    prompt: 'Please enter the desired reason.',
                     default: false
                 }
             ]
@@ -27,7 +27,7 @@ module.exports = class CloseCommand extends TicketerCommand {
         let channelName = msg.channel.name;
 
         let data = await ticketUtils.closeTicket(this.client, msg.guild, msg.channel, msg.member);
-        if(typeof data === "string") {
+        if(typeof data === 'string') {
             return await messageUtils.sendError({
                 target: msg.channel, 
                 valString: data,
@@ -38,7 +38,7 @@ module.exports = class CloseCommand extends TicketerCommand {
         }
 
         if(!reason) {
-            reason = "None provided";
+            reason = 'None provided';
         }
 
         let createdAt = data.createdAt;

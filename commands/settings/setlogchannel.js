@@ -28,13 +28,13 @@ module.exports = class SetLogChannelCommand extends TicketerCommand {
             'USE_EXTERNAL_EMOJIS': true
 
         },
-        "Ticketer Setup"
+        'Ticketer Setup'
         );
         
         let res = await this.client.provider.set(msg.guild.id, 'logChannel', logChannel.id);
         res = await msg.guild.channels.get(res);
         if(!res) {
-            res = "`Not found`";
+            res = '`Not found`';
         }
         else {
             res = res.toString();

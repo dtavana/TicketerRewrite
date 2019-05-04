@@ -15,7 +15,7 @@ module.exports = class ChannelsCommands extends TicketerCommand {
     }
     
     async run(msg, fromPattern, result) {
-        let ticketChannels = await this.client.provider.get(msg.guild, "ticketchannels", null);
+        let ticketChannels = await this.client.provider.get(msg.guild, 'ticketchannels', null);
         ticketChannels = JSON.parse(ticketChannels);
         if(!ticketChannels || ticketChannels.length === 0) {
             return await messageUtils.sendError({
@@ -27,7 +27,7 @@ module.exports = class ChannelsCommands extends TicketerCommand {
             });
         }
         
-        let resString = "";
+        let resString = '';
 
         for(let channel of ticketChannels) {
             let ticketChannel = await msg.guild.channels.get(channel.channelid);
@@ -50,11 +50,11 @@ module.exports = class ChannelsCommands extends TicketerCommand {
         }
 
         await messageUtils.sendSuccess({
-                target: msg.channel, 
-                valString: resString,
-                client: this.client,
-                messages: [msg].concat(result.prompts, result.answers),
-                guild: msg.guild
-            });
+            target: msg.channel, 
+            valString: resString,
+            client: this.client,
+            messages: [msg].concat(result.prompts, result.answers),
+            guild: msg.guild
+        });
     }
 };

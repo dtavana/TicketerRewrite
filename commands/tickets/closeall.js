@@ -19,21 +19,21 @@ module.exports = class CloseAllCommand extends TicketerCommand {
     async run(msg, fromPattern, result) {
         let originalMessage = await messageUtils.sendWaiting({
             target: msg.channel, 
-            valString: `Close **ALL** Tickets`
-        })
+            valString: 'Close **ALL** Tickets'
+        });
         const filter = (reaction, user) => user === msg.author && (reaction.emoji.name === '✅' || reaction.emoji.name === '🚫');
         let collector = new Discord.ReactionCollector(originalMessage, filter, {max: 1});
         let endReason;
         collector.on('end', async(collected, reason) => {
             if(collected.has('✅')) {
-                endReason = "All tickets have been closed."
+                endReason = 'All tickets have been closed.';
                 let allTickets = await this.client.provider.getSettings(`${msg.guild.id}-channels`);
                 if(!allTickets) {
-                    endReason = "There are no tickets to close.";
+                    endReason = 'There are no tickets to close.';
                 }
                 else {
                     if(allTickets.size === 0) {
-                        endReason = "There are no tickets to close.";
+                        endReason = 'There are no tickets to close.';
                     }
                     else {
                         for(let channelid of Object.keys(allTickets)) {
@@ -43,7 +43,7 @@ module.exports = class CloseAllCommand extends TicketerCommand {
                             }
                             let channelName = channel.name;
                             let data = await ticketUtils.closeTicket(this.client, msg.guild, channel, msg.member);
-                            if(typeof data === "string") {
+                            if(typeof data === 'string') {
                                 await messageUtils.sendError({
                                     target: msg.channel, 
                                     valString: data,
@@ -53,7 +53,7 @@ module.exports = class CloseAllCommand extends TicketerCommand {
                                 });
                             }
                             else {
-                                let closeReason = "Closing all tickets.";
+                                let closeReason = 'Closing all tickets.';
                                 let createdAt = data.createdAt;
                                 let originalAuthor = data.originalAuthor;
                                 
@@ -66,7 +66,7 @@ module.exports = class CloseAllCommand extends TicketerCommand {
                     }
                 }
 
-                await this.client.provider.redis.hdel(msg.guild.id, "allTickets");
+                await this.client.provider.redis.hdel(msg.guild.id, 'allTickets');
                 return await messageUtils.sendSuccess({
                     target: msg.channel, 
                     valString: endReason,
@@ -76,7 +76,7 @@ module.exports = class CloseAllCommand extends TicketerCommand {
                 });
             }
             else {
-                endReason = "The current operation has been cancelled."
+                endReason = 'The current operation has been cancelled.';
                 return await messageUtils.sendError({
                     target: msg.channel, 
                     valString: endReason,
@@ -85,6 +85,6 @@ module.exports = class CloseAllCommand extends TicketerCommand {
                     guild: msg.guild
                 });
             }
-        })
+        });
     }
 };

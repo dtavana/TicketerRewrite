@@ -26,7 +26,7 @@ module.exports = class SetupChannelCommand extends TicketerCommand {
         let premium = await this.checkPremium(this.client, msg);
         let channels = await settingsUtils.initializeChannels(this.client, msg.guild, channel, premium);
 
-        if(typeof channels === "string") {
+        if(typeof channels === 'string') {
             return await messageUtils.sendError({
                 target: msg.channel, 
                 valString: channels,

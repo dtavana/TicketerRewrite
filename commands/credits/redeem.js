@@ -60,7 +60,7 @@ module.exports = class RedeemCommand extends TicketerCommand {
 
     hasPermission(message, ownerOverride = true) {
         if(this.client.provider.guilds.includes(message.guild.id)) {
-            return `This guild already has premium enabled.`;
+            return 'This guild already has premium enabled.';
         }
         
         if(this.ownerOnly && (ownerOverride || !this.client.isOwner(message.author))) {

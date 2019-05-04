@@ -71,15 +71,15 @@ module.exports = {
     },
     sendWaiting: async(options) => {
         const waitingEmbed = new Discord.MessageEmbed()
-        .setTitle("Are you sure you would like to perform the following")    
-        .setColor('YELLOW')
-        .setTimestamp()
-        .setFooter(process.env.FOOTER_TEXT)
-        .addField("**Action**", options.valString)
+            .setTitle('Are you sure you would like to perform the following')    
+            .setColor('YELLOW')
+            .setTimestamp()
+            .setFooter(process.env.FOOTER_TEXT)
+            .addField('**Action**', options.valString);
         
         let embedMessage = await options.target.send(waitingEmbed);
-        await embedMessage.react("✅");
-        await embedMessage.react("🚫")
+        await embedMessage.react('✅');
+        await embedMessage.react('🚫');
 
         return embedMessage;
     },
@@ -94,7 +94,7 @@ module.exports = {
         client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages);
     },
     sendClosedTicket: async(client, channelName, originalAuthor, reason, timeString, guild, closer) => {
-        let logChannel = await client.provider.get(guild, "logChannel", null);
+        let logChannel = await client.provider.get(guild, 'logChannel', null);
         logChannel = await guild.channels.get(logChannel);
         if(!logChannel) {
             return;
@@ -117,11 +117,11 @@ module.exports = {
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
             .setDescription(welcomeMessage)
-            .addField("**Subject**", subject);
+            .addField('**Subject**', subject);
     
         let embedMessage = await target.send(openEmbed);
 
-        let logChannel = await client.provider.get(guild, "logChannel", null);
+        let logChannel = await client.provider.get(guild, 'logChannel', null);
         logChannel = await guild.channels.get(logChannel);
         if(!logChannel) {
             return;

@@ -18,7 +18,7 @@ module.exports = class SetupRolesCommand extends TicketerCommand {
     async run(msg, fromPattern, result) {
         let roles = await settingsUtils.initializeRoles(this.client, msg.guild);
 
-        if(typeof roles === "string") {
+        if(typeof roles === 'string') {
             return await messageUtils.sendError({
                 target: msg.channel, 
                 valString: data,
@@ -28,7 +28,7 @@ module.exports = class SetupRolesCommand extends TicketerCommand {
             });
         }
 
-        await msg.member.roles.add(roles.adminRole, "Ticketer Setup");
+        await msg.member.roles.add(roles.adminRole, 'Ticketer Setup');
 
         await messageUtils.sendSuccess({
             target: msg.channel, 
