@@ -111,7 +111,7 @@ module.exports = {
         return embedMessage;
     },
 
-    sendOpenedTicket: async(client, target, welcomeMessage, subject, guild, ) => {
+    sendOpenedTicket: async(client, target, welcomeMessage, subject, guild, user) => {
         const openEmbed = new Discord.MessageEmbed()
             .setColor('LUMINOUS_VIVID_PINK')
             .setTimestamp()
@@ -120,6 +120,21 @@ module.exports = {
             .addField("**Subject**", subject);
     
         let embedMessage = await target.send(openEmbed);
+
+        let logChannel = await client.provider.get(guild, "logChannel", null);
+        logChannel = await guild.channels.get(logChannel);
+        if(!logChannel) {
+            return;
+        }
+        
+        const logEmbed = new Discord.MessageEmbed()
+            .setTitle('Log :notepad_spiral:')
+            .setColor('#00FF00')
+            .setTimestamp()
+            .setFooter(process.env.FOOTER_TEXT)
+            .setDescription(`\`${user.tag}\` opened a new ticket: \`${target.name}\`\n\n**Subject:** \`${subject}\``);
+    
+        await logChannel.send(logEmbed);
         return embedMessage;
     },
 };

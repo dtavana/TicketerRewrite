@@ -84,7 +84,7 @@ module.exports = class NewCommand extends TicketerCommand {
             welcomeMessage = "Thank you for opening a new ticket. Support will be with you shortly.";
         }
 
-        await messageUtils.sendOpenedTicket(this.client, channel, welcomeMessage, subject, msg.guild)
+        await messageUtils.sendOpenedTicket(this.client, channel, welcomeMessage, subject, msg.guild, msg.author);
 
 
     }
