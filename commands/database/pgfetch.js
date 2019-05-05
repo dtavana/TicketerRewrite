@@ -9,7 +9,6 @@ module.exports = class PGFetchCommand extends TicketerCommand {
             group: 'database',
             memberName: 'pgfetch',
             description: 'Fetches a value in the Postgres database',
-            guildOnly: true,
             ownerOnly: true,
             args: [
                 {

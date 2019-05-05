@@ -1,35 +1,39 @@
 const TicketerCommand  = require('../ticketer-command');
 const messageUtils = require('../../utils/messageUtils');
 
-module.exports = class PGSetCommand extends TicketerCommand {
+module.exports = class GlobalRedisFetchCommand extends TicketerCommand {
     constructor(client) {
         super(client, {
-            name: 'pgset',
+            name: 'globalredisfetch',
             aliases: [],
             group: 'database',
-            memberName: 'pgset',
-            description: 'Sets a value in the Postgres database',
-            guildOnly: true,
+            memberName: 'globalredisfetch',
+            description: 'Fetches a value based on key in the global context',
             ownerOnly: true,
             args: [
                 {
-                    key: 'query',
-                    prompt: 'The query to execute on the database',
+                    key: 'key',
+                    prompt: 'The key for the global value',
                     type: 'string'
                 }
             ]
         });
     }
     
-    async run(msg, {query}, fromPattern, result) {
+    async run(msg, {key}, fromPattern, result) {
         try {
-            await this.client.provider.pg.none(query);
+            let data = await this.client.provider.redis.get(key);
+            if(!data) {
+                return await messageUtils.sendError({
+                    target: msg.channel, 
+                    valString: `The following error occured: \`Key not found\``
+                });
+            }
             await messageUtils.sendSuccess({
                 target: msg.channel, 
-                valString: `The query was executed succesfully.`
-            });
+                valString: `**Key:** \`${key}\` | **Value:** \`${data}\``
+            })
         }
-
         catch(error) {
             await messageUtils.sendError({
                 target: msg.channel, 

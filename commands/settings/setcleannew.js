@@ -8,13 +8,13 @@ module.exports = class SetCleanNewCommand extends PremiumCommand {
             aliases: [],
             group: 'settings',
             memberName: 'setcleannew',
-            description: 'Sets whether the bot should delete new ticket invocation messages (`true`: On**, `false`: Off**)',
+            description: 'Sets whether the bot should delete new ticket invocation messages',
             guildOnly: true,
             userPermissions: ['MANAGE_GUILD'],
             args: [
                 {
                     key: 'cleanNew',
-                    prompt: 'Sets whether the bot should delete new ticket invocation messages (`true`: On**, `false`: Off**)',
+                    prompt: 'Sets whether the bot should delete new ticket invocation messages (`true`: **On**, `false`: **Off**)',
                     type: 'boolean'
                 }
             ]

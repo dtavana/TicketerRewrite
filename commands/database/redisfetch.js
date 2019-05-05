@@ -1,35 +1,67 @@
 const TicketerCommand  = require('../ticketer-command');
 const messageUtils = require('../../utils/messageUtils');
 
-module.exports = class PGSetCommand extends TicketerCommand {
+module.exports = class RedisFetchCommand extends TicketerCommand {
     constructor(client) {
         super(client, {
-            name: 'pgset',
+            name: 'redisfetch',
             aliases: [],
             group: 'database',
-            memberName: 'pgset',
-            description: 'Sets a value in the Postgres database',
-            guildOnly: true,
+            memberName: 'redisfetch',
+            description: 'Fetches a key/field pair in a hash set or an entire hash set if field is omitted',
             ownerOnly: true,
             args: [
                 {
-                    key: 'query',
-                    prompt: 'The query to execute on the database',
+                    key: 'key',
+                    prompt: 'The key for the hashset',
                     type: 'string'
+                },
+                {
+                    key: 'field',
+                    prompt: 'The field for the hashset',
+                    type: 'string',
+                    default: false
                 }
             ]
         });
     }
     
-    async run(msg, {query}, fromPattern, result) {
+    async run(msg, {key, field}, fromPattern, result) {
         try {
-            await this.client.provider.pg.none(query);
-            await messageUtils.sendSuccess({
-                target: msg.channel, 
-                valString: `The query was executed succesfully.`
-            });
+            let data;
+            if(!field) {
+                data = await this.client.provider.redis.hgetall(key);
+                if(data && data.length !== 0) {
+                    let resString = "";
+                    for(let pair of Object.entries(data)) {
+                        resString += `**Key:** \`${key}\` | **Field:** \`${pair[0]}\` | **Result:** \`${pair[1]}\`\n`;
+                    }
+                    await messageUtils.sendSuccess({
+                        target: msg.channel, 
+                        valString: resString
+                    });
+                }
+                else {
+                    return await messageUtils.sendError({
+                        target: msg.channel, 
+                        valString: `The following error occured: \`Key was not found\``
+                    });
+                }
+            }
+            else {
+                data = await this.client.provider.get(key, field, null);
+                if(!data) {
+                    return await messageUtils.sendError({
+                        target: msg.channel, 
+                        valString: `The following error occured: \`Key/Field was not found\``
+                    });
+                }
+                await messageUtils.sendSuccess({
+                    target: msg.channel, 
+                    valString: `**Key:** \`${key}\`\n**Field:** \`${field}\`\n**Result:** \`${data}\``
+                });
+            }
         }
-
         catch(error) {
             await messageUtils.sendError({
                 target: msg.channel, 

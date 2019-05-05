@@ -9,7 +9,6 @@ module.exports = class PGSetCommand extends TicketerCommand {
             group: 'database',
             memberName: 'pgset',
             description: 'Sets a value in the Postgres database',
-            guildOnly: true,
             ownerOnly: true,
             args: [
                 {

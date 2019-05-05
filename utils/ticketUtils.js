@@ -4,6 +4,7 @@ module.exports = {
     openTicket: async(client, guild, context, user) => {
         let contextid = context.id;
         let channels = await client.provider.get(guild, 'ticketchannels', null);
+        let category;
         
         if(!channels) {
             return `The guild administrators has not setup a ticket channel yet! If you are a guild administrator, please use the \`${guild.commandPrefix}\`setupchannel in order to setup the guild.`;
@@ -15,7 +16,7 @@ module.exports = {
         let targetchannel;
 
         for(ticketchannel of channels) {
-            if(ticketchannel.channelid === contextid || ticketchannel.contextid === false) {
+            if(ticketchannel.channelid === contextid || ticketchannel.channelid === false) {
                 targetchannel = ticketchannel;
                 found = true;
                 break;
@@ -42,11 +43,18 @@ module.exports = {
         let adminRole = await client.provider.get(guild, 'adminRole', null);
         let moderatorRole = await client.provider.get(guild, 'moderatorRole', null);
         if(!adminRole || !moderatorRole) {
-            return  `The guild administrators has not setup the Ticketer Admin roles. If you are an administrator, please run the ${guild.commandPrefix}setuproles command.`;
+            return  `The guild administrators have not setup the Ticketer Admin roles. If you are an administrator, please run the \`${guild.commandPrefix}setuproles\` command.`;
         }
         adminRole = await guild.roles.get(adminRole);
         moderatorRole = await guild.roles.get(moderatorRole);
-        let category = await guild.channels.get(ticketchannel.categoryid);
+        if(!adminRole || !moderatorRole) {
+            return  `The Ticketer Admin roles can not be found. If you are an administrator, please run the \`${guild.commandPrefix}setuproles\` command to reset the roles.`;
+        }
+        let categoryid = targetchannel.categoryid;
+        category = await guild.channels.get(categoryid);
+        if(!category) {
+            return `The Ticketer Category for ${context.toString()} could not be found. If you are an administrator, please run the ${guild.commandPrefix}setupchannel command to reset the ticket channel.`;
+        }
 
         let createdChannel = await guild.channels.create(
             `${ticketPrefix}-${currentTicket}`,
@@ -63,8 +71,7 @@ module.exports = {
         );
 
         let openTickets = await client.provider.get(guild, 'openTickets', null);
-        let allOpenTickets = await client.provider.redis.get('openTickets');
-        let handledTickets = await client.provider.redis.get('handledTickets');
+        let allOpenTickets = await client.provider.redis.get('allOpenTickets');
 
         if(!allOpenTickets) {
             allOpenTickets = 0;
@@ -106,7 +113,7 @@ module.exports = {
         }
 
         let openTickets = await client.provider.get(guild, 'openTickets', null);
-        let allOpenTickets = await client.provider.redis.get('openTickets');
+        let allOpenTickets = await client.provider.redis.get('allOpenTickets');
         let handledTickets = await client.provider.redis.get('handledTickets');
 
         if(!allOpenTickets) {

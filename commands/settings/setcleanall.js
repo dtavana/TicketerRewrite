@@ -8,13 +8,13 @@ module.exports = class SetCleanAllCommand extends PremiumCommand {
             aliases: [],
             group: 'settings',
             memberName: 'setcleanall',
-            description: 'Sets whether the bot should delete all invocations of commands (`true`: On**, `false`: Off**)',
+            description: 'Sets whether the bot should delete all invocations of commands',
             guildOnly: true,
             userPermissions: ['MANAGE_GUILD'],
             args: [
                 {
                     key: 'cleanAll',
-                    prompt: 'Sets whether the bot should delete all invocations of commands (`true`: On**, `false`: Off**)',
+                    prompt: 'Sets whether the bot should delete all invocations of commands (`true`: **On**, `false`: **Off**)',
                     type: 'boolean'
                 }
             ]
