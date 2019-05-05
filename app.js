@@ -19,7 +19,7 @@ client.registry
     .registerDefaultTypes()
     .registerGroups([
         ['tickets', 'Ticket commands'],
-        ['admin', 'Administration commands'],
+        ['moderation', 'Moderation commands'],
         ['settings', 'Settings commands'],
         ['credits', 'Credits commands'],
         ['info', 'Info commands'],
@@ -35,7 +35,7 @@ client.registry.unregisterCommand(prefixCommand);
 
 client.once('ready', async() => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
-    client.user.setActivity('t!help | v2.0', {type: 'WATCHING'});
+    client.user.setActivity('-help | v2.0', {type: 'WATCHING'});
 });
     
 
