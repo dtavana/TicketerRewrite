@@ -1,32 +1,31 @@
 const PremiumCommand  = require('../premium-command');
 const messageUtils = require('../../utils/messageUtils');
 
-module.exports = class SetPrefixCommand extends PremiumCommand {
+module.exports = class SetTicketPrefixCommand extends PremiumCommand {
     constructor(client) {
         super(client, {
-            name: 'setprefix',
+            name: 'setticketprefix',
             aliases: [],
             group: 'settings',
-            memberName: 'setprefix',
-            description: 'Sets the prefix for a guild',
+            memberName: 'setticketprefix',
+            description: 'Sets the ticket prefix for a guild',
             guildOnly: true,
             userPermissions: ['MANAGE_GUILD'],
             args: [
                 {
-                    key: 'prefix',
-                    prompt: 'Please enter the desired prefix',
+                    key: 'ticketprefix',
+                    prompt: 'Please enter the desired ticket prefix',
                     type: 'string'
                 }
             ]
         });
     }
     
-    async run(msg, {prefix}, fromPattern, result) {
-        let res = await this.client.provider.set(msg.guild.id, 'prefix', prefix);
-        msg.guild.commandPrefix = prefix;
+    async run(msg, {ticketprefix}, fromPattern, result) {
+        let res = await this.client.provider.set(msg.guild.id, 'ticketprefix', ticketprefix);
         await messageUtils.sendSuccess({
             target: msg.channel, 
-            valString: `Old Prefix: \`${res}\`\n\nNew Prefix: \`${prefix}\``,
+            valString: `Old Ticket Prefix: \`${res}\`\n\nNew Ticket Prefix: \`${ticketprefix}\``,
             client: this.client,
             messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild

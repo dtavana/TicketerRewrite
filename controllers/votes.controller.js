@@ -14,7 +14,7 @@ module.exports = {
         let curVotes = await votesUtils.getVotes(client, userId);
         if(curVotes === null) {
             curVotes = 0;
-            await client.provider.pg.none("INSERT INTO votes (userid, count) VALUES ($1, 0);", [userId]);
+            await client.provider.pg.none('INSERT INTO votes (userid, count) VALUES ($1, 0);', [userId]);
         }
         curVotes += votesToAdd;
         let neededVotes = parseInt(process.env.NEEDED_VOTES);
@@ -30,18 +30,18 @@ module.exports = {
 
         if(receiveCredit) {
             key = donateUtils.generateKey();
-            await donateUtils.saveCredit(client, {"userid": userId, "key": key, "paymentid": "voting"}); 
+            await donateUtils.saveCredit(client, {'userid': userId, 'key': key, 'paymentid': 'voting'}); 
             publicString =  `\`${user.tag}\` just voted for Ticketer and received a premium credit!`;
             privateString = `You have had one premium credit: \`${key}\` added to your account! Use the \`redeem\` command to get started! Thank you for voting for Ticketer!`;
             finalVotes = curVotes - neededVotes;
             
         }
         else {
-            publicString = `\`${user.tag}\` just voted for Ticketer!`
+            publicString = `\`${user.tag}\` just voted for Ticketer!`;
             privateString = `Thank you for voting for Ticketer! You currently have **${curVotes} vote(s)**. You need **${neededVotes - curVotes} vote(s)** to get a premium credit.`;
             finalVotes = curVotes;
         }
-        await client.provider.pg.none("UPDATE votes SET count = $1 WHERE userid = $2;", [finalVotes, userId])
+        await client.provider.pg.none('UPDATE votes SET count = $1 WHERE userid = $2;', [finalVotes, userId]);
 
         await messageUtils.sendCleanSuccess({
             target: channel, 
@@ -55,4 +55,4 @@ module.exports = {
             client: null
         });
     }
-}
+};

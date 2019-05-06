@@ -1,5 +1,5 @@
 const guildUtils = require('../utils/guildUtils');
-const pub = require('./publish.controller')
+const pub = require('./publish.controller');
 require('dotenv').config();
 
 module.exports = {
@@ -8,6 +8,6 @@ module.exports = {
         let guilds = guildUtils.getGuilds(client, data.userId);
         let key = data.key;
 
-        await pub.publish(key, {"guilds": guilds})
+        await pub.publish(key, {'guilds': guilds});
     }
-}
+};

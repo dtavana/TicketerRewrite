@@ -1,12 +1,11 @@
 require('dotenv').config();
-const subpubController = require('../controllers/subpub.controller')
 
 module.exports = {
     setFetch: async(client, guildId, key, newValue) => {
         let oldValue = await client.provider.redis.hget(guildId, key);
         let setRes = await client.provider.redis.hset(guildId, key, newValue);
         if(oldValue === null) {
-            oldValue = "Not Set";
+            oldValue = 'Not Set';
         }
         return {
             oldValue: oldValue,
@@ -21,4 +20,4 @@ module.exports = {
         let value = await client.provider.redis.hget(guildId, key);
         return value;
     }
-}
+};
