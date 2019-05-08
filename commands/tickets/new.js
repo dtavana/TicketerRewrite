@@ -72,7 +72,7 @@ module.exports = class NewCommand extends TicketerCommand {
 
         await messageUtils.sendCleanSuccess({
             target: msg.channel, 
-            valString: `${msg.author.toString()} your ticket has been opened, click here: ${channel.toString()}`,
+            valString: `${target.toString()} your ticket has been opened, click here: ${channel.toString()}`,
             client: null
         });
 
@@ -81,7 +81,7 @@ module.exports = class NewCommand extends TicketerCommand {
             welcomeMessage = 'Thank you for opening a new ticket. Support will be with you shortly.';
         }
 
-        await messageUtils.sendOpenedTicket(this.client, channel, welcomeMessage, subject, msg.guild, msg.author);
+        await messageUtils.sendOpenedTicket(this.client, channel, welcomeMessage, subject, msg.guild, target);
 
 
     }

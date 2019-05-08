@@ -112,6 +112,7 @@ module.exports = {
     },
 
     sendOpenedTicket: async(client, target, welcomeMessage, subject, guild, user) => {
+        await target.send(user.toString());
         const openEmbed = new Discord.MessageEmbed()
             .setColor('LUMINOUS_VIVID_PINK')
             .setTimestamp()
