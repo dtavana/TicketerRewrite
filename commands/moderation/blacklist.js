@@ -27,7 +27,7 @@ module.exports = class BlacklistCommand extends TicketerCommand {
         if(!hasRole.state) {
             return await messageUtils.sendError({
                 target: msg.channel, 
-                valString: `In order to tag the user as the subject, you must have the ${hasRole.admin} role or the ${hasRole.moderator} role. If you believe this is in error, make sure you have the role.`,
+                valString: `In order to blacklist a user, you must have the ${hasRole.admin} role or the ${hasRole.moderator} role. If you believe this is in error, make sure you have the role.`,
                 client: this.client,
                 messages: [msg].concat(result.prompts, result.answers),
                 guild: msg.guild
