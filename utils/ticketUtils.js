@@ -98,7 +98,6 @@ module.exports = {
 
     closeTicket: async(client, guild, channel, member) => {
         let adminRole = await client.provider.get(guild, 'adminRole', null);
-        adminRole = await guild.roles.get(adminRole);
 
         let adminClose = await client.provider.get(guild, 'adminClose', null);
 
