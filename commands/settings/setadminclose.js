@@ -21,11 +21,11 @@ module.exports = class SetAdminClose extends PremiumCommand {
         });
     }
     
-    async run(msg, {cleanAll}, fromPattern, result) {
-        let res = await this.client.provider.set(msg.guild.id, 'cleanAll', cleanAll);
+    async run(msg, {adminClose}, fromPattern, result) {
+        let res = await this.client.provider.set(msg.guild.id, 'adminClose', adminClose);
         await messageUtils.sendSuccess({
             target: msg.channel, 
-            valString: `Old Clean All: \`${res}\`\n\nNew Clean All: \`${cleanAll}\``,
+            valString: `Old Admin Close: \`${res}\`\n\nNew Admin Close: \`${adminClose}\``,
             client: this.client,
             messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild

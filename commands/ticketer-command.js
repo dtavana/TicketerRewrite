@@ -11,9 +11,16 @@ module.exports = class TicketerCommand extends Command {
     async checkAdminRole(client, member, guild) {
         let adminRole = await client.provider.get(guild, 'adminRole', null);
         let hasRole = member.roles.has(adminRole);
+        let aRole = await guild.roles.get(adminRole);
+        if(!aRole) {
+            aRole = "**NOT FOUND**";
+        }
+        else {
+            aRole = aRole.toString()
+        }
         return {
                 state: hasRole,
-                admin: adminRole
+                admin: aRole
         };
     }
 
@@ -21,10 +28,25 @@ module.exports = class TicketerCommand extends Command {
         let adminRole = await client.provider.get(guild, 'adminRole', null);
         let moderatorRole = await client.provider.get(guild, 'moderatorRole', null);
         let hasRole = member.roles.has(adminRole) || member.roles.has(moderatorRole)
+        let aRole = await guild.roles.get(adminRole);
+        let mRole = await guild.roles.get(moderatorRole);
+        if(!aRole) {
+            aRole = "**NOT FOUND**";
+        }
+        else {
+            aRole = aRole.toString()
+        }
+        if(!mRole) {
+            mRole = "**NOT FOUND**";
+        }
+        else {
+            mRole = mRole.toString()
+        }
+
         return {
             state: hasRole,
-            admin: adminRole,
-            moderator: moderatorRole
+            admin: aRole,
+            moderator: mRole
     };
     }
     

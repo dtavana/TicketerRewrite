@@ -38,11 +38,11 @@ module.exports = class NewCommand extends TicketerCommand {
             }
         }
         if(subject instanceof User) {
-            let hasAdmin = await this.checkAdminRole(this.client, msg.member, msg.guild);
+            let hasAdmin = await this.checkTicketerRole(this.client, msg.member, msg.guild);
             if(!hasAdmin.state) {
                 return await messageUtils.sendError({
                     target: msg.channel, 
-                    valString: `In order to tag the user as the subject, you must have the ${hasAdmin.admin.toString()} role. If you believe this is in error, make sure you have the role.`,
+                    valString: `In order to tag the user as the subject, you must have the ${hasAdmin.admin} role. If you believe this is in error, make sure you have the role.`,
                     client: this.client,
                     messages: [msg].concat(result.prompts, result.answers),
                     guild: msg.guild

@@ -12,7 +12,8 @@ module.exports = class CloseAllCommand extends TicketerCommand {
             group: 'tickets',
             memberName: 'closeall',
             description: 'Closes all tickets',
-            guildOnly: true
+            guildOnly: true,
+            userPermissions: ['MANAGE_GUILD']
         });
     }
     
@@ -42,7 +43,7 @@ module.exports = class CloseAllCommand extends TicketerCommand {
                                 return;
                             }
                             let channelName = channel.name;
-                            let data = await ticketUtils.closeTicket(this.client, msg.guild, channel, msg.member);
+                            let data = await ticketUtils.closeTicket(this.client, msg.guild, channel, null);
                             if(typeof data === 'string') {
                                 await messageUtils.sendError({
                                     target: msg.channel, 

@@ -101,8 +101,15 @@ module.exports = {
 
         let adminClose = await client.provider.get(guild, 'adminClose', null);
 
-        if(!member.roles.has(adminRole) && adminClose) {
-            return `The guild administrators have required the ${adminRole.toString()} role to close tickets. If you believe this is in error, make sure you have the admin role.`;
+        if(member && !member.roles.has(adminRole) && adminClose) {
+            aRole = await guild.roles.get(adminRole);
+            if(!aRole) {
+                aRole = "**NOT FOUND**";
+            }
+            else {
+                aRole = aRole.toString()
+            }
+            return `The guild administrators have required the ${aRole} role to close tickets. If you believe this is in error, make sure you have the admin role.`;
         }
 
 
