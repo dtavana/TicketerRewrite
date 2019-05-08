@@ -10,10 +10,6 @@ module.exports = class TicketerCommand extends Command {
 
     async checkAdminRole(client, member, guild) {
         let adminRole = await client.provider.get(guild, 'adminRole', null);
-        adminRole = await guild.roles.get(adminRole);
-        if(!adminRole) {
-            adminRole = "**NOT FOUND**";
-        }
         let hasRole = member.roles.has(adminRole);
         return {
                 state: hasRole,
