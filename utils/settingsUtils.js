@@ -80,11 +80,11 @@ module.exports = {
         }
 
         if(oldData.length >= 1 && !premium) {
-            return `Non premium guilds may only set **1 ticket channel**. To have up to **5 ticket channels**, consider upgrading to premium using the ${guild.commandPrefix}upgrade command.`;
+            return `Non premium guilds may only set **1 ticket channel**. To have up to **10 ticket channels**, consider upgrading to premium using the \`${guild.commandPrefix}upgrade\` command.`;
         }
         
-        if(oldData.length >= 5) {
-            return "Premium guilds may only have up to **5 ticket channels**.";
+        if(oldData.length >= 10) {
+            return "Premium guilds may only have up to **10 ticket channels**.";
         }
 
         createdCategory = await guild.channels.create(

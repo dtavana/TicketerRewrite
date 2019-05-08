@@ -8,6 +8,30 @@ module.exports = class TicketerCommand extends Command {
         super(client, info);
     }
 
+    async checkAdminRole(client, member, guild) {
+        let adminRole = await client.provider.get(guild, 'adminRole', null);
+        adminRole = await guild.roles.get(adminRole);
+        if(!adminRole) {
+            adminRole = "**NOT FOUND**";
+        }
+        let hasRole = member.roles.has(adminRole);
+        return {
+                state: hasRole,
+                admin: adminRole
+        };
+    }
+
+    async checkTicketerRole(client, member, guild) {
+        let adminRole = await client.provider.get(guild, 'adminRole', null);
+        let moderatorRole = await client.provider.get(guild, 'moderatorRole', null);
+        let hasRole = member.roles.has(adminRole) || member.roles.has(moderatorRole)
+        return {
+            state: hasRole,
+            admin: adminRole,
+            moderator: moderatorRole
+    };
+    }
+    
     async checkPremium(client, msg) {
         let res = await client.provider.pg.oneOrNone('SELECT key FROM premium WHERE serverid = $1;', [msg.guild.id]);
         if(!res) {

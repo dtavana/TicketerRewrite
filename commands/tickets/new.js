@@ -38,14 +38,11 @@ module.exports = class NewCommand extends TicketerCommand {
             }
         }
         if(subject instanceof User) {
-            let adminRole = await this.client.provider.get(msg.guild, 'adminRole', null);
-            let moderatorRole = await this.client.provider.get(msg.guild, 'moderatorRole', null);
-            adminRole = await guild.roles.get(adminRole);
-            moderatorRole = await guild.roles.get(moderatorRole);
-            if(!msg.member.roles.has(adminRole) && !msg.member.roles.has(moderatorRole)) {
+            let hasAdmin = await this.checkAdminRole(this.client, msg.member, msg.guild);
+            if(!hasAdmin.state) {
                 return await messageUtils.sendError({
                     target: msg.channel, 
-                    valString: `In order to tag the user as the subject, you must have the ${adminRole.toString()} role. If you believe this is in error, make sure you have the role.`,
+                    valString: `In order to tag the user as the subject, you must have the ${hasAdmin.admin.toString()} role. If you believe this is in error, make sure you have the role.`,
                     client: this.client,
                     messages: [msg].concat(result.prompts, result.answers),
                     guild: msg.guild
