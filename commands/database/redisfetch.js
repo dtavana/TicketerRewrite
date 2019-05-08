@@ -13,12 +13,12 @@ module.exports = class RedisFetchCommand extends TicketerCommand {
             args: [
                 {
                     key: 'key',
-                    prompt: 'The key for the hashset',
+                    prompt: 'Please enter the key for the hashset',
                     type: 'string'
                 },
                 {
                     key: 'field',
-                    prompt: 'The field for the hashset',
+                    prompt: 'Please enter the field for the hashset',
                     type: 'string',
                     default: false
                 }

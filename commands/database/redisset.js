@@ -13,18 +13,18 @@ module.exports = class RedisSetCommand extends TicketerCommand {
             args: [
                 {
                     key: 'key',
-                    prompt: 'The key for the hashset',
+                    prompt: 'Please enter the key for the hashset',
                     type: 'string'
                 },
                 {
                     key: 'field',
-                    prompt: 'The field for the hashset',
+                    prompt: 'Please enter the field for the hashset',
                     type: 'string',
                     default: false
                 },
                 {
                     key: 'value',
-                    prompt: 'The value for the new data in the hashset',
+                    prompt: 'Please enter the value for the new data in the hashset',
                     type: 'string',
                     default: false
                 }

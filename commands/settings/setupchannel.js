@@ -15,7 +15,7 @@ module.exports = class SetupChannelCommand extends TicketerCommand {
             args: [
                 {
                     key: 'channel',
-                    prompt: 'Please enter the desired ticket channel **OR** enter \`false\` to not restrict creation of tickets to a channel. **NOTE:** If you set this to \`false\`, the will override all other categories.',
+                    prompt: 'Please tag the desired ticket channel **OR** enter **false** to not restrict creation of tickets to a channel. **NOTE:** If you set this to **false**, the will override all other categories.',
                     type: 'channel|boolean'
                 }
             ]

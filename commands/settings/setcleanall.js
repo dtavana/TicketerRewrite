@@ -14,7 +14,7 @@ module.exports = class SetCleanAllCommand extends PremiumCommand {
             args: [
                 {
                     key: 'cleanAll',
-                    prompt: 'Sets whether the bot should delete all invocations of commands (`true`: **On**, `false`: **Off**)',
+                    prompt: 'Please enter **true** to turn this feature on and **false** to turn this feature off.',
                     type: 'boolean'
                 }
             ]

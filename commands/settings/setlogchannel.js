@@ -14,7 +14,7 @@ module.exports = class SetLogChannelCommand extends TicketerCommand {
             args: [
                 {
                     key: 'logChannel',
-                    prompt: 'Please enter the desired log channel',
+                    prompt: 'Please tag the desired log channel',
                     type: 'channel'
                 }
             ]

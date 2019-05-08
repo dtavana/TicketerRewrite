@@ -13,12 +13,12 @@ module.exports = class GlobalRedisSetCommand extends TicketerCommand {
             args: [
                 {
                     key: 'key',
-                    prompt: 'The key for the global value',
+                    prompt: 'Please enter the key for the global value',
                     type: 'string'
                 },
                 {
                     key: 'value',
-                    prompt: 'The value for the global key',
+                    prompt: 'Please enter the value for the global key',
                     type: 'string'
                 }
             ]

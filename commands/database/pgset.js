@@ -13,7 +13,7 @@ module.exports = class PGSetCommand extends TicketerCommand {
             args: [
                 {
                     key: 'query',
-                    prompt: 'The query to execute on the database',
+                    prompt: 'Please enter the query to execute on the database',
                     type: 'string'
                 }
             ]

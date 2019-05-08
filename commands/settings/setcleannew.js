@@ -14,7 +14,7 @@ module.exports = class SetCleanNewCommand extends PremiumCommand {
             args: [
                 {
                     key: 'cleanNew',
-                    prompt: 'Sets whether the bot should delete new ticket invocation messages (`true`: **On**, `false`: **Off**)',
+                    prompt: 'Please enter **true** to turn this feature on and **false** to turn this feature off.',
                     type: 'boolean'
                 }
             ]

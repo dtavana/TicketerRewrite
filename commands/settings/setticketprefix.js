@@ -14,7 +14,7 @@ module.exports = class SetTicketPrefixCommand extends PremiumCommand {
             args: [
                 {
                     key: 'ticketprefix',
-                    prompt: 'Please enter the desired ticket prefix',
+                    prompt: 'Please enter the desired ticket prefix. **NOTE:** Must be less than 20 characters',
                     type: 'string'
                 }
             ]
@@ -22,6 +22,15 @@ module.exports = class SetTicketPrefixCommand extends PremiumCommand {
     }
     
     async run(msg, {ticketprefix}, fromPattern, result) {
+        if(ticketprefix.length > 20) {
+            return await messageUtils.sendError({
+                target: msg.channel, 
+                valString: 'Ticket prefix must be under 2000 characters.',
+                client: this.client,
+                messages: [msg].concat(result.prompts, result.answers),
+                guild: msg.guild
+            });
+        }
         let res = await this.client.provider.set(msg.guild.id, 'ticketprefix', ticketprefix);
         await messageUtils.sendSuccess({
             target: msg.channel, 
