@@ -7,7 +7,7 @@ module.exports = {
     sendSuccess: async(options) => {
         const successEmbed = new Discord.MessageEmbed()
             .setTitle('Success ✅')
-            .setColor('#00FF00')
+            .setColor('GREEN')
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
             .setDescription(options.valString);
@@ -30,7 +30,7 @@ module.exports = {
     sendError: async(options) => {
         const errorEmbed = new Discord.MessageEmbed()
             .setTitle('Error ❌')
-            .setColor('#FF0000')
+            .setColor('RED')
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
             .setDescription(options.valString);
@@ -52,7 +52,7 @@ module.exports = {
     },
     sendCleanSuccess: async(options) => {
         const successEmbed = new Discord.MessageEmbed()
-            .setColor('#00FF00')
+            .setColor('GREEN')
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
             .setDescription(options.valString);
@@ -94,6 +94,18 @@ module.exports = {
         let cleanAll = await client.provider.get(guild.id, 'cleanAll');
         client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages);
     },
+    sendTicketManipulation: async(client, guild, user, target, ticket, color, text) => {
+        let logChannel = await client.provider.get(guild, 'logChannel', null);
+        logChannel = await guild.channels.get(logChannel);
+        if(!logChannel) return;
+        const logEmbed = new Discord.MessageEmbed()
+            .setTitle('Log :notepad_spiral:')
+            .setColor(color)
+            .setTimestamp()
+            .setFooter(process.env.FOOTER_TEXT)
+            .setDescription(text);
+        await logChannel.send(logEmbed);
+    },
     sendClosedTicket: async(client, channelName, originalAuthor, authorObject, reason, timeString, guild, closer, channelHistory) => {
         let logChannel = await client.provider.get(guild, 'logChannel', null);
         let embedMessage;
@@ -101,10 +113,10 @@ module.exports = {
         if(logChannel) {
             const closeEmbed = new Discord.MessageEmbed()
                 .setTitle('Log :notepad_spiral:')
-                .setColor('#FF0000')
+                .setColor('RED')
                 .setTimestamp()
                 .setFooter(process.env.FOOTER_TEXT)
-                .setDescription(`**${closer.tag}** closed \`${channelName}\`\n\n**Reason:** \`${reason}\`\n\n**Original Author:** \`${originalAuthor}\`\n\n**Support Time:** \`${timeString}\``);
+                .setDescription(`**${closer.tag}** closed \`${channelName}\`\n**Reason:** \`${reason}\`\n**Original Author:** \`${originalAuthor}\`\n**Support Time:** \`${timeString}\``);
     
             embedMessage = await logChannel.send(closeEmbed);
         }
@@ -125,10 +137,10 @@ module.exports = {
             if(targetChannel !== logChannel) {
                 const transcriptEmbed = new Discord.MessageEmbed()
                     .setTitle('Transcript :notepad_spiral:')
-                    .setColor('#FF0000')
+                    .setColor('RED')
                     .setTimestamp()
                     .setFooter(process.env.FOOTER_TEXT)
-                    .setDescription(`**${closer.tag}** closed \`${channelName}\`\n\n**Reason:** \`${reason}\`\n\n**Original Author:** \`${originalAuthor}\`\n\n**Support Time:** \`${timeString}\`\n\n**The transcript is below**`);
+                    .setDescription(`**${closer.tag}** closed \`${channelName}\`\n**Reason:** \`${reason}\`\n**Original Author:** \`${originalAuthor}\`\n**Support Time:** \`${timeString}\`\n**The transcript is below**`);
                 await targetChannel.send(transcriptEmbed);
             }
             await targetChannel.send({
@@ -138,10 +150,10 @@ module.exports = {
             if(sendToUser && authorObject) {
                 const userEmbed = new Discord.MessageEmbed()
                     .setTitle('Transcript :notepad_spiral:')
-                    .setColor('#FF0000')
+                    .setColor('RED')
                     .setTimestamp()
                     .setFooter(process.env.FOOTER_TEXT)
-                    .setDescription(`**${closer.tag}** closed your ticket, \`${channelName}\`\n\n**Reason:** \`${reason}\`\n\n**Support Time:** \`${timeString}\`\n\n**The transcript is below**`);
+                    .setDescription(`**${closer.tag}** closed your ticket, \`${channelName}\`\n**Reason:** \`${reason}\`\n**Support Time:** \`${timeString}\`\n**The transcript is below**`);
                 
                 await authorObject.send(userEmbed);
                 await authorObject.send({
@@ -173,10 +185,10 @@ module.exports = {
         
         const logEmbed = new Discord.MessageEmbed()
             .setTitle('Log :notepad_spiral:')
-            .setColor('#00FF00')
+            .setColor('GREEN')
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
-            .setDescription(`\`${user.tag}\` opened a new ticket: \`${target.name}\`\n\n**Subject:** \`${subject}\``);
+            .setDescription(`\`${user.tag}\` opened a new ticket: \`${target.name}\`\n**Subject:** \`${subject}\``);
     
         await logChannel.send(logEmbed);
         return embedMessage;
