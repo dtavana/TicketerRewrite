@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const utils = require('./utils');
+const transcripts = require('./transcripts');
 require('dotenv').config();
 
 module.exports = {
@@ -93,21 +94,63 @@ module.exports = {
         let cleanAll = await client.provider.get(guild.id, 'cleanAll');
         client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages);
     },
-    sendClosedTicket: async(client, channelName, originalAuthor, reason, timeString, guild, closer) => {
+    sendClosedTicket: async(client, channelName, originalAuthor, authorObject, reason, timeString, guild, closer, channelHistory) => {
         let logChannel = await client.provider.get(guild, 'logChannel', null);
+        let embedMessage;
         logChannel = await guild.channels.get(logChannel);
-        if(!logChannel) {
-            return;
+        if(logChannel) {
+            const closeEmbed = new Discord.MessageEmbed()
+                .setTitle('Log :notepad_spiral:')
+                .setColor('#FF0000')
+                .setTimestamp()
+                .setFooter(process.env.FOOTER_TEXT)
+                .setDescription(`**${closer.tag}** closed \`${channelName}\`\n\n**Reason:** \`${reason}\`\n\n**Original Author:** \`${originalAuthor}\`\n\n**Support Time:** \`${timeString}\``);
+    
+            embedMessage = await logChannel.send(closeEmbed);
         }
         
-        const closeEmbed = new Discord.MessageEmbed()
-            .setTitle('Log :notepad_spiral:')
-            .setColor('#FF0000')
-            .setTimestamp()
-            .setFooter(process.env.FOOTER_TEXT)
-            .setDescription(`**${closer.tag}** closed \`${channelName}\`\n\n**Reason:** \`${reason}\`\n\n**Original Author:** \`${originalAuthor}\`\n\n**Support Time:** \`${timeString}\``);
-    
-        let embedMessage = await logChannel.send(closeEmbed);
+        
+        let sendTranscripts = await client.provider.get(guild, 'sendTranscripts', null);
+        if(sendTranscripts) {
+            let targetChannel;
+            let transcriptChannel = await client.provider.get(guild, 'transcriptChannel', null);
+            if(transcriptChannel) {
+                targetChannel = await guild.channels.get(transcriptChannel);
+            }
+            else {
+                targetChannel = logChannel;
+            }
+            if(!targetChannel) return embedMessage;
+            let filePath = await transcripts.createTranscript(guild, channelName, channelHistory);
+            if(targetChannel !== logChannel) {
+                const transcriptEmbed = new Discord.MessageEmbed()
+                    .setTitle('Transcript :notepad_spiral:')
+                    .setColor('#FF0000')
+                    .setTimestamp()
+                    .setFooter(process.env.FOOTER_TEXT)
+                    .setDescription(`**${closer.tag}** closed \`${channelName}\`\n\n**Reason:** \`${reason}\`\n\n**Original Author:** \`${originalAuthor}\`\n\n**Support Time:** \`${timeString}\`\n\n**The transcript is below**`);
+                await targetChannel.send(transcriptEmbed);
+            }
+            await targetChannel.send({
+                files: [filePath]
+            });  
+            let sendToUser = await client.provider.get(guild, 'sendToUser', null);
+            if(sendToUser && authorObject) {
+                const userEmbed = new Discord.MessageEmbed()
+                    .setTitle('Transcript :notepad_spiral:')
+                    .setColor('#FF0000')
+                    .setTimestamp()
+                    .setFooter(process.env.FOOTER_TEXT)
+                    .setDescription(`**${closer.tag}** closed your ticket, \`${channelName}\`\n\n**Reason:** \`${reason}\`\n\n**Support Time:** \`${timeString}\`\n\n**The transcript is below**`);
+                
+                await authorObject.send(userEmbed);
+                await authorObject.send({
+                    files: [filePath]
+                });
+            }
+            await transcripts.deleteTranscript(filePath);
+        }
+
         return embedMessage;
     },
 

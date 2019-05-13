@@ -3,6 +3,7 @@ const messageUtils = require('../../utils/messageUtils');
 const ticketUtils = require('../../utils/ticketUtils');
 const utils = require('../../utils/utils');
 
+
 module.exports = class CloseCommand extends TicketerCommand {
     constructor(client) {
         super(client, {
@@ -43,11 +44,13 @@ module.exports = class CloseCommand extends TicketerCommand {
 
         let createdAt = data.createdAt;
         let originalAuthor = data.originalAuthor;
+        let channelHistory = data.channelHistory;
+        let authorObject = data.authorObject;
         
         let elapsedTime = Date.now() - createdAt;
         let timeString = utils.timeConversion(elapsedTime);
 
-        await messageUtils.sendClosedTicket(this.client, channelName, originalAuthor, reason, timeString, msg.guild, msg.author);
+        await messageUtils.sendClosedTicket(this.client, channelName, originalAuthor, authorObject, reason, timeString, msg.guild, msg.author, channelHistory);
         
     }
 };

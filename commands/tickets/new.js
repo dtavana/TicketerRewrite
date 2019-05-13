@@ -2,6 +2,7 @@ const TicketerCommand  = require('../ticketer-command');
 const { User } = require('discord.js');
 const messageUtils = require('../../utils/messageUtils');
 const ticketUtils = require('../../utils/ticketUtils');
+const moderationUtils = require('../../utils/moderationUtils');
 
 module.exports = class NewCommand extends TicketerCommand {
     constructor(client) {
@@ -24,6 +25,17 @@ module.exports = class NewCommand extends TicketerCommand {
     }
     
     async run(msg, {subject}, fromPattern, result) {
+        let blacklist = await moderationUtils.getBlacklisted(this.client, msg.author, msg.guild);
+        if(blacklist) {
+            return await messageUtils.sendError({
+                target: msg.channel, 
+                valString: `${msg.author.toString()} is currently blacklisted in **${msg.guild.name}**`,
+                client: this.client,
+                messages: [msg].concat(result.prompts, result.answers),
+                guild: msg.guild
+            });
+        }
+        
         let target;
         if(subject === false) {
             let enforceSubject = await this.client.provider.get(msg.guild, 'enforceSubject', null);

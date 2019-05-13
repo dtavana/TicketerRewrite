@@ -118,6 +118,9 @@ module.exports = {
             return `${channel.toString()} was not detected as a open ticket!`;
         }
 
+        let createdAt = channel.createdAt;
+        let channelHistory = channel.messages;
+
         let openTickets = await client.provider.get(guild, 'openTickets', null);
         let allOpenTickets = await client.provider.redis.get('allOpenTickets');
         let handledTickets = await client.provider.redis.get('handledTickets');
@@ -145,14 +148,14 @@ module.exports = {
         handledTickets += 1;
 
         author = await client.users.get(author);
+        let authorObject = author;
         if(!author) {
             author = 'Not found';
+            authorObject = null;
         }
         else {
             author = author.tag;
         }
-
-        let createdAt = channel.createdAt;
 
         await channel.delete('Closing Ticketer Ticket');
         await client.provider.remove(`${guild.id}-channels`, channel.id);
@@ -163,7 +166,9 @@ module.exports = {
 
         return {
             'createdAt': createdAt,
-            'originalAuthor': author
+            'originalAuthor': author,
+            'channelHistory': channelHistory,
+            'authorObject': authorObject
         };
     }
     
