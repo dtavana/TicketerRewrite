@@ -81,8 +81,9 @@ module.exports = {
         let embedMessage = await options.target.send(waitingEmbed);
         await embedMessage.react('✅');
         await embedMessage.react('🚫');
-
-        return embedMessage;
+        const filter = (reaction, user) => user.id === options.message.author.id && (reaction.emoji.name === '✅' || reaction.emoji.name === '🚫');
+        let collector = new Discord.ReactionCollector(embedMessage, filter, {max: 1});
+        return collector;
     },
     cleanWaiting: async(options) => {
         let client = options.client || null;

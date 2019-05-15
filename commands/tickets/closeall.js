@@ -18,12 +18,11 @@ module.exports = class CloseAllCommand extends TicketerCommand {
     }
     
     async run(msg, fromPattern, result) {
-        let originalMessage = await messageUtils.sendWaiting({
+        let collector = await messageUtils.sendWaiting({
             target: msg.channel, 
-            valString: 'Close **ALL** Tickets'
+            valString: 'Close **ALL** Tickets',
+            message: msg
         });
-        const filter = (reaction, user) => user === msg.author && (reaction.emoji.name === '✅' || reaction.emoji.name === '🚫');
-        let collector = new Discord.ReactionCollector(originalMessage, filter, {max: 1});
         let endReason;
         collector.on('end', async(collected, reason) => {
             if(collected.has('✅')) {
@@ -57,11 +56,13 @@ module.exports = class CloseAllCommand extends TicketerCommand {
                                 let closeReason = 'Closing all tickets.';
                                 let createdAt = data.createdAt;
                                 let originalAuthor = data.originalAuthor;
+                                let channelHistory = data.channelHistory;
+                                let authorObject = data.authorObject;
                                 
                                 let elapsedTime = Date.now() - createdAt;
                                 let timeString = utils.timeConversion(elapsedTime);
 
-                                await messageUtils.sendClosedTicket(this.client, channelName, originalAuthor, closeReason, timeString, msg.guild, msg.author);
+                                await messageUtils.sendClosedTicket(this.client, channelName, originalAuthor, authorObject, closeReason, timeString, msg.guild, msg.author, channelHistory);
                             }
                         }
                     }

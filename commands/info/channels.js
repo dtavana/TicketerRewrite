@@ -7,7 +7,7 @@ module.exports = class ChannelsCommands extends TicketerCommand {
         super(client, {
             name: 'channels',
             aliases: ['ticketchannels'],
-            group: 'misc',
+            group: 'info',
             memberName: 'channels',
             description: 'Displays all channels',
             guildOnly: true
