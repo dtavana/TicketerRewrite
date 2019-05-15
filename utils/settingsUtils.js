@@ -45,21 +45,12 @@ module.exports = {
             moderatorRole: createdModeratorRole
         };
     },
-    initializeChannels: async(client, guild, ticketchannel, premium) => {
+    initializeChannels: async(client, guild, ticketchannel, cleanTicketChannel, premium) => {
         let createdCategory;
         let ticketchannelname;
         let ticketchannelid;
         let oldData;
         let newData;
-        
-        await ticketchannel.overwritePermissions(client.user, {
-            'SEND_MESSAGES': true,
-            'VIEW_CHANNEL': true,
-            'USE_EXTERNAL_EMOJIS': true
-
-        },
-        "Ticketer Setup"
-        );
 
         if(!ticketchannel) {
             ticketchannelname = "Ticketer";
@@ -68,6 +59,15 @@ module.exports = {
         else {
             ticketchannelname = ticketchannel.name;
             ticketchannelid = ticketchannel.id
+            await ticketchannel.overwritePermissions(client.user, {
+                'SEND_MESSAGES': true,
+                'VIEW_CHANNEL': true,
+                'USE_EXTERNAL_EMOJIS': true
+    
+            },
+            "Ticketer Setup"
+            );
+            await ticketchannel.setRateLimitPerUser(15);
         } 
         
         oldData = await client.provider.get(guild.id, "ticketchannels", null);
@@ -96,8 +96,10 @@ module.exports = {
         
         oldData.push({
             channelid: ticketchannelid,
-            categoryid: createdCategory.id
+            categoryid: createdCategory.id,
+            cleanChannel: cleanTicketChannel
         })
+        
         
         newData = JSON.stringify(oldData);
 

@@ -45,7 +45,7 @@ module.exports = class ViewSettingsCommand extends TicketerCommand {
         }
         await messageUtils.sendSuccess({
             target: msg.channel, 
-            valString: resString,
+            valString: resString += `\nTo view your current ticket channel configurations, use the \`${msg.guild.commandPrefix}channels\` command.`,
             client: this.client,
             messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild

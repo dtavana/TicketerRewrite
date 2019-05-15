@@ -1,4 +1,5 @@
 const { SettingProvider } = require('discord.js-commando');
+const Discord = require('discord.js');
 require('dotenv').config();
 const subpubController = require('../controllers/subpub.controller');
 
@@ -13,6 +14,7 @@ class TicketerProvider extends SettingProvider {
 
         this.guilds = [];
         this.listeners = new Map();
+        this.ticketChannelCollectors = new Map();
     }
 
     async init(client) {
@@ -158,6 +160,22 @@ class TicketerProvider extends SettingProvider {
         if(typeof settings.prefix !== 'undefined') {
             if(guild) guild._commandPrefix = settings.prefix;
             else this.client._commandPrefix = settings.prefix;
+        }
+
+        //Set ticket channel cleanup
+        let ticketChannels = settings.ticketchannels;
+        ticketChannels = JSON.parse(ticketChannels);
+        const filter = m => !m.content.startsWith(`${guild.commandPrefix}new`) && !m.content.startsWith(`${guild.commandPrefix}ticket`) && !(m.embeds.length > 0 && m.embeds[0].description && m.embeds[0].description.includes("your ticket has been opened"));
+        for(let entry of ticketChannels) {
+            if(!entry.cleanChannel) continue;
+            let channel = guild.channels.get(entry.channelid);
+            if(!channel) continue;
+            let collector = new Discord.MessageCollector(channel, filter, {})
+            collector.on('collect', async(message) => {
+                try { await message.delete(); }
+                catch {};
+            });
+            this.ticketChannelCollectors.set(guild.id, collector);
         }
 
         // Load all command/group statuses
