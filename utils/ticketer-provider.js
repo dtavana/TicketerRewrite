@@ -175,7 +175,13 @@ class TicketerProvider extends SettingProvider {
                 try { await message.delete(); }
                 catch {};
             });
-            this.ticketChannelCollectors.set(guild.id, collector);
+            if(this.ticketChannelCollectors.has(guild.id)) {
+                this.ticketChannelCollectors.set(guild.id, this.ticketChannelCollectors.get(guild.id).push(collector));
+            }
+            else {
+                this.ticketChannelCollectors.set(guild.id, [collector]);
+            }
+            
         }
 
         // Load all command/group statuses
