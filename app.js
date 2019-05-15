@@ -23,8 +23,7 @@ client.registry
         ['settings', 'Settings commands'],
         ['credits', 'Credits commands'],
         ['info', 'Info commands'],
-        ['database', 'Database commands'],
-        ['misc', 'Miscellaneous commands']
+        ['database', 'Database commands']
     ])
     .registerDefaultGroups()
     .registerDefaultCommands()
