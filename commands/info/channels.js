@@ -1,5 +1,4 @@
 const TicketerCommand  = require('../ticketer-command');
-const { User } = require('discord.js');
 const messageUtils = require('../../utils/messageUtils');
 
 module.exports = class ChannelsCommands extends TicketerCommand {
