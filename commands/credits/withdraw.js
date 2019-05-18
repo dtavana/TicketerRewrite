@@ -38,6 +38,7 @@ module.exports = class WithdrawCommand extends TicketerCommand {
         let key = await donateUtils.disableCredit(this.client, msg.guild.id);
         await this.client.provider.clear(msg.guild);
         await this.client.provider.clear(`${msg.guild.id}-channels`);
+        this.client.provider.guilds = this.client.provider.guilds.filter(id => id != msg.guild.id);
         await messageUtils.sendSuccess({
             target: msg.channel, 
             valString: `Credit with key \`${key}\` has been disabled in this guild and is ready for use in another guild. This guild's settings have been cleared.`,
