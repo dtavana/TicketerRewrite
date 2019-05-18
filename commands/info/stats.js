@@ -21,26 +21,14 @@ module.exports = class StatsCommand extends TicketerCommand {
         if(!allOpenTickets) {
             allOpenTickets = 0;
         }
-        else {
-            allOpenTickets = parseInt(allOpenTickets);
-        }
         if(!openTickets) {
             openTickets = 0;
-        }
-        else {
-            openTickets = parseInt(openTickets);
         }
         if(!closedTickets) {
             closedTickets = 0;
         }
-        else {
-            closedTickets = parseInt(closedTickets);
-        }
         if(!handledTickets) {
             handledTickets = 0;
-        }
-        else {
-            handledTickets = parseInt(handledTickets);
         }
 
         await messageUtils.sendSuccess({
