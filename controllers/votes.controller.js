@@ -29,7 +29,12 @@ module.exports = {
         var key;
 
         if(receiveCredit) {
-            key = donateUtils.generateKey();
+            let keyExists = true;
+            let key;
+            while(keyExists) {
+                key = await donateUtils.generateKey();
+                keyExists = await donateUtils.checkKey(this.client, key);
+            }
             await donateUtils.saveCredit(client, {'userid': userId, 'key': key, 'paymentid': 'voting'}); 
             publicString =  `\`${user.tag}\` just voted for Ticketer and received a premium credit!`;
             privateString = `You have had one premium credit: \`${key}\` added to your account! Use the \`redeem\` command to get started! Thank you for voting for Ticketer!`;

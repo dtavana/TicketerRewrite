@@ -13,7 +13,12 @@ module.exports = {
         let channel = client.channels.get(process.env.DONATE_LOG);
         var key;
         if(added) {
-            key = donateUtils.generateKey();
+            let keyExists = true;
+            let key;
+            while(keyExists) {
+                key = await donateUtils.generateKey();
+                keyExists = await donateUtils.checkKey(this.client, key);
+            }
             await donateUtils.saveCredit(client, {'userid': userId, 'key': key, 'paymentid': paymentId});
         }
         else {

@@ -18,10 +18,23 @@ module.exports = {
         await client.provider.pg.none('UPDATE premium SET enabled = False, serverid = 0 WHERE key = $1;', [key]);
         return key;
     },
+    transferCredit: async(client, key, userId) => {
+        await client.provider.pg.none("UPDATE premium SET userid = $1 WHERE key = $2;", [userId, key]);
+    },
     removeCredit: async(client, paymentId) => {
         let key = await client.provider.pg.one('SELECT key FROM premium WHERE paymentid = $1;', paymentId);
         await client.provider.pg.none('DELETE FROM premium WHERE paymentId = $1;', paymentId);
         return key;
+    },
+    checkKey: async(client, key) => {
+        let exists = await client.provider.pg.oneOrNone("SELECT * FROM premium WHERE key = $1;", key);
+        if(exists === null) {
+            return false;
+        }
+        return true;
+    },
+    removeCreditFromKey: async(client, key) => {
+        await client.provider.pg.none('DELETE FROM premium WHERE key = $1;', key);
     },
     getCredits: async(client, userId) => {
         let credits = await client.provider.pg.any('SELECT * FROM premium WHERE userid = $1;', [userId]);
@@ -29,6 +42,13 @@ module.exports = {
             return null;
         }
         return credits;
+    },
+    getOpenCredit: async(client, userId) => {
+        let credits = await client.provider.pg.any('SELECT * FROM premium WHERE userid = $1 AND enabled = False;', [userId]);
+        if(credits.length == 0) {
+            return null;
+        }
+        return credits[0];
     },
     getCreditOwner: async(client, serverId) => {
         let userId = await client.provider.pg.oneOrNone('SELECT userid FROM premium WHERE serverid = $1;', [serverId]);
