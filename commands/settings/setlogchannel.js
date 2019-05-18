@@ -1,4 +1,4 @@
-const TicketerCommand  = require('../premium-command');
+const TicketerCommand  = require('../ticketer-command');
 const messageUtils = require('../../utils/messageUtils');
 
 module.exports = class SetLogChannelCommand extends TicketerCommand {
@@ -14,24 +14,44 @@ module.exports = class SetLogChannelCommand extends TicketerCommand {
             args: [
                 {
                     key: 'logChannel',
-                    prompt: 'Please tag the desired log channel',
-                    type: 'channel'
+                    prompt: 'Please tag the desired log channel or enter **false** to turn this feature off',
+                    type: 'channel|boolean'
                 }
             ]
         });
     }
     
     async run(msg, {logChannel}, fromPattern, result) {
-        await logChannel.overwritePermissions(this.client.user, {
-            'SEND_MESSAGES': true,
-            'VIEW_CHANNEL': true,
-            'USE_EXTERNAL_EMOJIS': true
-
-        },
-        'Ticketer Setup'
-        );
+        if(logChannel === true) {
+            return await messageUtils.sendError({
+                target: msg.channel, 
+                valString: `Invalid entry for logChannel.`,
+                client: this.client,
+                messages: [msg].concat(result.prompts, result.answers),
+                guild: msg.guild
+            });
+        }
         
-        let res = await this.client.provider.set(msg.guild.id, 'logChannel', logChannel.id);
+        let res;
+
+        if(!logChannel) {
+            res = await this.client.provider.set(msg.guild.id, 'logChannel', false);
+            logChannel = "**TURNED OFF**"
+        }
+        else {
+            res = await this.client.provider.set(msg.guild.id, 'logChannel', logChannel.id);
+            await logChannel.overwritePermissions(this.client.user, {
+                'SEND_MESSAGES': true,
+                'VIEW_CHANNEL': true,
+                'USE_EXTERNAL_EMOJIS': true
+    
+            },
+            'Ticketer Setup'
+            );
+            logChannel = logChannel.toString();
+            
+        }
+
         res = await msg.guild.channels.get(res);
         if(!res) {
             res = '`Not found`';
@@ -41,11 +61,10 @@ module.exports = class SetLogChannelCommand extends TicketerCommand {
         }
         await messageUtils.sendSuccess({
             target: msg.channel, 
-            valString: `Old Log Channel: ${res}\n\nNew Log Channel: ${logChannel.toString()}`,
+            valString: `Old Log Channel: ${res}\n\nNew Log Channel: ${logChannel}`,
             client: this.client,
             messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild
         });
-
     }
 };
