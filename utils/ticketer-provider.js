@@ -98,7 +98,14 @@ class TicketerProvider extends SettingProvider {
         }
         const settings = await this.getSettings(guild);
         
-        return settings ? typeof settings[key] !== null ? settings[key] : defVal : defVal;
+        if(!settings[key])
+            return defVal;
+        else if(settings[key] === 'true')
+            return true;
+        else if(settings[key] === 'false')
+            return false;
+        else
+            return settings[key];
     }
 
     async set(guild, key, val) {
@@ -141,7 +148,6 @@ class TicketerProvider extends SettingProvider {
     async clear(guild) {
         if(typeof guild !== "string") {
             guild = this.constructor.getGuildID(guild);
-            this.guilds = this.guilds.filter(id => id != guild);
         }
         await this.redis.del(guild !== 'global' ? guild : 0);
     }
