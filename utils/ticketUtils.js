@@ -122,6 +122,7 @@ module.exports = {
         let channelHistory = channel.messages;
 
         let openTickets = await client.provider.get(guild, 'openTickets', null);
+        let closedTickets = await client.provider.get(guild, 'closedTickets', null);
         let allOpenTickets = await client.provider.redis.get('allOpenTickets');
         let handledTickets = await client.provider.redis.get('handledTickets');
 
@@ -137,6 +138,12 @@ module.exports = {
         else {
             openTickets = parseInt(openTickets);
         }
+        if(!closedTickets) {
+            closedTickets = 0;
+        }
+        else {
+            closedTickets = parseInt(closedTickets);
+        }
         if(!handledTickets) {
             handledTickets = 0;
         }
@@ -145,6 +152,7 @@ module.exports = {
         }
         allOpenTickets -= 1;
         openTickets -= 1;
+        closedTickets += 1;
         handledTickets += 1;
 
         author = await client.users.get(author);
@@ -160,6 +168,7 @@ module.exports = {
         await channel.delete('Closing Ticketer Ticket');
         await client.provider.remove(`${guild.id}-channels`, channel.id);
         await client.provider.set(guild, 'openTickets', openTickets);
+        await client.provider.set(guild, 'closedTickets', closedTickets);
         await client.provider.redis.set('allOpenTickets', allOpenTickets);
         await client.provider.redis.set('handledTickets', handledTickets);
 

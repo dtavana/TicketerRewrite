@@ -70,20 +70,6 @@ module.exports = {
             "Ticketer Setup"
             );
             await ticketchannel.setRateLimitPerUser(15);
-            if(cleanTicketChannel) {
-                const filter = m => !m.content.startsWith(`${guild.commandPrefix}new`) && !m.content.startsWith(`${guild.commandPrefix}ticket`) && !(m.embeds.length > 0 && m.embeds[0].description && m.embeds[0].description.includes("your ticket has been opened"));
-                let collector = new Discord.MessageCollector(ticketchannel, filter, {})
-                collector.on('collect', async(message) => {
-                    try { await message.delete(); }
-                    catch {};
-                });
-                if(client.provider.ticketChannelCollectors.has(guild.id)) {
-                    client.provider.ticketChannelCollectors.set(guild.id, client.provider.ticketChannelCollectors.get(guild.id).push(collector));
-                }
-                else {
-                    client.provider.ticketChannelCollectors.set(guild.id, [collector]);
-                }
-             }
         } 
         
         oldData = await client.provider.get(guild.id, "ticketchannels", null);

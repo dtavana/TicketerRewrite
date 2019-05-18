@@ -1,6 +1,7 @@
 const TicketerCommand  = require('../ticketer-command');
 const messageUtils = require('../../utils/messageUtils');
 const settingsUtils = require('../../utils/settingsUtils');
+const Discord = require('discord.js');
 
 module.exports = class SetupChannelCommand extends TicketerCommand {
     constructor(client) {
@@ -67,5 +68,20 @@ module.exports = class SetupChannelCommand extends TicketerCommand {
             messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild
         });
+
+        if(cleanTicketChannel && channels.channel) {
+            const filter = m => !m.content.startsWith(`${msg.guild.commandPrefix}new`) && !m.content.startsWith(`${msg.guild.commandPrefix}ticket`) && !(m.embeds.length > 0 && m.embeds[0].description && m.embeds[0].description.includes("your ticket has been opened"));
+            let collector = new Discord.MessageCollector(channels.channel, filter, {})
+            collector.on('collect', async(message) => {
+                try { await message.delete(); }
+                catch {};
+            });
+            if(this.client.provider.ticketChannelCollectors.has(msg.guild.id)) {
+                this.client.provider.ticketChannelCollectors.set(msg.guild.id, this.client.provider.ticketChannelCollectors.get(msg.guild.id).push(collector));
+            }
+            else {
+                this.client.provider.ticketChannelCollectors.set(msg.guild.id, [collector]);
+            }
+         }
     }
 };
