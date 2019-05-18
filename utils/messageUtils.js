@@ -127,26 +127,27 @@ module.exports = {
         if(sendTranscripts) {
             let targetChannel;
             let transcriptChannel = await client.provider.get(guild, 'transcriptChannel', null);
-            if(transcriptChannel) {
-                targetChannel = await guild.channels.get(transcriptChannel);
-            }
-            else {
+            if(!transcriptChannel) {
                 targetChannel = logChannel;
             }
-            if(!targetChannel) return embedMessage;
+            else {
+                targetChannel = guild.channels.get(transcriptChannel);
+            }
             let filePath = await transcripts.createTranscript(guild, channelName, channelHistory);
-            if(targetChannel !== logChannel) {
-                const transcriptEmbed = new Discord.MessageEmbed()
+            if(targetChannel) {
+                if(targetChannel !== logChannel) {
+                    const transcriptEmbed = new Discord.MessageEmbed()
                     .setTitle('Transcript :notepad_spiral:')
                     .setColor('RED')
                     .setTimestamp()
                     .setFooter(process.env.FOOTER_TEXT)
                     .setDescription(`**${closer.tag}** closed \`${channelName}\`\n**Reason:** \`${reason}\`\n**Original Author:** \`${originalAuthor}\`\n**Support Time:** \`${timeString}\`\n**The transcript is below**`);
-                await targetChannel.send(transcriptEmbed);
-            }
-            await targetChannel.send({
-                files: [filePath]
-            });  
+                    await targetChannel.send(transcriptEmbed);
+                }
+                await targetChannel.send({
+                    files: [filePath]
+                }); 
+            } 
             let sendToUser = await client.provider.get(guild, 'sendToUser', null);
             if(sendToUser && authorObject) {
                 const userEmbed = new Discord.MessageEmbed()
@@ -156,10 +157,14 @@ module.exports = {
                     .setFooter(process.env.FOOTER_TEXT)
                     .setDescription(`**${closer.tag}** closed your ticket, \`${channelName}\`\n**Reason:** \`${reason}\`\n**Support Time:** \`${timeString}\`\n**The transcript is below**`);
                 
-                await authorObject.send(userEmbed);
-                await authorObject.send({
+                try {
+                    await authorObject.send(userEmbed);
+                    await authorObject.send({
                     files: [filePath]
-                });
+                    });
+                }
+                catch {}
+                
             }
             await transcripts.deleteTranscript(filePath);
         }
