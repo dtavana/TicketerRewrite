@@ -173,6 +173,8 @@ module.exports = {
     },
 
     sendOpenedTicket: async(client, target, welcomeMessage, subject, guild, user) => {
+        welcomeMessage = welcomeMessage.replace(':user:', user.toString());
+        welcomeMessage = welcomeMessage.replace(':server:', guild.name);
         await target.send(user.toString());
         const openEmbed = new Discord.MessageEmbed()
             .setColor('LUMINOUS_VIVID_PINK')
