@@ -20,7 +20,7 @@ class TicketerProvider extends SettingProvider {
     async init(client) {
         this.client = client;
 
-        await this.pg.none('CREATE TABLE IF NOT EXISTS premium(userid varchar, serverid varchar, key varchar, enabled boolean DEFAULT FALSE, paymentid varchar DEFAULT 0);');
+        await this.pg.none('CREATE TABLE IF NOT EXISTS premium(userid varchar, serverid varchar, key varchar, enabled boolean DEFAULT FALSE, paymentid varchar DEFAULT 0, expires TIMESTAMP DEFAULT null);');
         await this.pg.none('CREATE TABLE IF NOT EXISTS blacklist(userid varchar, serverid varchar, adminid varchar);');
         await this.pg.none('CREATE TABLE IF NOT EXISTS payments(userid varchar, paymentid varchar);');
         await this.pg.none('CREATE TABLE IF NOT EXISTS votes(userid varchar PRIMARY KEY, count smallint);');

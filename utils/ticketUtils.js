@@ -65,7 +65,8 @@ module.exports = {
                     {id: guild.defaultRole, deny: ['SEND_MESSAGES', 'VIEW_CHANNEL'], type: 'role'},
                     {id: adminRole, allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS', 'ATTACH_FILES'], type: 'role'},
                     {id: moderatorRole, allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS', 'ATTACH_FILES'], type: 'role'},
-                    {id: user, allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS', 'ATTACH_FILES'], type: 'member'}
+                    {id: user, allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS', 'ATTACH_FILES'], type: 'member'},
+                    {id: client.user, allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS', 'ATTACH_FILES'], type: 'member'}
                 ]
             }
         );

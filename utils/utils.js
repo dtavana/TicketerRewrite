@@ -1,4 +1,9 @@
 module.exports = {
+    initEvents: async(client) => {
+        client.on('guildCreate', async(guild) => {
+            await client.provider.set(guild.id, 'currentTicket', 0);
+        });
+    },
     cleanMessages: async(clean, messages) => {
         if(clean) {
             for(let message of messages) {
