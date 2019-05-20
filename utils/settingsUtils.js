@@ -21,7 +21,6 @@ module.exports = {
         }
         catch {}
         
-
         createdAdminRole = await guild.roles.create({
             data: {
                 name: `Ticketer Admin`,
@@ -54,6 +53,7 @@ module.exports = {
         let oldData;
         let newData;
 
+        
         if(!ticketchannel) {
             ticketchannelname = "Ticketer";
             ticketchannelid = false;
@@ -61,19 +61,26 @@ module.exports = {
         else {
             ticketchannelname = ticketchannel.name;
             ticketchannelid = ticketchannel.id
-            await ticketchannel.overwritePermissions(client.user, {
-                'SEND_MESSAGES': true,
-                'VIEW_CHANNEL': true,
-                'USE_EXTERNAL_EMOJIS': true
-    
-            },
-            "Ticketer Setup"
-            );
-            await ticketchannel.setRateLimitPerUser(15);
+            try {
+                await ticketchannel.overwritePermissions(client.user, {
+                    'SEND_MESSAGES': true,
+                    'VIEW_CHANNEL': true,
+                    'USE_EXTERNAL_EMOJIS': true
+        
+                },
+                "Ticketer Setup"
+                );
+                await ticketchannel.setRateLimitPerUser(15);
+            }
+            catch {
+                return `I do not have permissions to setup ${ticketchannel.toString()}. I need the **Manage Channels** permission in order to proceed.`
+            }
+        
         } 
         
         oldData = await client.provider.get(guild.id, "ticketchannels", null);
 
+        
         if(oldData === undefined || oldData === null) {
             oldData = [];
         }
@@ -88,7 +95,7 @@ module.exports = {
         if(oldData.length >= 10) {
             return "Premium guilds may only have up to **10 ticket channels**.";
         }
-
+        
         createdCategory = await guild.channels.create(
             `${ticketchannelname} Category`,
             {

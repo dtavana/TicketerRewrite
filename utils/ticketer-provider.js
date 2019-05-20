@@ -170,26 +170,28 @@ class TicketerProvider extends SettingProvider {
 
         //Set ticket channel cleanup
         let ticketChannels = settings.ticketchannels;
-        ticketChannels = JSON.parse(ticketChannels);
-        const filter = m => !m.content.startsWith(`${guild.commandPrefix}new`) && !m.content.startsWith(`${guild.commandPrefix}ticket`) && !(m.embeds.length > 0 && m.embeds[0].description && m.embeds[0].description.includes("your ticket has been opened"));
-        for(let entry of ticketChannels) {
-            if(!entry.cleanChannel) continue;
-            let channel = guild.channels.get(entry.channelid);
-            if(!channel) continue;
-            let collector = new Discord.MessageCollector(channel, filter, {})
-            collector.on('collect', async(message) => {
-                try { await message.delete(); }
-                catch {};
-            });
-            if(this.ticketChannelCollectors.has(guild.id)) {
-                this.ticketChannelCollectors.set(guild.id, this.ticketChannelCollectors.get(guild.id).push(collector));
+        if(ticketChannels) {
+            ticketChannels = JSON.parse(ticketChannels);
+            const filter = m => !m.content.startsWith(`${guild.commandPrefix}new`) && !m.content.startsWith(`${guild.commandPrefix}ticket`) && !(m.embeds.length > 0 && m.embeds[0].description && m.embeds[0].description.includes("your ticket has been opened"));
+            for(let entry of ticketChannels) {
+                if(!entry.cleanChannel) continue;
+                let channel = guild.channels.get(entry.channelid);
+                if(!channel) continue;
+                let collector = new Discord.MessageCollector(channel, filter, {})
+                collector.on('collect', async(message) => {
+                    try { await message.delete(); }
+                    catch {};
+                });
+                if(this.ticketChannelCollectors.has(guild.id)) {
+                    this.ticketChannelCollectors.set(guild.id, this.ticketChannelCollectors.get(guild.id).push(collector));
+                }
+                else {
+                    this.ticketChannelCollectors.set(guild.id, [collector]);
+                }
+                
             }
-            else {
-                this.ticketChannelCollectors.set(guild.id, [collector]);
-            }
-            
         }
-
+        
         // Load all command/group statuses
         for(const command of this.client.registry.commands.values()) this.setupGuildCommand(guild, command, settings);
         for(const group of this.client.registry.groups.values()) this.setupGuildGroup(guild, group, settings);
