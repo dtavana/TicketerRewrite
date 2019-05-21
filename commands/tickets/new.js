@@ -70,7 +70,7 @@ module.exports = class NewCommand extends TicketerCommand {
             }
         }
 
-        let channel = await ticketUtils.openTicket(this.client, msg.guild, msg.channel, msg.author);
+        let channel = await ticketUtils.openTicket(this.client, msg.guild, msg.channel, target);
 
         if(typeof channel === 'string') {
             return await messageUtils.sendError({
