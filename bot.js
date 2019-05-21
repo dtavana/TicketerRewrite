@@ -8,12 +8,15 @@ const sub = require('./controllers/subscribe.controller');
 const pub = require('./controllers/publish.controller');
 const TicketerProvider = require('./utils/ticketer-provider');
 const utils = require('./utils/utils');
+const DBL = require('dblapi.js');
 
 const client = new CommandoClient({
     commandPrefix: process.env.DEFAULT_PREFIX,
     owner: process.env.OWNERS.split(','),
     invite: process.env.INVITE
 });
+
+//const dbl = new DBL(process.env.DBL_TOKEN, client);
 
 client.setProvider(new TicketerProvider(pg, redis, sub, pub));
 
@@ -38,14 +41,8 @@ client.registry.unregisterCommand(prefixCommand);
 client.once('ready', async() => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
     client.user.setActivity(`-help | v2.0.0`, {type: 'WATCHING'});
-    client.on('shardReady', async(id) => {
-        client.user.setActivity(`-help | v2.0.0 | Shard ${id}`, {type: 'WATCHING'});
-    });
     await utils.initEvents(client);
 });
-
-
-    
 
 client.on('error', console.error);
 
