@@ -1,6 +1,5 @@
 const TicketerCommand  = require('../ticketer-command');
 const { User } = require('discord.js');
-//const NewArgument = require('./new-argument')
 const messageUtils = require('../../utils/messageUtils');
 const ticketUtils = require('../../utils/ticketUtils');
 const moderationUtils = require('../../utils/moderationUtils');

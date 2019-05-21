@@ -14,6 +14,15 @@ module.exports = {
                 guild: msg.guild
             });
         });
+
+        client.on('guildDelete', async(guild) => {
+            await client.provider.clear(guild.id);
+            await client.provider.pg.none("DELETE FROM blacklist WHERE serverid = $1;", guild.id);
+            await client.provider.pg.none("UPDATE premium SET serverid = 0, enabled = False WHERE serverid = $1;", guild.id);
+            client.provider.guilds = client.provider.guilds.filter(id => id != guild.id);
+        });
+
+
     },
     cleanMessages: async(clean, messages) => {
         if(clean) {
