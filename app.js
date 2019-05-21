@@ -35,7 +35,7 @@ client.registry.unregisterCommand(prefixCommand);
 
 client.once('ready', async() => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
-    client.user.setActivity('-help | v2.0', {type: 'WATCHING'});
+    client.user.setActivity('-help | v2.0.0', {type: 'WATCHING'});
     await utils.initEvents(client);
 });
     
