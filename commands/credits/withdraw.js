@@ -38,6 +38,7 @@ module.exports = class WithdrawCommand extends TicketerCommand {
         let key = await donateUtils.disableCredit(this.client, msg.guild.id);
         await this.client.provider.clear(msg.guild);
         await this.client.provider.clear(`${msg.guild.id}-channels`);
+        await this.client.provider.set(msg.guild.id, 'currentTicket', 0);
         this.client.provider.guilds = this.client.provider.guilds.filter(id => id != msg.guild.id);
         await messageUtils.sendSuccess({
             target: msg.channel, 
