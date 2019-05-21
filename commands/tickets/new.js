@@ -1,5 +1,6 @@
 const TicketerCommand  = require('../ticketer-command');
 const { User } = require('discord.js');
+//const NewArgument = require('./new-argument')
 const messageUtils = require('../../utils/messageUtils');
 const ticketUtils = require('../../utils/ticketUtils');
 const moderationUtils = require('../../utils/moderationUtils');
@@ -16,7 +17,7 @@ module.exports = class NewCommand extends TicketerCommand {
             args: [
                 {
                     key: 'subject',
-                    type: 'user|string',
+                    type: 'strictuser|string',
                     prompt: 'Please enter the desired subject. **NOTE:** For Ticketer Admins, you may tag a user to open a ticket on another user\'s behalf.',
                     default: false
                 }
@@ -82,10 +83,12 @@ module.exports = class NewCommand extends TicketerCommand {
             });
         }
 
-        await messageUtils.sendCleanSuccess({
+        await messageUtils.sendNewTicket({
             target: msg.channel, 
             valString: `${target.toString()} your ticket has been opened, click here: ${channel.toString()}`,
-            client: null
+            client: this.client,
+            messages: [msg].concat(result.prompts, result.answers),
+            guild: msg.guild
         });
 
         let welcomeMessage = await this.client.provider.get(msg.guild, 'welcomeMessage', null);

@@ -50,7 +50,23 @@ module.exports = {
         client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages);
         return embedMessage;
     },
+    
     sendCleanSuccess: async(options) => {
+        const successEmbed = new Discord.MessageEmbed()
+            .setColor('GREEN')
+            .setTimestamp()
+            .setFooter(process.env.FOOTER_TEXT)
+            .setDescription(options.valString);
+        
+        let embedMessage = await options.target.send(successEmbed);
+
+        let client = options.client || null;
+        if(client === null){
+            return;
+        }
+    },
+
+    sendNewTicket: async(options) => {
         const successEmbed = new Discord.MessageEmbed()
             .setColor('GREEN')
             .setTimestamp()
@@ -68,8 +84,11 @@ module.exports = {
 
         let guild = options.guild;
 
+        let cleanNew = await client.provider.get(guild.id, 'cleanNew');
+        client.setTimeout(utils.cleanMessages, 10000, cleanNew, messages);
         return embedMessage;
     },
+
     sendWaiting: async(options) => {
         const waitingEmbed = new Discord.MessageEmbed()
             .setTitle('Are you sure you would like to perform the following')    

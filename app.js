@@ -1,6 +1,7 @@
 const { CommandoClient } = require('discord.js-commando');
 require('dotenv').config();
 const path = require('path');
+const StrictUserArgumentType = require('./utils/strict-user-argument-type');
 const pg = require('./controllers/postgres.controller');
 const redis = require('./controllers/redis.controller');
 const sub = require('./controllers/subscribe.controller');
@@ -18,6 +19,7 @@ client.setProvider(new TicketerProvider(pg, redis, sub, pub));
 
 client.registry
     .registerDefaultTypes()
+    .registerType(StrictUserArgumentType)
     .registerGroups([
         ['tickets', 'Ticket commands'],
         ['moderation', 'Moderation commands'],
