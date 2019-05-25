@@ -38,7 +38,7 @@ module.exports = {
         let embedMessage = await options.target.send(errorEmbed);
 
         let client = options.client || null;
-        if(client === null){
+        if(client === null || !options.messages || !options.guild){
             return;
         }
         let messages = options.messages;
@@ -50,7 +50,30 @@ module.exports = {
         client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages);
         return embedMessage;
     },
-    
+    sendDebug: async(options) => {
+        const successEmbed = new Discord.MessageEmbed()
+            .setColor('AQUA')
+            .setTimestamp()
+            .setFooter(process.env.FOOTER_TEXT)
+            .addField("Channel Permissions", options.channelString, true)
+            .addBlankField(true)
+            .addField("Guild Permissions", options.guildString, true)
+        
+        let embedMessage = await options.target.send(successEmbed);
+
+        let client = options.client || null;
+        if(client === null){
+            return embedMessage;
+        }
+        let messages = options.messages;
+        messages.push(embedMessage);
+
+        let guild = options.guild;
+
+        let cleanAll = await client.provider.get(guild.id, 'cleanAll');
+        client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages);
+        return embedMessage;
+    },
     sendCleanSuccess: async(options) => {
         const successEmbed = new Discord.MessageEmbed()
             .setColor('GREEN')
@@ -219,5 +242,5 @@ module.exports = {
     
         await logChannel.send(logEmbed);
         return embedMessage;
-    },
+    }
 };
