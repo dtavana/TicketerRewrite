@@ -98,7 +98,10 @@ class TicketerProvider extends SettingProvider {
         }
         const settings = await this.getSettings(guild);
         
-        if(!settings[key])
+        
+        if(!settings)
+            return defVal;
+        else if(!settings[key])
             return defVal;
         else if(settings[key] === 'true')
             return true;
