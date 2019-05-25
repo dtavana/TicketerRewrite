@@ -27,6 +27,7 @@ module.exports = class ViewSettingsCommand extends TicketerCommand {
         let resString = "";
         let channels = ["logChannel", "transcriptChannel"];
         let roles = ["moderatorRole", "adminRole"];
+        let viewchannels = "ticketchannels"
         for(let setting of Object.entries(settings)) {
             let key = setting[0];
             let value = setting[1];
@@ -40,6 +41,7 @@ module.exports = class ViewSettingsCommand extends TicketerCommand {
                 if(!value) value = "**NOT FOUND**";
                 else value = value.toString();
             }
+            else if(key === viewchannels) continue;
             else value = `\`${value}\``;
             resString += `**${key.toUpperCase()}** | ${value}\n`;
         }
