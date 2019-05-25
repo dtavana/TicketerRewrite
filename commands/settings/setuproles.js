@@ -21,7 +21,7 @@ module.exports = class SetupRolesCommand extends TicketerCommand {
         if(typeof roles === 'string') {
             return await messageUtils.sendError({
                 target: msg.channel, 
-                valString: data,
+                valString: roles,
                 client: this.client,
                 messages: [msg].concat(result.prompts, result.answers),
                 guild: msg.guild

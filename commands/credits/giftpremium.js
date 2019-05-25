@@ -39,7 +39,7 @@ module.exports = class CreditsCommand extends StaffCommand {
             valString: `Gift **${amount} credit(s)** to ${target.toString()}`,
             message: msg
         });
-        collector.on('end', async(collected, reason) => {
+        collector.on('end', async(collected) => {
             if(collected.has('✅')) {
                 for (var i = 0; i < amount; i++) { 
                     let keyExists = true;
@@ -61,7 +61,7 @@ module.exports = class CreditsCommand extends StaffCommand {
             else {
                 return await messageUtils.sendError({
                     target: msg.channel, 
-                    valString: `The current operation has been cancelled.`,
+                    valString: 'The current operation has been cancelled.',
                     client: this.client,
                     messages: [msg].concat(result.prompts, result.answers),
                     guild: msg.guild

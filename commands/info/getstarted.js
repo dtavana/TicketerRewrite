@@ -13,7 +13,7 @@ module.exports = class GetStartedCommand extends TicketerCommand {
     }
     
     async run(msg, fromPattern, result) {
-        let res = `Thank you for using Ticketer. In order to get started, please start by setting up the Ticketer Roles. This can be done using \`${msg.guild.commandPrefix}setuproles\`. After that, you can use the \`${msg.guild.commandPrefix}setupchannel\` command to setup a Ticketer Channel. For a list of all the other commands, use \`${msg.guild.commandPrefix}help\`. If you have any questions at all, please join our support server with the \`${msg.guild.commandPrefix}support\` command.`
+        let res = `Thank you for using Ticketer. In order to get started, please start by setting up the Ticketer Roles. This can be done using \`${msg.guild.commandPrefix}setuproles\`. After that, you can use the \`${msg.guild.commandPrefix}setupchannel\` command to setup a Ticketer Channel. For a list of all the other commands, use \`${msg.guild.commandPrefix}help\`. If you have any questions at all, please join our support server with the \`${msg.guild.commandPrefix}support\` command.`;
         await messageUtils.sendSuccess({
             target: msg.channel, 
             valString: res,

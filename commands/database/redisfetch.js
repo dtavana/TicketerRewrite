@@ -26,13 +26,13 @@ module.exports = class RedisFetchCommand extends TicketerCommand {
         });
     }
     
-    async run(msg, {key, field}, fromPattern, result) {
+    async run(msg, {key, field}) {
         try {
             let data;
             if(!field) {
                 data = await this.client.provider.redis.hgetall(key);
                 if(data && data.length !== 0) {
-                    let resString = "";
+                    let resString = '';
                     for(let pair of Object.entries(data)) {
                         resString += `**Key:** \`${key}\` | **Field:** \`${pair[0]}\` | **Result:** \`${pair[1]}\`\n`;
                     }
@@ -44,7 +44,7 @@ module.exports = class RedisFetchCommand extends TicketerCommand {
                 else {
                     return await messageUtils.sendError({
                         target: msg.channel, 
-                        valString: `The following error occured: \`Key was not found\``
+                        valString: 'The following error occured: `Key was not found`'
                     });
                 }
             }
@@ -53,7 +53,7 @@ module.exports = class RedisFetchCommand extends TicketerCommand {
                 if(!data) {
                     return await messageUtils.sendError({
                         target: msg.channel, 
-                        valString: `The following error occured: \`Key/Field was not found\``
+                        valString: 'The following error occured: `Key/Field was not found`'
                     });
                 }
                 await messageUtils.sendSuccess({

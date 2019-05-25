@@ -20,7 +20,7 @@ module.exports = class ClearSettingsCommand extends TicketerCommand {
             valString: 'Clear guild settings',
             message: msg
         });
-        collector.on('end', async(collected, reason) => {
+        collector.on('end', async(collected) => {
             if(collected.has('✅')) {
                 await this.client.provider.clear(msg.guild);
                 await this.client.provider.clear(`${msg.guild.id}-channels`);
@@ -41,7 +41,7 @@ module.exports = class ClearSettingsCommand extends TicketerCommand {
             else {
                 return await messageUtils.sendError({
                     target: msg.channel, 
-                    valString: `The current operation has been cancelled.`,
+                    valString: 'The current operation has been cancelled.',
                     client: this.client,
                     messages: [msg].concat(result.prompts, result.answers),
                     guild: msg.guild

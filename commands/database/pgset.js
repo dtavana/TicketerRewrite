@@ -20,12 +20,12 @@ module.exports = class PGSetCommand extends TicketerCommand {
         });
     }
     
-    async run(msg, {query}, fromPattern, result) {
+    async run(msg, {query}) {
         try {
             await this.client.provider.pg.none(query);
             await messageUtils.sendSuccess({
                 target: msg.channel, 
-                valString: `The query was executed succesfully.`
+                valString: 'The query was executed succesfully.'
             });
         }
 

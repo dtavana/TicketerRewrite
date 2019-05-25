@@ -24,21 +24,21 @@ module.exports = class ViewSettingsCommand extends TicketerCommand {
                 guild: msg.guild
             });
         }
-        let resString = "";
-        let channels = ["logChannel", "transcriptChannel"];
-        let roles = ["moderatorRole", "adminRole"];
-        let viewchannels = "ticketchannels"
+        let resString = '';
+        let channels = ['logChannel', 'transcriptChannel'];
+        let roles = ['moderatorRole', 'adminRole'];
+        let viewchannels = 'ticketchannels';
         for(let setting of Object.entries(settings)) {
             let key = setting[0];
             let value = setting[1];
             if(channels.includes(key)) {
                 value = msg.guild.channels.get(value);
-                if(!value) value = "**NOT FOUND**";
+                if(!value) value = '**NOT FOUND**';
                 else value = value.toString();
             }
             else if(roles.includes(key)) {
                 value = msg.guild.roles.get(value);
-                if(!value) value = "**NOT FOUND**";
+                if(!value) value = '**NOT FOUND**';
                 else value = value.toString();
             }
             else if(key === viewchannels) continue;

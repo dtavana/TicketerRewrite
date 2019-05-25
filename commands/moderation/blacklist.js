@@ -1,5 +1,4 @@
 const TicketerCommand  = require('../ticketer-command');
-const { User } = require('discord.js');
 const messageUtils = require('../../utils/messageUtils');
 const moderationUtils = require('../../utils/moderationUtils');
 
@@ -37,7 +36,7 @@ module.exports = class BlacklistCommand extends TicketerCommand {
         if(blacklist) {
             let banningAdmin = await this.client.users.get(blacklist.adminid);
             if(!banningAdmin) {
-                banningAdmin = "**USER NOT FOUND**";
+                banningAdmin = '**USER NOT FOUND**';
             }
             else {
                 banningAdmin = banningAdmin.toString();

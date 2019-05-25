@@ -26,7 +26,6 @@ module.exports = {
 
         let publicString;
         let privateString;
-        var key;
 
         if(receiveCredit) {
             let keyExists = true;

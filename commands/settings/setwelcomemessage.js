@@ -32,7 +32,7 @@ module.exports = class SetWelcomeMessage extends PremiumCommand {
             });
         }
 
-        let res = await this.client.provider.set(msg.guild.id, 'welcomeMessage', welcomeMessage);
+        await this.client.provider.set(msg.guild.id, 'welcomeMessage', welcomeMessage);
         await messageUtils.sendSuccess({
             target: msg.channel, 
             valString: `New Welcome Message:\n${welcomeMessage}`,

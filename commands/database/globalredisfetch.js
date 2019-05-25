@@ -20,19 +20,19 @@ module.exports = class GlobalRedisFetchCommand extends TicketerCommand {
         });
     }
     
-    async run(msg, {key}, fromPattern, result) {
+    async run(msg, {key}) {
         try {
             let data = await this.client.provider.redis.get(key);
             if(!data) {
                 return await messageUtils.sendError({
                     target: msg.channel, 
-                    valString: `The following error occured: \`Key not found\``
+                    valString: 'The following error occured: `Key not found`'
                 });
             }
             await messageUtils.sendSuccess({
                 target: msg.channel, 
                 valString: `**Key:** \`${key}\` | **Value:** \`${data}\``
-            })
+            });
         }
         catch(error) {
             await messageUtils.sendError({

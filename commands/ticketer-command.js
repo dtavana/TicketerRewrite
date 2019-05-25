@@ -13,41 +13,41 @@ module.exports = class TicketerCommand extends Command {
         let hasRole = member.roles.has(adminRole);
         let aRole = await guild.roles.get(adminRole);
         if(!aRole) {
-            aRole = "**NOT FOUND**";
+            aRole = '**NOT FOUND**';
         }
         else {
-            aRole = aRole.toString()
+            aRole = aRole.toString();
         }
         return {
-                state: hasRole,
-                admin: aRole
+            state: hasRole,
+            admin: aRole
         };
     }
 
     async checkTicketerRole(client, member, guild) {
         let adminRole = await client.provider.get(guild, 'adminRole', null);
         let moderatorRole = await client.provider.get(guild, 'moderatorRole', null);
-        let hasRole = member.roles.has(adminRole) || member.roles.has(moderatorRole)
+        let hasRole = member.roles.has(adminRole) || member.roles.has(moderatorRole);
         let aRole = await guild.roles.get(adminRole);
         let mRole = await guild.roles.get(moderatorRole);
         if(!aRole) {
-            aRole = "**NOT FOUND**";
+            aRole = '**NOT FOUND**';
         }
         else {
-            aRole = aRole.toString()
+            aRole = aRole.toString();
         }
         if(!mRole) {
-            mRole = "**NOT FOUND**";
+            mRole = '**NOT FOUND**';
         }
         else {
-            mRole = mRole.toString()
+            mRole = mRole.toString();
         }
 
         return {
             state: hasRole,
             admin: aRole,
             moderator: mRole
-    };
+        };
     }
     
     async checkPremium(client, msg) {
@@ -58,7 +58,7 @@ module.exports = class TicketerCommand extends Command {
         return true;
     }
     
-    onError(err, message, args, fromPattern, result) {
+    onError(err, message) {
         const owners = this.client.owners;
         const ownerList = owners ? owners.map((usr, i) => {
             const or = i === owners.length - 1 && owners.length > 1 ? 'or ' : '';

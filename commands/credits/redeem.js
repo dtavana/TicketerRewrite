@@ -1,8 +1,6 @@
 const TicketerCommand  = require('../ticketer-command');
 const messageUtils = require('../../utils/messageUtils');
-const { permissions } = require('discord.js-commando');
 const donateUtils = require('../../utils/donateUtils');
-const { oneLine } = require('common-tags');
 
 module.exports = class RedeemCommand extends TicketerCommand {
     constructor(client) {

@@ -25,7 +25,7 @@ module.exports = class SetLogChannelCommand extends TicketerCommand {
         if(logChannel === true) {
             return await messageUtils.sendError({
                 target: msg.channel, 
-                valString: `Invalid entry for logChannel.`,
+                valString: 'Invalid entry for logChannel.',
                 client: this.client,
                 messages: [msg].concat(result.prompts, result.answers),
                 guild: msg.guild
@@ -36,7 +36,7 @@ module.exports = class SetLogChannelCommand extends TicketerCommand {
 
         if(!logChannel) {
             res = await this.client.provider.set(msg.guild.id, 'logChannel', false);
-            logChannel = "**TURNED OFF**"
+            logChannel = '**TURNED OFF**';
         }
         else {
             res = await this.client.provider.set(msg.guild.id, 'logChannel', logChannel.id);

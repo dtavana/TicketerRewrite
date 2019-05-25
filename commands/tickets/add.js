@@ -1,6 +1,5 @@
 const TicketerCommand  = require('../ticketer-command');
 const messageUtils = require('../../utils/messageUtils');
-const ticketUtils = require('../../utils/ticketUtils');
 
 module.exports = class AddCommand extends TicketerCommand {
     constructor(client) {
@@ -62,7 +61,7 @@ module.exports = class AddCommand extends TicketerCommand {
         if(target.user.bot) {
             return await messageUtils.sendError({
                 target: msg.channel, 
-                valString: `You may not add bots to a ticket channel`,
+                valString: 'You may not add bots to a ticket channel',
                 client: this.client,
                 messages: [msg].concat(result.prompts, result.answers),
                 guild: msg.guild
@@ -74,8 +73,8 @@ module.exports = class AddCommand extends TicketerCommand {
             'VIEW_CHANNEL': true,
             'EMBED_LINKS': true,
             'ATTACH_FILES': true
-            },
-            "Adding user to a Ticketer Channel"
+        },
+        'Adding user to a Ticketer Channel'
         );
         
         await messageUtils.sendSuccess({

@@ -20,25 +20,25 @@ module.exports = class PGFetchCommand extends TicketerCommand {
         });
     }
     
-    async run(msg, {query}, fromPattern, result) {
+    async run(msg, {query}) {
         try {
             let data = await this.client.provider.pg.any(query);
             if(data.length === 0) {
                 return await messageUtils.sendError({
                     target: msg.channel, 
-                    valString: "The following error occured: `No data was returned`"
+                    valString: 'The following error occured: `No data was returned`'
                 });
             }
             else {
                 for(let entry of data) {
-                    let resString = "";
+                    let resString = '';
                     for(let pair of Object.entries(entry)) {
                         resString += `**Key:** \`${pair[0]}\` | **Value:** \`${pair[1]}\`\n`;
                     }
                     await messageUtils.sendSuccess({
                         target: msg.channel, 
                         valString: resString
-                    })
+                    });
                 }
             }
         }

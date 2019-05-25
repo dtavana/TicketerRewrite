@@ -10,7 +10,7 @@ module.exports = {
         await client.provider.pg.none('INSERT INTO premium (userid, key, paymentid) VALUES (${userid}, ${key}, ${paymentid});', options);
     },
     saveVoteCredit: async(client, options) => {
-        await client.provider.pg.none("INSERT INTO premium (userid, key, paymentid, expires) VALUES (${userid}, ${key}, ${paymentid}, date_trunc('day', NOW() + interval '1 month'));", options);
+        await client.provider.pg.none('INSERT INTO premium (userid, key, paymentid, expires) VALUES (${userid}, ${key}, ${paymentid}, date_trunc(\'day\', NOW() + interval \'1 month\'));', options);
     },
     enableCredit: async(client, args) => {
         await client.provider.pg.none('UPDATE premium SET enabled = True, serverid = ${serverId} WHERE key = ${key}', args);
@@ -22,7 +22,7 @@ module.exports = {
         return key;
     },
     transferCredit: async(client, key, userId) => {
-        await client.provider.pg.none("UPDATE premium SET userid = $1 WHERE key = $2;", [userId, key]);
+        await client.provider.pg.none('UPDATE premium SET userid = $1 WHERE key = $2;', [userId, key]);
     },
     removeCredit: async(client, paymentId) => {
         let key = await client.provider.pg.one('SELECT key FROM premium WHERE paymentid = $1;', paymentId);
@@ -30,7 +30,7 @@ module.exports = {
         return key;
     },
     checkKey: async(client, key) => {
-        let exists = await client.provider.pg.oneOrNone("SELECT * FROM premium WHERE key = $1;", key);
+        let exists = await client.provider.pg.oneOrNone('SELECT * FROM premium WHERE key = $1;', key);
         if(exists === null) {
             return false;
         }

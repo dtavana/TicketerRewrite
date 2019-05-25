@@ -1,5 +1,3 @@
-const Discord = require('discord.js');
-
 module.exports = {
     openTicket: async(client, guild, context, user) => {
         let contextid = context.id;
@@ -15,7 +13,7 @@ module.exports = {
         let found = false;
         let targetchannel;
 
-        for(ticketchannel of channels) {
+        for(let ticketchannel of channels) {
             if(ticketchannel.channelid === contextid || ticketchannel.channelid === false) {
                 targetchannel = ticketchannel;
                 found = true;
@@ -103,12 +101,12 @@ module.exports = {
         let adminClose = await client.provider.get(guild, 'adminClose', null);
 
         if(member && !member.roles.has(adminRole) && adminClose) {
-            aRole = await guild.roles.get(adminRole);
+            let aRole = await guild.roles.get(adminRole);
             if(!aRole) {
-                aRole = "**NOT FOUND**";
+                aRole = '**NOT FOUND**';
             }
             else {
-                aRole = aRole.toString()
+                aRole = aRole.toString();
             }
             return `The guild administrators have required the ${aRole} role to close tickets. If you believe this is in error, make sure you have the admin role.`;
         }

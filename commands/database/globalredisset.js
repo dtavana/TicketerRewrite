@@ -25,13 +25,13 @@ module.exports = class GlobalRedisSetCommand extends TicketerCommand {
         });
     }
     
-    async run(msg, {key, value}, fromPattern, result) {
+    async run(msg, {key, value}) {
         try {
-            let data = await this.client.provider.redis.set(key, value);
+            await this.client.provider.redis.set(key, value);
             await messageUtils.sendSuccess({
                 target: msg.channel, 
                 valString: `**Key:** \`${key}\` | **Value:** \`${value}\``
-            })
+            });
         }
         catch(error) {
             await messageUtils.sendError({

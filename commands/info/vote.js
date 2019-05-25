@@ -15,7 +15,7 @@ module.exports = class VoteCommand extends TicketerCommand {
     async run(msg, fromPattern, result) {
         await messageUtils.sendSuccess({
             target: msg.channel, 
-            valString: `[Click here to vote](https://discordbots.org/bot/542709669211275296/vote)`,
+            valString: '[Click here to vote](https://discordbots.org/bot/542709669211275296/vote)',
             client: this.client,
             messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild

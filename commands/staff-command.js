@@ -5,12 +5,12 @@ const { oneLine } = require('common-tags');
 module.exports = class StaffCommand extends TicketerCommand {
     constructor(client, info) {
         super(client, info);
-        this.STAFF = ["112762841173368832"];
+        this.STAFF = ['112762841173368832'];
     }
 
     hasPermission(message) {
         if(!this.STAFF.includes(message.author.id)) {
-            return `This is a Ticketer Staff command.`;
+            return 'This is a Ticketer Staff command.';
         }
         
         if(this.ownerOnly && !this.client.isOwner(message.author)) {

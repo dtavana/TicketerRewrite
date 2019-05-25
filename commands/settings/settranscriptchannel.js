@@ -25,7 +25,7 @@ module.exports = class SetTranscriptChannelCommand extends PremiumCommand {
         if(transcriptChannel === true) {
             return await messageUtils.sendError({
                 target: msg.channel, 
-                valString: `Invalid entry for transcriptChannel.`,
+                valString: 'Invalid entry for transcriptChannel.',
                 client: this.client,
                 messages: [msg].concat(result.prompts, result.answers),
                 guild: msg.guild
@@ -36,7 +36,7 @@ module.exports = class SetTranscriptChannelCommand extends PremiumCommand {
 
         if(!transcriptChannel) {
             res = await this.client.provider.set(msg.guild.id, 'transcriptChannel', false);
-            transcriptChannel = "**TURNED OFF**"
+            transcriptChannel = '**TURNED OFF**';
         }
         else {
             res = await this.client.provider.set(msg.guild.id, 'transcriptChannel', transcriptChannel.id);

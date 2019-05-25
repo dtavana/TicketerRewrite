@@ -25,7 +25,7 @@ module.exports = class CreditsCommand extends TicketerCommand {
         if(msg.author.id === target.id) {
             return await messageUtils.sendError({
                 target: msg.channel, 
-                valString: `You can not transfer a credit to yourself.`,
+                valString: 'You can not transfer a credit to yourself.',
                 client: this.client,
                 messages: [msg].concat(result.prompts, result.answers),
                 guild: msg.guild
@@ -46,7 +46,7 @@ module.exports = class CreditsCommand extends TicketerCommand {
             valString: `Transfer credit to ${target.toString()}`,
             message: msg
         });
-        collector.on('end', async(collected, reason) => {
+        collector.on('end', async(collected) => {
             if(collected.has('✅')) {
                 await donateUtils.transferCredit(this.client, credit.key, target.id);
                 await messageUtils.sendSuccess({
@@ -60,7 +60,7 @@ module.exports = class CreditsCommand extends TicketerCommand {
             else {
                 return await messageUtils.sendError({
                     target: msg.channel, 
-                    valString: `The current operation has been cancelled.`,
+                    valString: 'The current operation has been cancelled.',
                     client: this.client,
                     messages: [msg].concat(result.prompts, result.answers),
                     guild: msg.guild

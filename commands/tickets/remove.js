@@ -1,6 +1,5 @@
 const TicketerCommand  = require('../ticketer-command');
 const messageUtils = require('../../utils/messageUtils');
-const ticketUtils = require('../../utils/ticketUtils');
 
 module.exports = class RemoveCommand extends TicketerCommand {
     constructor(client) {
@@ -65,8 +64,8 @@ module.exports = class RemoveCommand extends TicketerCommand {
             'VIEW_CHANNEL': false,
             'EMBED_LINKS': false,
             'ATTACH_FILES': false
-            },
-            "Adding user to a Ticketer Channel"
+        },
+        'Adding user to a Ticketer Channel'
         );
         
         await messageUtils.sendSuccess({

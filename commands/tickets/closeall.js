@@ -1,5 +1,4 @@
 const TicketerCommand  = require('../ticketer-command');
-const Discord = require('discord.js');
 const messageUtils = require('../../utils/messageUtils');
 const ticketUtils = require('../../utils/ticketUtils');
 const utils = require('../../utils/utils');
@@ -24,7 +23,7 @@ module.exports = class CloseAllCommand extends TicketerCommand {
             message: msg
         });
         let endReason;
-        collector.on('end', async(collected, reason) => {
+        collector.on('end', async(collected) => {
             if(collected.has('✅')) {
                 endReason = 'All tickets have been closed.';
                 let allTickets = await this.client.provider.getSettings(`${msg.guild.id}-channels`);
