@@ -23,7 +23,7 @@ module.exports = class ClearSettingsCommand extends TicketerCommand {
         collector.on('end', async(collected) => {
             if(collected.has('✅')) {
                 await this.client.provider.clear(msg.guild);
-                await this.client.provider.clear(`${msg.guild.id}-channels`);
+                //await this.client.provider.clear(`${msg.guild.id}-channels`);
                 if(this.client.provider.ticketChannelCollectors.has(msg.guild.id)) {
                     for(let ticketCollector of this.client.provider.ticketChannelCollectors.get(msg.guild.id)) {
                         ticketCollector.stop();

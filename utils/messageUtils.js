@@ -149,18 +149,30 @@ module.exports = {
             .setDescription(text);
         await logChannel.send(logEmbed);
     },
-    sendClosedTicket: async(client, channelName, originalAuthor, authorObject, reason, timeString, guild, closer, channelHistory) => {
+    sendClosedTicket: async(client, channelName, originalAuthor, authorObject, reason, timeString, guild, closer, channelHistory, subject) => {
         let logChannel = await client.provider.get(guild, 'logChannel', null);
         let embedMessage;
         logChannel = await guild.channels.get(logChannel);
         if(logChannel) {
+            /*
             const closeEmbed = new Discord.MessageEmbed()
                 .setTitle('Log :notepad_spiral:')
                 .setColor('RED')
                 .setTimestamp()
                 .setFooter(process.env.FOOTER_TEXT)
-                .setDescription(`**${closer.tag}** closed \`${channelName}\`\n**Reason:** \`${reason}\`\n**Original Author:** \`${originalAuthor}\`\n**Support Time:** \`${timeString}\``);
-    
+                .setDescription(`**${closer.tag}** closed \`${channelName}\`\n**Reason:** \`${reason}\`\n**Original Subject:** \`${subject}\`\n**Original Author:** \`${originalAuthor}\`\n**Support Time:** \`${timeString}\``);
+            */
+           const closeEmbed = new Discord.MessageEmbed()
+                .setTitle('Log :notepad_spiral:')
+                .setColor('RED')
+                .setTimestamp()
+                .setFooter(process.env.FOOTER_TEXT)
+                .setDescription(`**${closer.tag}** closed \`${channelName}\``)
+                .addField("Reason", reason, true)
+                .addField("Support Time", timeString, true)
+                .addField("Original Subject", subject, true)
+                .addField("Original Author", originalAuthor, true)
+                
             embedMessage = await logChannel.send(closeEmbed);
         }
         
@@ -238,7 +250,8 @@ module.exports = {
             .setColor('GREEN')
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
-            .setDescription(`\`${user.tag}\` opened a new ticket: \`${target.name}\`\n**Subject:** \`${subject}\``);
+            .setDescription(`\`${user.tag}\` opened a new ticket: \`${target.name}\``)
+            .addField("Subject", subject, true)
     
         await logChannel.send(logEmbed);
         return embedMessage;

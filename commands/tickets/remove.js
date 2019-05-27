@@ -28,8 +28,8 @@ module.exports = class RemoveCommand extends TicketerCommand {
     
     async run(msg, {target, channel}, fromPattern, result) {
         if(!channel) channel = msg.channel;
-        let ticketOwner = await this.client.provider.get(`${msg.guild.id}-channels`, channel.id, null);
-        if(!ticketOwner) {
+        let ticketData = await this.client.provider.get(`${msg.guild.id}-channels`, channel.id, null);
+        if(!ticketData) {
             return await messageUtils.sendError({
                 target: msg.channel, 
                 valString: `${channel.toString()} is not detected as a ticket channel`,
@@ -38,6 +38,8 @@ module.exports = class RemoveCommand extends TicketerCommand {
                 guild: msg.guild
             });
         }
+        ticketData = JSON.parse(ticketData);
+        let ticketOwner = ticketData.author;
         let hasAdmin = await this.checkTicketerRole(this.client, msg.member, msg.guild);
         if(!hasAdmin.state && msg.author.id !== ticketOwner) {
             return await messageUtils.sendError({

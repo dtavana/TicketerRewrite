@@ -57,11 +57,12 @@ module.exports = class CloseAllCommand extends TicketerCommand {
                                 let originalAuthor = data.originalAuthor;
                                 let channelHistory = data.channelHistory;
                                 let authorObject = data.authorObject;
+                                let subject = data.subject;
                                 
                                 let elapsedTime = Date.now() - createdAt;
                                 let timeString = utils.timeConversion(elapsedTime);
 
-                                await messageUtils.sendClosedTicket(this.client, channelName, originalAuthor, authorObject, closeReason, timeString, msg.guild, msg.author, channelHistory);
+                                await messageUtils.sendClosedTicket(this.client, channelName, originalAuthor, authorObject, closeReason, timeString, msg.guild, msg.author, channelHistory, subject);
                             }
                         }
                     }

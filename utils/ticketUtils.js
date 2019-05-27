@@ -1,5 +1,5 @@
 module.exports = {
-    openTicket: async(client, guild, context, user) => {
+    openTicket: async(client, guild, context, user, subject) => {
         let contextid = context.id;
         let channels = await client.provider.get(guild, 'ticketchannels', null);
         let category;
@@ -88,7 +88,13 @@ module.exports = {
         allOpenTickets += 1;
         openTickets += 1;
 
-        await client.provider.set(`${guild.id}-channels`, createdChannel.id, user.id);
+        let res = {
+            'author': user.id,
+            'subject': subject
+        };
+        res = JSON.stringify(res);
+
+        await client.provider.set(`${guild.id}-channels`, createdChannel.id, res);
         await client.provider.set(guild, 'openTickets', openTickets);
         await client.provider.redis.set('allOpenTickets', allOpenTickets);
 
@@ -112,11 +118,14 @@ module.exports = {
         }
 
 
-        let author = await client.provider.get(`${guild.id}-channels`, channel.id, null);
-        if(!author) {
+        let ticketData = await client.provider.get(`${guild.id}-channels`, channel.id, null);
+        if(!ticketData) {
             return `${channel.toString()} was not detected as a open ticket!`;
         }
-
+        ticketData = JSON.parse(ticketData);
+        let author = ticketData.author;
+        let subject = ticketData.subject;
+        
         let createdAt = channel.createdAt;
         let channelHistory = channel.messages;
 
@@ -176,7 +185,8 @@ module.exports = {
             'createdAt': createdAt,
             'originalAuthor': author,
             'channelHistory': channelHistory,
-            'authorObject': authorObject
+            'authorObject': authorObject,
+            'subject': subject
         };
     }
     
