@@ -1,13 +1,13 @@
 const PremiumCommand  = require('../premium-command');
 const messageUtils = require('../../utils/messageUtils');
 
-module.exports = class SetTranscriptChannelCommand extends PremiumCommand {
+module.exports = class TranscriptChannelCommand extends PremiumCommand {
     constructor(client) {
         super(client, {
-            name: 'settranscriptchannel',
-            aliases: [],
+            name: 'transcriptchannel',
+            aliases: ['settranscriptchannel'],
             group: 'settings',
-            memberName: 'settranscriptchannel',
+            memberName: 'transcriptchannel',
             description: 'Sets the transcript channel for a guild',
             guildOnly: true,
             userPermissions: ['MANAGE_GUILD'],

@@ -1,13 +1,13 @@
 const PremiumCommand  = require('../premium-command');
 const messageUtils = require('../../utils/messageUtils');
 
-module.exports = class SetWelcomeMessage extends PremiumCommand {
+module.exports = class WelcomeMessage extends PremiumCommand {
     constructor(client) {
         super(client, {
-            name: 'setwelcomemessage',
-            aliases: [],
+            name: 'welcomemessage',
+            aliases: ['setwelcomemessage'],
             group: 'settings',
-            memberName: 'setwelcomemessage',
+            memberName: 'welcomemessage',
             description: 'Sets the welcome message for a new ticket',
             guildOnly: true,
             userPermissions: ['MANAGE_GUILD'],

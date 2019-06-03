@@ -1,19 +1,19 @@
 const PremiumCommand  = require('../premium-command');
 const messageUtils = require('../../utils/messageUtils');
 
-module.exports = class SetSendToUserCommand extends PremiumCommand {
+module.exports = class CleanAllCommand extends PremiumCommand {
     constructor(client) {
         super(client, {
-            name: 'setsendtouser',
-            aliases: [],
+            name: 'cleanall',
+            aliases: ['setcleanall'],
             group: 'settings',
-            memberName: 'setsendtouser',
-            description: 'Sets whether the transcripts should be DM\'d to user. **NOTE:** this setting only takes affect when `settranscripts` is set to **true**',
+            memberName: 'cleanall',
+            description: 'Sets whether the bot should delete all invocations of commands',
             guildOnly: true,
             userPermissions: ['MANAGE_GUILD'],
             args: [
                 {
-                    key: 'sendToUser',
+                    key: 'cleanAll',
                     prompt: 'Please enter **true** to turn this feature on and **false** to turn this feature off.',
                     type: 'boolean'
                 }
@@ -21,11 +21,11 @@ module.exports = class SetSendToUserCommand extends PremiumCommand {
         });
     }
     
-    async run(msg, {sendToUser}, fromPattern, result) {
-        let res = await this.client.provider.set(msg.guild.id, 'sendToUser', sendToUser);
+    async run(msg, {cleanAll}, fromPattern, result) {
+        let res = await this.client.provider.set(msg.guild.id, 'cleanAll', cleanAll);
         await messageUtils.sendSuccess({
             target: msg.channel, 
-            valString: `Old Send To User: \`${res}\`\n\nNew Send To User: \`${sendToUser}\``,
+            valString: `Old Clean All: \`${res}\`\n\nNew Clean All: \`${cleanAll}\``,
             client: this.client,
             messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild

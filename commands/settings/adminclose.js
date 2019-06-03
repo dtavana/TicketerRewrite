@@ -1,13 +1,13 @@
 const PremiumCommand  = require('../premium-command');
 const messageUtils = require('../../utils/messageUtils');
 
-module.exports = class SetAdminClose extends PremiumCommand {
+module.exports = class AdminClose extends PremiumCommand {
     constructor(client) {
         super(client, {
-            name: 'setadminclose',
-            aliases: [],
+            name: 'adminclose',
+            aliases: ['setadminclose'],
             group: 'settings',
-            memberName: 'setadminclose',
+            memberName: 'adminclose',
             description: 'Sets whether it is needed for the Ticketer Admin role is needed to close a ticket',
             guildOnly: true,
             userPermissions: ['MANAGE_GUILD'],

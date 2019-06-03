@@ -1,13 +1,13 @@
 const TicketerCommand  = require('../ticketer-command');
 const messageUtils = require('../../utils/messageUtils');
 
-module.exports = class SetLogChannelCommand extends TicketerCommand {
+module.exports = class LogChannelCommand extends TicketerCommand {
     constructor(client) {
         super(client, {
-            name: 'setlogchannel',
-            aliases: [],
+            name: 'logchannel',
+            aliases: ['setlogchannel'],
             group: 'settings',
-            memberName: 'setlogchannel',
+            memberName: 'logchannel',
             description: 'Sets the log channel for a guild',
             guildOnly: true,
             userPermissions: ['MANAGE_GUILD'],

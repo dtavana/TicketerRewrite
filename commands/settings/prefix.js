@@ -1,13 +1,13 @@
 const PremiumCommand  = require('../premium-command');
 const messageUtils = require('../../utils/messageUtils');
 
-module.exports = class SetPrefixCommand extends PremiumCommand {
+module.exports = class PrefixCommand extends PremiumCommand {
     constructor(client) {
         super(client, {
-            name: 'setprefix',
-            aliases: [],
+            name: 'prefix',
+            aliases: ['setprefix'],
             group: 'settings',
-            memberName: 'setprefix',
+            memberName: 'prefix',
             description: 'Sets the prefix for a guild',
             guildOnly: true,
             userPermissions: ['MANAGE_GUILD'],

@@ -1,13 +1,13 @@
 const PremiumCommand  = require('../premium-command');
 const messageUtils = require('../../utils/messageUtils');
 
-module.exports = class SetTicketPrefixCommand extends PremiumCommand {
+module.exports = class TicketPrefixCommand extends PremiumCommand {
     constructor(client) {
         super(client, {
-            name: 'setticketprefix',
-            aliases: [],
+            name: 'ticketprefix',
+            aliases: ['setticketprefix'],
             group: 'settings',
-            memberName: 'setticketprefix',
+            memberName: 'ticketprefix',
             description: 'Sets the ticket prefix for a guild',
             guildOnly: true,
             userPermissions: ['MANAGE_GUILD'],
