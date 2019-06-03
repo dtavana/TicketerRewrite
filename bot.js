@@ -32,11 +32,8 @@ client.registry
         ['database', 'Database commands']
     ])
     .registerDefaultGroups()
-    .registerDefaultCommands()
+    .registerDefaultCommands({'prefix': false})
     .registerCommandsIn(path.join(__dirname, 'commands'));
-
-let prefixCommand = client.registry.resolveCommand('prefix');
-client.registry.unregisterCommand(prefixCommand);
 
 client.once('ready', async() => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);

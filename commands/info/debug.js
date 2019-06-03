@@ -46,7 +46,7 @@ module.exports = class DebugCommand extends TicketerCommand {
         }
 
         await messageUtils.sendDebug({
-            target: msg.author, 
+            target: msg.channel, 
             channelString: channelStr,
             guildString: guildStr,
             client: this.client,

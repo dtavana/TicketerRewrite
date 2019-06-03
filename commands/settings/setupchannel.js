@@ -70,7 +70,7 @@ module.exports = class SetupChannelCommand extends TicketerCommand {
         });
 
         if(cleanTicketChannel && channels.channel) {
-            const filter = m => !m.content.startsWith(`${msg.guild.commandPrefix}new`) && !m.content.startsWith(`${msg.guild.commandPrefix}ticket`) && !(m.embeds.length > 0 && m.embeds[0].description && m.embeds[0].description.includes("your ticket has been opened"));
+            const filter = m => !m.content.startsWith(`${guild.commandPrefix}new`) && !m.content.startsWith(`${guild.commandPrefix}ticket`) && !(m.embeds.length > 0 && ((m.embeds[0].description && m.embeds[0].description.includes("your ticket has been opened")) || (m.embeds[0].title && m.embeds[0].title.includes("Error"))));
             let collector = new Discord.MessageCollector(channels.channel, filter, {})
             collector.on('collect', async(message) => {
                 try { await message.delete(); }

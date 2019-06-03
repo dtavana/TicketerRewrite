@@ -15,7 +15,12 @@ module.exports = {
             }
             if(message.system) return;
             if(message.embeds.length > 0) {
-                data += `<div class='container'> ${message.author.tag} <img src ='${message.author.avatarURL()}' alt='Missing Avatar'> <p>**EMBED**</p> <span class='time-right'>${message.createdAt.toUTCString()} UTC</span></div>`;
+                if(message.embeds[0].video) {
+                    data += `<div class='container'> ${message.author.tag} <img src ='${message.author.avatarURL()}' alt='Missing Avatar'> <p>${message.embeds[0].video.url}</p> <span class='time-right'>${message.createdAt.toUTCString()} UTC</span></div>`;
+                }
+                else {
+                    data += `<div class='container'> ${message.author.tag} <img src ='${message.author.avatarURL()}' alt='Missing Avatar'> <p>**EMBED**</p> <span class='time-right'>${message.createdAt.toUTCString()} UTC</span></div>`;
+                }
             }
             else {
                 data += `<div class='container'> ${message.author.tag} <img src ='${message.author.avatarURL()}' alt='Missing Avatar'> <p>${message.cleanContent}</p> <span class='time-right'>${message.createdAt.toUTCString()} UTC</span></div>`;
