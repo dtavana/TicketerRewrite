@@ -1,7 +1,17 @@
 const messageUtils = require('./messageUtils');
+const votesController = require('../controllers/votes.controller');
+const DBL = require('dblapi.js');
 
 module.exports = { 
-    initEvents: async(client) => {
+    initEvents: async(client, server) => {
+        const dbl = new DBL(process.env.DBL_TOKEN, {webhookAuth: process.env.DBL_AUTHENTICATION, webhookServer: server}, client);
+        dbl.webhook.on('ready', hook => {
+            console.log(`Webhook running with path ${hook.path}`);
+          });
+        dbl.webhook.on('vote', async(vote) => {
+            await votesController.send(client, vote);
+        });
+
         client.on('guildCreate', async(guild) => {
             await client.provider.set(guild.id, 'currentTicket', 0);
             let owner = guild.owner;
@@ -18,5 +28,9 @@ module.exports = {
             await client.provider.pg.none('UPDATE premium SET serverid = 0, enabled = False WHERE serverid = $1;', guild.id);
             client.provider.guilds = client.provider.guilds.filter(id => id != guild.id);
         });
+
+        server.listen(8080, () => {
+            console.log('Webhook server listening');
+          });
     },
 };

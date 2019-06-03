@@ -42,11 +42,13 @@ class TicketerProvider extends SettingProvider {
         this.sub.on('message', async(channel, message) => {
             await subpubController.handleIncomingMessage(client, channel, message);
         });
+        /*
         this.sub.subscribe(process.env.VOTE_CHANNEL, (err) => {
             if(err) {
                 throw new Error(err);
             }
         });
+        */
         this.sub.subscribe(process.env.DONATE_CHANNEL, (err) => {
             if(err) {
                 throw new Error(err);

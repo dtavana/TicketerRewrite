@@ -4,15 +4,14 @@ const donateUtils = require('../utils/donateUtils');
 require('dotenv').config();
 
 module.exports = {
-    send: async(client, message) => {
-        let data = JSON.parse(message);
+    send: async(client, data) => {
         let votesToAdd;
         let isWeekend = data.isWeekend;
         isWeekend ? votesToAdd = 2 : votesToAdd = 1;
-        let userId = data.userId;
+        let userId = data.user;
         
         let curVotes = await votesUtils.getVotes(client, userId);
-        if(curVotes === null) {
+        if(!curVotes) {
             curVotes = 0;
             await client.provider.pg.none('INSERT INTO votes (userid, count) VALUES ($1, 0);', [userId]);
         }
@@ -21,7 +20,7 @@ module.exports = {
         let receiveCredit = curVotes >= neededVotes;
         let finalVotes;
 
-        let user = await client.fetchUser(userId);
+        let user = await client.users.get(userId);
         let channel = client.channels.get(process.env.VOTES_LOG);
 
         let publicString;

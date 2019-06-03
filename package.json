@@ -25,6 +25,8 @@
     "discord.js": "github:discordjs/discord.js",
     "discord.js-commando": "github:discordjs/Commando",
     "dotenv": "^7.0.0",
+    "express": "^4.17.1",
+    "http": "0.0.0",
     "lodash": "^4.17.11",
     "node-fetch": "^2.3.0",
     "pg-promise": "^8.6.4",
