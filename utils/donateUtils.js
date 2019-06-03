@@ -10,7 +10,7 @@ module.exports = {
         await client.provider.pg.none('INSERT INTO premium (userid, key, paymentid) VALUES (${userid}, ${key}, ${paymentid});', options);
     },
     saveVoteCredit: async(client, options) => {
-        await client.provider.pg.none('INSERT INTO premium (userid, key, paymentid, expires) VALUES (${userid}, ${key}, ${paymentid}, date_trunc(\'day\', NOW() + interval \'1 month\'));', options);
+        await client.provider.pg.none('INSERT INTO premium (userid, key, paymentid, expires) VALUES (${userid}, ${key}, ${paymentid}, date_trunc(\'day\', NOW() + interval \'1 minute\'));', options);
     },
     enableCredit: async(client, args) => {
         await client.provider.pg.none('UPDATE premium SET enabled = True, serverid = ${serverId} WHERE key = ${key}', args);

@@ -192,7 +192,7 @@ module.exports = {
         if(!author) {
             author = 'Not found';
             authorObject = null;
-            await client.provider.redis.hdel(`${guild.id}-channels`, author);
+            await client.provider.remove(`${guild.id}-channels`, author);
         }
         else {
             author = author.tag;
@@ -203,7 +203,7 @@ module.exports = {
                 currentUserOpenTickets = parseInt(currentUserOpenTickets);
             }
             currentUserOpenTickets -= 1;
-            await client.provider.set(guild, authorObject.id, currentUserOpenTickets);
+            await client.provider.set(`${guild.id}-channels`, authorObject.id, currentUserOpenTickets);
         }
 
         await channel.delete('Closing Ticketer Ticket');

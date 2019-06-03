@@ -9,6 +9,7 @@ const pub = require('./controllers/publish.controller');
 const webhookServer = require('./utils/webhookServer');
 const TicketerProvider = require('./utils/ticketer-provider');
 const events = require('./utils/events');
+const cleanup = require('./utils/cleanup')
 
 const client = new CommandoClient({
     commandPrefix: process.env.DEFAULT_PREFIX,
@@ -37,6 +38,9 @@ client.once('ready', async() => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
     client.user.setActivity('-help | v2.0.0', {type: 'WATCHING'});
     await events.initEvents(client, webhookServer);
+    setInterval(async() => {
+        await cleanup.cleanExpiredCredits(client, pg);
+    }, 60000);  
 });
 
 client.on('error', console.error);

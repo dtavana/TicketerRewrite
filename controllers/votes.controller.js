@@ -20,8 +20,9 @@ module.exports = {
         let receiveCredit = curVotes >= neededVotes;
         let finalVotes;
 
-        let user = await client.users.get(userId);
-        let channel = client.channels.get(process.env.VOTES_LOG);
+        let user = client.users.get(userId);
+        let guild = client.guilds.get(process.env.GUILD_ID)
+        let channel = guild.channels.get(process.env.VOTES_LOG);
 
         let publicString;
         let privateString;
@@ -31,26 +32,31 @@ module.exports = {
             let key;
             while(keyExists) {
                 key = await donateUtils.generateKey();
-                keyExists = await donateUtils.checkKey(this.client, key);
+                keyExists = await donateUtils.checkKey(client, key);
             }
             await donateUtils.saveVoteCredit(client, {'userid': userId, 'key': key, 'paymentid': 'voting'}); 
-            publicString =  `\`${user.tag}\` just voted for Ticketer and received a premium credit!`;
+            if(user) {
+                publicString =  `\`${user.tag}\` just voted for Ticketer and received a premium credit!`;
+            }
+            else {
+                publicString =  `\`${userId}\` just voted for Ticketer and received a premium credit!`;
+            }
+            
             privateString = `You have had one premium credit: \`${key}\` added to your account! Use the \`redeem\` command to get started! Thank you for voting for Ticketer!`;
             finalVotes = curVotes - neededVotes;
             
         }
         else {
-            publicString = `\`${user.tag}\` just voted for Ticketer!`;
+            if(user) {
+                publicString = `\`${user.tag}\` just voted for Ticketer!`;
+            }
+            else {
+                publicString = `\`${userId}\` just voted for Ticketer!`;
+            }
             privateString = `Thank you for voting for Ticketer! You currently have **${curVotes} vote(s)**. You need **${neededVotes - curVotes} vote(s)** to get a premium credit.`;
             finalVotes = curVotes;
         }
         await client.provider.pg.none('UPDATE votes SET count = $1 WHERE userid = $2;', [finalVotes, userId]);
-
-        await messageUtils.sendCleanSuccess({
-            target: channel, 
-            valString: publicString,
-            client: null
-        });
 
         await messageUtils.sendCleanSuccess({
             target: user, 
