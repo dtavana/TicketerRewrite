@@ -55,7 +55,7 @@ module.exports = class SetupChannelCommand extends TicketerCommand {
         let resString;
 
         if(!channels.channel) {
-            resString = `I have bound **NO CHANNEL** to the ${channels.category.name}. All tickets created will be placed under the \`${channels.category.name}\`.`;
+            resString = `I have bound **NO CHANNEL** to the ${channels.category.name}. All tickets created will be placed under the \`${channels.category.name}\`. Feel free to rename the `;
         }
         else {
             resString = `I have bound ${channels.channel.toString()} to the \`${channels.category.name}\`. All tickets created in ${channels.channel.toString()} will be placed under the \`${channels.category.name}\`.`;
@@ -70,18 +70,21 @@ module.exports = class SetupChannelCommand extends TicketerCommand {
         });
 
         if(cleanTicketChannel && channels.channel) {
-            const filter = m => !m.content.startsWith(`${guild.commandPrefix}new`) && !m.content.startsWith(`${guild.commandPrefix}ticket`) && !(m.embeds.length > 0 && ((m.embeds[0].description && m.embeds[0].description.includes("your ticket has been opened")) || (m.embeds[0].title && m.embeds[0].title.includes("Error"))));
+            const filter = m => !m.content.startsWith(`${msg.guild.commandPrefix}new`) && !m.content.startsWith(`${msg.guild.commandPrefix}ticket`) && !(m.embeds.length > 0 && ((m.embeds[0].description && m.embeds[0].description.includes("your ticket has been opened")) || (m.embeds[0].title && m.embeds[0].title.includes("Error"))));
             let collector = new Discord.MessageCollector(channels.channel, filter, {})
             collector.on('collect', async(message) => {
                 try { await message.delete(); }
                 catch {};
             });
+            /*
             if(this.client.provider.ticketChannelCollectors.has(msg.guild.id)) {
                 this.client.provider.ticketChannelCollectors.set(msg.guild.id, this.client.provider.ticketChannelCollectors.get(msg.guild.id).push(collector));
             }
             else {
-                this.client.provider.ticketChannelCollectors.set(msg.guild.id, [collector]);
+                let collectorArray = [collector];
+                this.client.provider.ticketChannelCollectors.set(msg.guild.id, collectorArray);
             }
+            */
          }
     }
 };

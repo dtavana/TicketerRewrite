@@ -187,12 +187,16 @@ class TicketerProvider extends SettingProvider {
                     try { await message.delete(); }
                     catch {};
                 });
+                /*
+                console.log(this.ticketChannelCollectors);
                 if(this.ticketChannelCollectors.has(guild.id)) {
                     this.ticketChannelCollectors.set(guild.id, this.ticketChannelCollectors.get(guild.id).push(collector));
                 }
                 else {
-                    this.ticketChannelCollectors.set(guild.id, [collector]);
+                    let collectorArray = [collector];
+                    this.ticketChannelCollectors.set(guild.id, collectorArray);
                 }
+                */
                 
             }
         }
