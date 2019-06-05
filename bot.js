@@ -31,7 +31,7 @@ client.registry
         ['database', 'Database commands']
     ])
     .registerDefaultGroups()
-    .registerDefaultCommands({'prefix': false})
+    .registerDefaultCommands({'prefix': false, 'unknownCommand': false})
     .registerCommandsIn(path.join(__dirname, 'commands'));
 
 client.once('ready', async() => {
