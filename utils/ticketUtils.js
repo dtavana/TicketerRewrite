@@ -136,6 +136,9 @@ module.exports = {
         let moderatorRole = await client.provider.get(guild, 'moderatorRole', null);
         adminRole = await guild.roles.get(adminRole);
         moderatorRole = await guild.roles.get(moderatorRole);
+        if(!adminRole || !moderatorRole) {
+            return `I could not open a welcome ticket for \`${user.tag}\` because you have not setup the Ticketer Roles. Please run \`${guild.commandPrefix}setuproles\` command.`;
+        }
         let category = await client.provider.get(guild.id, 'ticketOnJoinCategory', null);
         category = await guild.channels.get(category);
         let createdChannel = await guild.channels.create(

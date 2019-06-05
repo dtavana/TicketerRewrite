@@ -34,6 +34,13 @@ module.exports = {
             let res = await client.provider.get(member.guild.id, 'ticketOnJoin', null);
             if(!!res) {
                 let channel = await ticketUtils.openJoinTicket(client, member.guild, member.user);
+                if(typeof channel === 'string') {
+                    return await messageUtils.sendError({
+                        target: member.guild.owner, 
+                        valString: channel,
+                        client: null
+                    });
+                }
                 let welcomeMessage = await client.provider.get(member.guild, 'joinWelcomeMessage', null);
                 if(!welcomeMessage) {
                     welcomeMessage = 'Welcome to :server:. An admin will be with you shortly.';
@@ -42,8 +49,10 @@ module.exports = {
             }
         });
 
+        /*
         server.listen(8080, () => {
             console.log('Webhook server listening');
-          });
+        });
+        */
     },
 };
