@@ -49,7 +49,7 @@ module.exports = {
             }
         });
 
-        server.listen(3000, () => {
+        server.listen(8080, () => {
             console.log('Webhook server listening');
         });
     },
