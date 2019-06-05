@@ -8,7 +8,7 @@ module.exports = {
         const dbl = new DBL(process.env.DBL_TOKEN, {webhookAuth: process.env.DBL_AUTHENTICATION, webhookServer: server}, client);
         dbl.webhook.on('ready', hook => {
             console.log(`Webhook running with path ${hook.path}`);
-          });
+        });
         dbl.webhook.on('vote', async(vote) => {
             await votesController.send(client, vote);
         });
@@ -32,7 +32,7 @@ module.exports = {
 
         client.on('guildMemberAdd', async(member) => {
             let res = await client.provider.get(member.guild.id, 'ticketOnJoin', null);
-            if(!!res) {
+            if(res) {
                 let channel = await ticketUtils.openJoinTicket(client, member.guild, member.user);
                 if(typeof channel === 'string') {
                     return await messageUtils.sendError({

@@ -58,7 +58,7 @@ module.exports = class RemoveChannelCommand extends TicketerCommand {
             if(collected.has('✅')) {
                 let newData = ticketChannels.filter(theChannel => theChannel.channelid !== channel.id);
                 newData = JSON.stringify(newData);
-                await this.client.provider.set(msg.guild.id, "ticketchannels", newData);
+                await this.client.provider.set(msg.guild.id, 'ticketchannels', newData);
                 return await messageUtils.sendSuccess({
                     target: msg.channel, 
                     valString: `**${channel.toString()}** has been removed as a ticket channel.`,

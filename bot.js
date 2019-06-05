@@ -9,7 +9,7 @@ const pub = require('./controllers/publish.controller');
 const webhookServer = require('./utils/webhookServer');
 const TicketerProvider = require('./utils/ticketer-provider');
 const events = require('./utils/events');
-const cleanup = require('./utils/cleanup')
+const cleanup = require('./utils/cleanup');
 
 const client = new CommandoClient({
     commandPrefix: process.env.DEFAULT_PREFIX,

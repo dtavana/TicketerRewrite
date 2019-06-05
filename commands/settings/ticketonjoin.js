@@ -26,9 +26,9 @@ module.exports = class TicketOnJoinCommand extends PremiumCommand {
         let createdCategory;
         if(ticketOnJoin) {
             createdCategory = await msg.guild.channels.create(
-                `New Member Ticket Category`,
+                'New Member Ticket Category',
                 {
-                    type: "category"
+                    type: 'category'
                 }
             );
             await this.client.provider.set(msg.guild.id, 'ticketOnJoinCategory', createdCategory.id);

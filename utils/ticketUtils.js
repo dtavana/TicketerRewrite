@@ -25,7 +25,7 @@ module.exports = {
         }
 
         if(maxTickets !== -1 && currentUserOpenTickets === maxTickets) {
-            return `${user.toString()} already has **${maxTickets}** tickets opened.`
+            return `${user.toString()} already has **${maxTickets}** tickets opened.`;
         }
 
         channels = JSON.parse(channels);
@@ -161,7 +161,7 @@ module.exports = {
         );
         let res = {
             'author': user.id,
-            'subject': "New Member Ticket"
+            'subject': 'New Member Ticket'
         };
         res = JSON.stringify(res);
         await client.provider.set(`${guild.id}-channels`, createdChannel.id, res);

@@ -13,7 +13,7 @@ module.exports = class UpgradeCommand extends TicketerCommand {
     }
     
     async run(msg, fromPattern, result) {
-        let res = `Premium is a one-time $20 fee. Click here to [purchase premium](https://donatebot.io/checkout/542717934104084511).`;
+        let res = 'Premium is a one-time $20 fee. Click here to [purchase premium](https://donatebot.io/checkout/542717934104084511).';
         await messageUtils.sendSuccess({
             target: msg.channel, 
             valString: res,
