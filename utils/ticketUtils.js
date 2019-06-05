@@ -139,7 +139,7 @@ module.exports = {
         let category = await client.provider.get(guild.id, 'ticketOnJoinCategory', null);
         category = await guild.channels.get(category);
         let createdChannel = await guild.channels.create(
-            `newmember-${currentTicket}`,
+            `${user.name}-jointicket`,
             {
                 type: 'text',
                 parent: category,
