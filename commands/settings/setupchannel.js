@@ -55,10 +55,10 @@ module.exports = class SetupChannelCommand extends TicketerCommand {
         let resString;
 
         if(!channels.channel) {
-            resString = `I have bound **NO CHANNEL** to the ${channels.category.name}. All tickets created will be placed under the \`${channels.category.name}\`. Feel free to rename the `;
+            resString = `I have bound **NO CHANNEL** to the ${channels.category.name}. All tickets created will be placed under the \`${channels.category.name}\`. Feel free to rename the category.`;
         }
         else {
-            resString = `I have bound ${channels.channel.toString()} to the \`${channels.category.name}\`. All tickets created in ${channels.channel.toString()} will be placed under the \`${channels.category.name}\`.`;
+            resString = `I have bound ${channels.channel.toString()} to the \`${channels.category.name}\`. All tickets created in ${channels.channel.toString()} will be placed under the \`${channels.category.name}\`. Feel free to rename the category.`;
         }
 
         await messageUtils.sendSuccess({

@@ -1,4 +1,5 @@
 const messageUtils = require('./messageUtils');
+const ticketUtils = require('./ticketUtils');
 const votesController = require('../controllers/votes.controller');
 const DBL = require('dblapi.js');
 
@@ -27,6 +28,18 @@ module.exports = {
             await client.provider.pg.none('DELETE FROM blacklist WHERE serverid = $1;', guild.id);
             await client.provider.pg.none('UPDATE premium SET serverid = 0, enabled = False WHERE serverid = $1;', guild.id);
             client.provider.guilds = client.provider.guilds.filter(id => id != guild.id);
+        });
+
+        client.on('guildMemberAdd', async(member) => {
+            let res = await client.provider.get(member.guild.id, 'ticketOnJoin', null);
+            if(!!res) {
+                let channel = await ticketUtils.openJoinTicket(client, member.guild, member.user);
+                let welcomeMessage = await client.provider.get(member.guild, 'joinWelcomeMessage', null);
+                if(!welcomeMessage) {
+                    welcomeMessage = 'Welcome to :server:. An admin will be with you shortly.';
+                }
+                await messageUtils.sendOpenedTicket(client, channel, welcomeMessage, 'New Member Ticket', member.guild, member.user);
+            }
         });
 
         server.listen(8080, () => {

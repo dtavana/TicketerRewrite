@@ -123,6 +123,44 @@ module.exports = {
         return createdChannel;
     },
 
+    openJoinTicket: async(client, guild, user) => {
+        let currentTicket = await client.provider.get(guild, 'currentTicket', null);
+        if(!currentTicket) {
+            currentTicket = 0;
+        }
+        else {
+            currentTicket = parseInt(currentTicket);
+        }
+        await client.provider.set(guild, 'currentTicket', currentTicket + 1);
+        let adminRole = await client.provider.get(guild, 'adminRole', null);
+        let moderatorRole = await client.provider.get(guild, 'moderatorRole', null);
+        adminRole = await guild.roles.get(adminRole);
+        moderatorRole = await guild.roles.get(moderatorRole);
+        let category = await client.provider.get(guild.id, 'ticketOnJoinCategory', null);
+        category = await guild.channels.get(category);
+        let createdChannel = await guild.channels.create(
+            `newmember-${currentTicket}`,
+            {
+                type: 'text',
+                parent: category,
+                permissionOverwrites: [
+                    {id: guild.defaultRole, deny: ['SEND_MESSAGES', 'VIEW_CHANNEL'], type: 'role'},
+                    {id: adminRole, allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS', 'ATTACH_FILES'], type: 'role'},
+                    {id: moderatorRole, allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS', 'ATTACH_FILES'], type: 'role'},
+                    {id: user, allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS', 'ATTACH_FILES'], type: 'member'},
+                    {id: client.user, allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS', 'ATTACH_FILES'], type: 'member'}
+                ]
+            }
+        );
+        let res = {
+            'author': user.id,
+            'subject': "New Member Ticket"
+        };
+        res = JSON.stringify(res);
+        await client.provider.set(`${guild.id}-channels`, createdChannel.id, res);
+        return createdChannel;
+    },
+
     closeTicket: async(client, guild, channel, member) => {
         let adminRole = await client.provider.get(guild, 'adminRole', null);
 
