@@ -5,7 +5,7 @@ module.exports = {
         let category;
         
         if(!channels) {
-            return `The guild administrators has not setup a ticket channel yet! If you are a guild administrator, please use the \`${guild.commandPrefix}\`setupchannel in order to setup the guild.`;
+            return `The guild administrators have not setup a ticket channel yet! If you are a guild administrator, please use the \`${guild.commandPrefix}\`setupchannel in order to setup the guild.`;
         }
 
         let maxTickets = await client.provider.get(guild, 'maxTickets', null);
@@ -29,6 +29,10 @@ module.exports = {
         }
 
         channels = JSON.parse(channels);
+
+        if(channels.length === 0) {
+            return `The guild administrators have not setup a ticket channel yet! If you are a guild administrator, please use the \`${guild.commandPrefix}\`setupchannel in order to setup the guild.`;
+        }
 
         let found = false;
         let targetchannel;
