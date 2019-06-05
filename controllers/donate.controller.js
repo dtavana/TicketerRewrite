@@ -59,5 +59,18 @@ module.exports = {
                 client: null
             });
         }
+        
+        client.shard.broadcastEval(`
+            const messageUtils = require('../../../../utils/messageUtils');
+            const channel = this.channels.get('${process.env.DONATE_LOG}')
+            if(!!channel) {
+                messageUtils.sendCleanSuccess({
+                    target: channel, 
+                    valString: '${publicString}',
+                    client: null
+                }).then();
+            }
+        `)
+            .then();
     }
 };
