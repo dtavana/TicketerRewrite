@@ -21,8 +21,6 @@ module.exports = {
         let finalVotes;
 
         let user = client.users.get(userId);
-        let guild = client.guilds.get(process.env.GUILD_ID)
-        let channel = guild.channels.get(process.env.VOTES_LOG);
 
         let publicString;
         let privateString;
@@ -58,10 +56,25 @@ module.exports = {
         }
         await client.provider.pg.none('UPDATE votes SET count = $1 WHERE userid = $2;', [finalVotes, userId]);
 
-        await messageUtils.sendCleanSuccess({
-            target: user, 
-            valString: privateString,
-            client: null
-        });
+        if(user) {
+            await messageUtils.sendCleanSuccess({
+                target: user, 
+                valString: privateString,
+                client: null
+            });
+        }
+
+        client.shard.broadcastEval(`
+            const messageUtils = require('../../../../utils/messageUtils');
+            const channel = this.channels.get('${process.env.VOTES_LOG}')
+            if(!!channel) {
+                messageUtils.sendCleanSuccess({
+                    target: channel, 
+                    valString: '${publicString}',
+                    client: null
+                }).then();
+            }
+        `)
+            .then();
     }
 };

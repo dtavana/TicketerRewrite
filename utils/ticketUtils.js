@@ -5,7 +5,7 @@ module.exports = {
         let category;
         
         if(!channels) {
-            return `The guild administrators has not setup a ticket channel yet! If you are a guild administrator, please use the \`${guild.commandPrefix}\`setupchannel in order to setup the guild.`;
+            return `The guild administrators have not setup a ticket channel yet! If you are a guild administrator, please use the \`${guild.commandPrefix}\`setupchannel in order to setup the guild.`;
         }
 
         let maxTickets = await client.provider.get(guild, 'maxTickets', null);
@@ -25,10 +25,14 @@ module.exports = {
         }
 
         if(maxTickets !== -1 && currentUserOpenTickets === maxTickets) {
-            return `${user.toString()} already has **${maxTickets}** tickets opened.`
+            return `${user.toString()} already has **${maxTickets}** tickets opened.`;
         }
 
         channels = JSON.parse(channels);
+
+        if(channels.length === 0) {
+            return `The guild administrators have not setup a ticket channel yet! If you are a guild administrator, please use the \`${guild.commandPrefix}\`setupchannel in order to setup the guild.`;
+        }
 
         let found = false;
         let targetchannel;
@@ -136,6 +140,9 @@ module.exports = {
         let moderatorRole = await client.provider.get(guild, 'moderatorRole', null);
         adminRole = await guild.roles.get(adminRole);
         moderatorRole = await guild.roles.get(moderatorRole);
+        if(!adminRole || !moderatorRole) {
+            return `I could not open a welcome ticket for \`${user.tag}\` because you have not setup the Ticketer Roles. Please run \`${guild.commandPrefix}setuproles\` command.`;
+        }
         let category = await client.provider.get(guild.id, 'ticketOnJoinCategory', null);
         category = await guild.channels.get(category);
         let createdChannel = await guild.channels.create(
@@ -154,7 +161,7 @@ module.exports = {
         );
         let res = {
             'author': user.id,
-            'subject': "New Member Ticket"
+            'subject': 'New Member Ticket'
         };
         res = JSON.stringify(res);
         await client.provider.set(`${guild.id}-channels`, createdChannel.id, res);

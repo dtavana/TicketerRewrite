@@ -13,7 +13,7 @@ module.exports = class InviteCommand extends TicketerCommand {
     }
     
     async run(msg, fromPattern, result) {
-        let res = `To invite me, [click here](https://discordapp.com/oauth2/authorize?client_id=542709669211275296&scope=bot&permissions=805432400)`;
+        let res = 'To invite me, [click here](https://discordapp.com/oauth2/authorize?client_id=542709669211275296&scope=bot&permissions=805432400)';
         await messageUtils.sendSuccess({
             target: msg.channel, 
             valString: res,

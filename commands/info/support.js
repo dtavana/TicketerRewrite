@@ -13,7 +13,7 @@ module.exports = class SupportCommand extends TicketerCommand {
     }
     
     async run(msg, fromPattern, result) {
-        let res = `Please [join](http://discord.ticketerbot.xyz) the official Ticketer support server for more detailed support.`;
+        let res = 'Please [join](http://discord.ticketerbot.xyz) the official Ticketer support server for more detailed support.';
         await messageUtils.sendSuccess({
             target: msg.channel, 
             valString: res,
