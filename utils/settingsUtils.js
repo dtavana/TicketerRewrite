@@ -53,7 +53,29 @@ module.exports = {
         let oldData;
         let newData;
 
+        oldData = await client.provider.get(guild.id, "ticketchannels", null);
+
+        if(oldData === undefined || oldData === null) {
+            oldData = [];
+        }
+        else {
+            oldData = JSON.parse(oldData);
+        }
+
+        if(oldData.length >= 1 && !premium) {
+            return `Non premium guilds may only set **1 ticket channel**. To have up to **10 ticket channels**, consider upgrading to premium using the \`${guild.commandPrefix}upgrade\` command.`;
+        }
         
+        if(oldData.length >= 10) {
+            return "Premium guilds may only have up to **10 ticket channels**.";
+        }
+
+        for(let curChannel of oldData) {
+            if(curChannel.channelid === ticketchannel.id) {
+                return `${ticketchannel.toString()} has already been setup as a ticket channel.`
+            }
+        }
+
         if(!ticketchannel) {
             ticketchannelname = "Ticketer";
             ticketchannelid = false;

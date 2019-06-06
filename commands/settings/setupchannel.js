@@ -30,6 +30,15 @@ module.exports = class SetupChannelCommand extends TicketerCommand {
     }
     
     async run(msg, {channel, cleanTicketChannel}, fromPattern, result) {
+        if(channel === true) {
+            return await messageUtils.sendError({
+                target: msg.channel, 
+                valString: `\`true\` is not a valid value for **channel**.`,
+                client: this.client,
+                messages: [msg].concat(result.prompts, result.answers),
+                guild: msg.guild
+            });
+        }
         let premium = await this.checkPremium(this.client, msg);
         if(cleanTicketChannel && !premium) {
             return await messageUtils.sendError({
