@@ -6,10 +6,10 @@ const pg = require('./controllers/postgres.controller');
 const redis = require('./controllers/redis.controller');
 const sub = require('./controllers/subscribe.controller');
 const pub = require('./controllers/publish.controller');
-const webhookServer = require('./utils/webhookServer');
 const TicketerProvider = require('./utils/ticketer-provider');
 const events = require('./utils/events');
 const cleanup = require('./utils/cleanup');
+const DBL = require('dblapi.js');
 
 const client = new CommandoClient({
     commandPrefix: process.env.DEFAULT_PREFIX,
@@ -36,11 +36,12 @@ client.registry
 
 client.once('ready', async() => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
-    client.user.setActivity('-help | v2.1', {type: 'WATCHING'});
-    await events.initEvents(client, webhookServer);
+    client.user.setActivity('-help | v2.2', {type: 'WATCHING'});
+    await events.initEvents(client);
     setInterval(async() => {
         await cleanup.cleanExpiredCredits(client, pg);
     }, 60000);  
+    const dbl = new DBL(process.env.DBL_TOKEN, client);
 });
 
 client.on('error', console.error);

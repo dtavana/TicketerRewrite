@@ -1,76 +1,61 @@
 const messageUtils = require('../utils/messageUtils');
 const donateUtils = require('../utils/donateUtils');
 const Discord = require('discord.js');
+const pg = require('./postgres.controller');
 require('dotenv').config();
 
 module.exports = {
-    send: async(client, message) => {
+    send: async(manager, message) => {
         let data = JSON.parse(message);
 
         let userId = data.userId;
         let added = data.added;
         let paymentId = data.paymentId;
-        let user = client.users.get(userId);
         let key;
         if(added) {
             let keyExists = true;
             let key;
             while(keyExists) {
                 key = await donateUtils.generateKey();
-                keyExists = await donateUtils.checkKey(client, key);
+                keyExists = await donateUtils.checkKey(pg, key);
             }
-            await donateUtils.saveCredit(client, {'userid': userId, 'key': key, 'paymentid': paymentId});
+            await donateUtils.saveCredit(pg, {'userid': userId, 'key': key, 'paymentid': paymentId});
         }
         else {
-            key = await donateUtils.removeCredit(client, paymentId);
+            key = await donateUtils.removeCredit(pg, paymentId);
         }
-        
-        let publicString;
-        let privateString;
 
-        if(added) {
-            if(user) {
-                publicString =  `\`${user.tag}\` just purchased one month of premium. Key: \`${key}\``;
-            }
-            else {
-                publicString =  `\`${userId}\` just purchased one month of premium. Key: \`${key}\``;
-            }
-            
-        }
-        else {
-            if(user) {
-                publicString =  `\`${user.tag}\` just had a premium credited removed. Key: \`${key}\``;
-            }
-            else {
-                publicString =  `\`${userId}\` just had a premium credited removed. Key: \`${key}\``;
-            }
-        }
-        
-        if(user) {
-            if(added) {
-                privateString = `You have had one premium credit: \`${key}\` added to your account! Use the \`redeem\` command to get started!`;
-            }
-            else {
-                privateString = `You have had one premium credit removed: \`${key}\` added to your account! Use the \`redeem\` command to get started!`;
-            }
-            await messageUtils.sendCleanSuccess({
-                target: user, 
-                valString: privateString,
-                client: null
-            });
-        }
-        
-        client.shard.broadcastEval(`
+        await manager.broadcastEval(`
             const messageUtils = require('../../../../utils/messageUtils');
-            const channel = this.channels.get('${process.env.DONATE_LOG}')
+            const channel = this.channels.get('${process.env.DONATE_LOG}');
+            const user = this.channels.get('${userId}');
+            let userString;
+            if(user) userString = '\`' + user.tag + '\`';
+            else userString = '\`${userId}\`';
+            let publicString;
+            let privateString;
+            if(${added}) {
+                publicString = userString + ' just purchased one month of premium. Key: \`${key}\`';
+                privateString = 'You have had one premium credit: \`${key}\` added to your account! Use the \`redeem\` command to get started!';
+            }
+            else {
+                publicString =  userString + ' just had a premium credited removed. Key: \`${key}\`';
+                privateString = 'You have had one premium credit removed: \`${key}\` added to your account! Use the \`redeem\` command to get started!';
+            }
             if(!!channel) {
                 messageUtils.sendCleanSuccess({
                     target: channel, 
-                    valString: '${publicString}',
+                    valString: publicString,
+                    client: null
+                }).then();
+            }
+            if(!!user) {
+                messageUtils.sendCleanSuccess({
+                    target: user, 
+                    valString: privateString,
                     client: null
                 }).then();
             }
         `)
-            .then();
     }
 };
