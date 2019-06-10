@@ -1,18 +1,8 @@
 const messageUtils = require('./messageUtils');
 const ticketUtils = require('./ticketUtils');
-const votesController = require('../controllers/votes.controller');
-const DBL = require('dblapi.js');
 
 module.exports = { 
-    initEvents: async(client, server) => {
-        const dbl = new DBL(process.env.DBL_TOKEN, {webhookAuth: process.env.DBL_AUTHENTICATION, webhookServer: server}, client);
-        dbl.webhook.on('ready', hook => {
-            console.log(`Webhook running with path ${hook.path}`);
-        });
-        dbl.webhook.on('vote', async(vote) => {
-            await votesController.send(client, vote);
-        });
-
+    initEvents: async(client) => {
         client.on('guildCreate', async(guild) => {
             await client.provider.set(guild.id, 'currentTicket', 0);
             let owner = guild.owner;
@@ -47,10 +37,6 @@ module.exports = {
                 }
                 await messageUtils.sendOpenedTicket(client, channel, welcomeMessage, 'New Member Ticket', member.guild, member.user);
             }
-        });
-
-        server.listen(8080, () => {
-            console.log('Webhook server listening');
         });
     },
 };
