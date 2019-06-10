@@ -6,7 +6,6 @@ const pg = require('./controllers/postgres.controller');
 const redis = require('./controllers/redis.controller');
 const sub = require('./controllers/subscribe.controller');
 const pub = require('./controllers/publish.controller');
-const webhookServer = require('./utils/webhookServer');
 const TicketerProvider = require('./utils/ticketer-provider');
 const events = require('./utils/events');
 const cleanup = require('./utils/cleanup');
@@ -37,7 +36,7 @@ client.registry
 client.once('ready', async() => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
     client.user.setActivity('-help | v2.1', {type: 'WATCHING'});
-    await events.initEvents(client, webhookServer);
+    await events.initEvents(client);
     setInterval(async() => {
         await cleanup.cleanExpiredCredits(client, pg);
     }, 60000);  
