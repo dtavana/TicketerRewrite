@@ -8,8 +8,10 @@ const manager = new ShardingManager('./bot.js', {
     token: process.env.BOT_TOKEN
 });
 
-manager.spawn();
-manager.on('shardCreate', shard => console.log(`Launched shard ${shard.id}`));
+let posted = false;
+
+manager.on('shardCreate', async(shard) => console.log(`Launched shard ${shard.id}`));
+manager.spawn().then();
 
 const dbl = new DBL(process.env.DBL_TOKEN, {webhookAuth: process.env.DBL_AUTHENTICATION, webhookServer: server});
 dbl.webhook.on('ready', hook => {
