@@ -8,7 +8,7 @@ module.exports = {
         let header = '<!DOCTYPE html>\n<html>\n<title>Ticketer Transcript</title>\n<head>\n<style type=\'text/css\'>\nbody { background-color: #36393F; }\n.container { color: white; border: 2px solid #B03B3F; background-color: #2F3136; border-radius: 5px; padding: 20px; margin: 10px 0; }\n.edited { background-color: #f49b42; }\n.deleted { background-color: #8c2424; }\n.darker { border-color: #ccc; background-color: #ddd; }\n.container::after { content: ""; clear: both; display: table; }\n.container img { float: left; max-width: 60px; width: 100%; margin-right: 20px; border-radius: 50%; }\n.container img.right { float: right; margin-left: 20px; margin-right: 0; }\n.time-right { color: white !important; float: right; color: #aaa; }\n.time-left { color: white !important; float: left; color: #999; }\n</style>\n</head>\n<body>';
         let data = header;
         let skip = 0;
-        messageHistory.forEach(message => {
+        messageHistory.array().reverse().forEach(message => {
             if(skip < 2) {
                 skip++;
                 return;
