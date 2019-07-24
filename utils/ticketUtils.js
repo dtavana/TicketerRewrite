@@ -192,9 +192,9 @@ module.exports = {
         ticketData = JSON.parse(ticketData);
         let author = ticketData.author;
         let subject = ticketData.subject;
-        
+
         let createdAt = channel.createdAt;
-        let channelHistory = channel.messages;
+        let channelHistory = await channel.messages.fetch();
 
         let openTickets = await client.provider.get(guild, 'openTickets', null);
         let closedTickets = await client.provider.get(guild, 'closedTickets', null);
