@@ -37,7 +37,7 @@ module.exports = class InactiveCommand extends PremiumCommand {
         let ticketOwner = ticketData.author;
         ticketOwner = this.client.users.get(ticketOwner);
 
-        let adminClose = this.client.provider.get(msg.guild.id, 'adminClose', null);
+        let adminClose = await this.client.provider.get(msg.guild.id, 'adminClose', null);
 
         if(adminClose) {
             let hasAdmin = await this.checkAdminRole(this.client, msg.member, msg.guild);
@@ -64,10 +64,15 @@ module.exports = class InactiveCommand extends PremiumCommand {
             }
         }
         
-        await this.client.provider.pg.none("INSERT INTO inactive (ticketid, serverid, expires) VALUES ($1, $2, date_trunc(\'minute\', NOW() + interval \'2 hours\'));", [channel.id, msg.guild.id]);
+        let inactiveTime = await this.client.provider.get(msg.guild.id, 'inactiveTime', null);
+        if(!inactiveTime) {
+            inactiveTime = 120;
+        }
+
+        await this.client.provider.pg.none(`INSERT INTO inactive (ticketid, serverid, expires) VALUES ($1, $2, date_trunc(\'minute\', NOW() + interval \'${inactiveTime} minutes\'));`, [channel.id, msg.guild.id]);
         await messageUtils.sendSuccess({
             target: msg.channel, 
-            valString: `${channel.toString()} has been marked as inactive and will be deleted in **2 hours**. Use the \`${msg.guild.commandPrefix}active\` command to reactivate this ticket`,
+            valString: `${channel.toString()} has been marked as inactive and will be deleted in **${inactiveTime} minutes**. Use the \`${msg.guild.commandPrefix}active\` command to reactivate this ticket`,
             client: this.client,
             messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild
@@ -75,7 +80,7 @@ module.exports = class InactiveCommand extends PremiumCommand {
         if(ticketOwner) {
             await messageUtils.sendNotice({
                 target: ticketOwner, 
-                valString: `\`${channel.name}\` in **${msg.guild.name}** has been marked as inactive and will be deleted in **2 hours**. Use the \`${msg.guild.commandPrefix}active\` command to reactivate your ticket`,
+                valString: `\`${channel.name}\` in **${msg.guild.name}** has been marked as inactive and will be deleted in **${inactiveTime} minutes**. Use the \`${msg.guild.commandPrefix}active\` command to reactivate your ticket`,
                 client: this.null
             });
         }
@@ -86,7 +91,7 @@ module.exports = class InactiveCommand extends PremiumCommand {
             null,
             channel.name,
             'YELLOW',
-            `\`${channel.name}\` has been marked as inactive and will be deleted in **2 hours**`
+            `\`${channel.name}\` has been marked as inactive and will be deleted in **${inactiveTime} minutes**`
         );
     }
 };
