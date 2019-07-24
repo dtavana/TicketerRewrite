@@ -154,14 +154,6 @@ module.exports = {
         let embedMessage;
         logChannel = await guild.channels.get(logChannel);
         if(logChannel) {
-            /*
-            const closeEmbed = new Discord.MessageEmbed()
-                .setTitle('Log :notepad_spiral:')
-                .setColor('RED')
-                .setTimestamp()
-                .setFooter(process.env.FOOTER_TEXT)
-                .setDescription(`**${closer.tag}** closed \`${channelName}\`\n**Reason:** \`${reason}\`\n**Original Subject:** \`${subject}\`\n**Original Author:** \`${originalAuthor}\`\n**Support Time:** \`${timeString}\``);
-            */
            const closeEmbed = new Discord.MessageEmbed()
                 .setTitle('Log :notepad_spiral:')
                 .setColor('RED')
