@@ -37,16 +37,33 @@ module.exports = class InactiveCommand extends PremiumCommand {
         let ticketOwner = ticketData.author;
         ticketOwner = this.client.users.get(ticketOwner);
 
-        let hasAdmin = await this.checkTicketerRole(this.client, msg.member, msg.guild);
-        if(!hasAdmin.state) {
-            return await messageUtils.sendError({
-                target: msg.channel, 
-                valString: `In order to add a user to a ticket, you must have the ${hasAdmin.admin} role or the ${hasAdmin.moderator} role`,
-                client: this.client,
-                messages: [msg].concat(result.prompts, result.answers),
-                guild: msg.guild
-            });
+        let adminClose = this.client.provider.get(msg.guild.id, 'adminClose', null);
+
+        if(adminClose) {
+            let hasAdmin = await this.checkAdminRole(this.client, msg.member, msg.guild);
+            if(!hasAdmin.state) {
+                return await messageUtils.sendError({
+                    target: msg.channel, 
+                    valString: `In order to mark a ticket as inactive, you must have the ${hasAdmin.admin} role`,
+                    client: this.client,
+                    messages: [msg].concat(result.prompts, result.answers),
+                    guild: msg.guild
+                });
+            }
         }
+        else {
+            let hasAdmin = await this.checkTicketerRole(this.client, msg.member, msg.guild);
+            if(!hasAdmin.state) {
+                return await messageUtils.sendError({
+                    target: msg.channel, 
+                    valString: `In order to mark a ticket as inactive, you must have the ${hasAdmin.admin} role or the ${hasAdmin.moderator} role`,
+                    client: this.client,
+                    messages: [msg].concat(result.prompts, result.answers),
+                    guild: msg.guild
+                });
+            }
+        }
+        
         await this.client.provider.pg.none("INSERT INTO inactive (ticketid, serverid, expires) VALUES ($1, $2, date_trunc(\'minute\', NOW() + interval \'2 hours\'));", [channel.id, msg.guild.id]);
         await messageUtils.sendSuccess({
             target: msg.channel, 
