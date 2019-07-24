@@ -72,11 +72,13 @@ module.exports = class InactiveCommand extends PremiumCommand {
             messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild
         });
-        await messageUtils.sendNotice({
-            target: ticketOwner, 
-            valString: `\`${channel.name}\` in **${msg.guild.name}** has been marked as inactive and will be deleted in **2 hours**. Use the \`${msg.guild.commandPrefix}active\` command to reactivate your ticket`,
-            client: this.null
-        });
+        if(ticketOwner) {
+            await messageUtils.sendNotice({
+                target: ticketOwner, 
+                valString: `\`${channel.name}\` in **${msg.guild.name}** has been marked as inactive and will be deleted in **2 hours**. Use the \`${msg.guild.commandPrefix}active\` command to reactivate your ticket`,
+                client: this.null
+            });
+        }
         await messageUtils.sendTicketManipulation(
             this.client,
             msg.guild,

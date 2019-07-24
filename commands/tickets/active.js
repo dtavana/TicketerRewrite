@@ -37,11 +37,13 @@ module.exports = class ActiveCommand extends PremiumCommand {
             messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild
         });
-        await messageUtils.sendSuccess({
-            target: ticketOwner, 
-            valString: `\`${channel.name}\` in **${msg.guild.name}** has been marked as active again`,
-            client: this.null
-        });
+        if(ticketOwner) {
+            await messageUtils.sendSuccess({
+                target: ticketOwner, 
+                valString: `\`${channel.name}\` in **${msg.guild.name}** has been marked as active again`,
+                client: this.null
+            });
+        }
         await messageUtils.sendTicketManipulation(
             this.client,
             msg.guild,
