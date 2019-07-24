@@ -40,7 +40,8 @@ client.once('ready', async() => {
     await events.initEvents(client);
     setInterval(async() => {
         await cleanup.cleanExpiredCredits(client, pg);
-    }, 60000);  
+        await cleanup.cleanInactiveTickets(client, pg);
+    }, 60000);
     const dbl = new DBL(process.env.DBL_TOKEN, client);
 });
 
