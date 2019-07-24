@@ -192,9 +192,93 @@ module.exports = {
         ticketData = JSON.parse(ticketData);
         let author = ticketData.author;
         let subject = ticketData.subject;
-        
+
         let createdAt = channel.createdAt;
-        let channelHistory = channel.messages;
+        let channelHistory = await channel.messages.fetch();
+
+        let openTickets = await client.provider.get(guild, 'openTickets', null);
+        let closedTickets = await client.provider.get(guild, 'closedTickets', null);
+        let allOpenTickets = await client.provider.redis.get('allOpenTickets');
+        let handledTickets = await client.provider.redis.get('handledTickets');
+
+        if(!allOpenTickets) {
+            allOpenTickets = 0;
+        }
+        else {
+            allOpenTickets = parseInt(allOpenTickets);
+        }
+        if(!openTickets) {
+            openTickets = 0;
+        }
+        else {
+            openTickets = parseInt(openTickets);
+        }
+        if(!closedTickets) {
+            closedTickets = 0;
+        }
+        else {
+            closedTickets = parseInt(closedTickets);
+        }
+        if(!handledTickets) {
+            handledTickets = 0;
+        }
+        else {
+            handledTickets = parseInt(handledTickets);
+        }
+        allOpenTickets -= 1;
+        openTickets -= 1;
+        closedTickets += 1;
+        handledTickets += 1;
+
+        let currentUserOpenTickets = await client.provider.get(`${guild.id}-channels`, author, null);
+
+        author = await client.users.get(author);
+        let authorObject = author;
+        if(!author) {
+            author = 'Not found';
+            authorObject = null;
+            await client.provider.remove(`${guild.id}-channels`, author);
+        }
+        else {
+            author = author.tag;
+            if(!currentUserOpenTickets) {
+                currentUserOpenTickets = 1;
+            }
+            else {
+                currentUserOpenTickets = parseInt(currentUserOpenTickets);
+            }
+            currentUserOpenTickets -= 1;
+            await client.provider.set(`${guild.id}-channels`, authorObject.id, currentUserOpenTickets);
+        }
+
+        await channel.delete('Closing Ticketer Ticket');
+        await client.provider.remove(`${guild.id}-channels`, channel.id);
+        await client.provider.set(guild, 'openTickets', openTickets);
+        await client.provider.set(guild, 'closedTickets', closedTickets);
+        await client.provider.redis.set('allOpenTickets', allOpenTickets);
+        await client.provider.redis.set('handledTickets', handledTickets);
+
+
+        return {
+            'createdAt': createdAt,
+            'originalAuthor': author,
+            'channelHistory': channelHistory,
+            'authorObject': authorObject,
+            'subject': subject
+        };
+    },
+
+    closeInactiveTicket: async(client, guild, channel) => {
+        let ticketData = await client.provider.get(`${guild.id}-channels`, channel.id, null);
+        if(!ticketData) {
+            return false;
+        }
+        ticketData = JSON.parse(ticketData);
+        let author = ticketData.author;
+        let subject = ticketData.subject;
+
+        let createdAt = channel.createdAt;
+        let channelHistory = await channel.messages.fetch();
 
         let openTickets = await client.provider.get(guild, 'openTickets', null);
         let closedTickets = await client.provider.get(guild, 'closedTickets', null);

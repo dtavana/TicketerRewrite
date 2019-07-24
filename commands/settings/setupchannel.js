@@ -80,20 +80,21 @@ module.exports = class SetupChannelCommand extends TicketerCommand {
 
         if(cleanTicketChannel && channels.channel) {
             const filter = m => !m.content.startsWith(`${msg.guild.commandPrefix}new`) && !m.content.startsWith(`${msg.guild.commandPrefix}ticket`) && !(m.embeds.length > 0 && ((m.embeds[0].description && m.embeds[0].description.includes("your ticket has been opened")) || (m.embeds[0].title && m.embeds[0].title.includes("Error"))));
-            let collector = new Discord.MessageCollector(channels.channel, filter, {})
+            let collector = new Discord.MessageCollector(channel, filter, {})
+            let dmOnCleanChannel = await this.client.provider.get(msg.guild.id, 'dmOnCleanChannel', null);
             collector.on('collect', async(message) => {
+                try {
+                    if(dmOnCleanChannel) {
+                        await messageUtils.sendError({
+                            target: message.author, 
+                            valString: `You may only create tickets in this channel.`,
+                        });
+                    }
+                }
+                catch {};
                 try { await message.delete(); }
                 catch {};
             });
-            /*
-            if(this.client.provider.ticketChannelCollectors.has(msg.guild.id)) {
-                this.client.provider.ticketChannelCollectors.set(msg.guild.id, this.client.provider.ticketChannelCollectors.get(msg.guild.id).push(collector));
-            }
-            else {
-                let collectorArray = [collector];
-                this.client.provider.ticketChannelCollectors.set(msg.guild.id, collectorArray);
-            }
-            */
          }
     }
 };

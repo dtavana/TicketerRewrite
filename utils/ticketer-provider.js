@@ -2,6 +2,7 @@ const { SettingProvider } = require('discord.js-commando');
 const Discord = require('discord.js');
 require('dotenv').config();
 const subpubController = require('../controllers/subpub.controller');
+const messageUtils = require('./messageUtils');
 
 class TicketerProvider extends SettingProvider {
     constructor(pg, redis, sub, pub) {
@@ -24,6 +25,7 @@ class TicketerProvider extends SettingProvider {
         await this.pg.none('CREATE TABLE IF NOT EXISTS blacklist(userid varchar, serverid varchar, adminid varchar);');
         await this.pg.none('CREATE TABLE IF NOT EXISTS payments(userid varchar, paymentid varchar);');
         await this.pg.none('CREATE TABLE IF NOT EXISTS votes(userid varchar PRIMARY KEY, count smallint);');
+        await this.pg.none('CREATE TABLE IF NOT EXISTS inactive(ticketid varchar PRIMARY KEY, serverid varchar, expires TIMESTAMP);');
 
         // Load all settings
         const guilds = await this.pg.manyOrNone('SELECT serverid FROM premium WHERE enabled = True;');
@@ -184,6 +186,15 @@ class TicketerProvider extends SettingProvider {
                 if(!channel) continue;
                 let collector = new Discord.MessageCollector(channel, filter, {})
                 collector.on('collect', async(message) => {
+                    try {
+                        if(settings.dmOnCleanChannel) {
+                            await messageUtils.sendError({
+                                target: message.author, 
+                                valString: `You may only create tickets in this channel.`,
+                            });
+                        }
+                    }
+                    catch {};
                     try { await message.delete(); }
                     catch {};
                 });

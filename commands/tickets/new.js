@@ -35,6 +35,10 @@ module.exports = class NewCommand extends TicketerCommand {
                 guild: msg.guild
             });
         }
+
+        if(!!subject && subject.length > 500) {
+            subject = subject.substring(0, 500) + "** ...**";
+        }
         
         let target;
         if(subject === false) {

@@ -26,7 +26,6 @@ module.exports = class CloseCommand extends TicketerCommand {
     
     async run(msg, {reason}, fromPattern, result) {
         let channelName = msg.channel.name;
-
         let data = await ticketUtils.closeTicket(this.client, msg.guild, msg.channel, msg.member);
         if(typeof data === 'string') {
             return await messageUtils.sendError({

@@ -1,4 +1,6 @@
 const messageUtils = require('./messageUtils');
+const ticketUtils = require('./ticketUtils');
+const utils = require('./utils');
 
 module.exports = {
     cleanExpiredCredits: async(client, pg) => {
@@ -17,9 +19,35 @@ module.exports = {
                 await messageUtils.sendCleanSuccess({
                     target: user, 
                     valString: `Your vote credit with key \`${credit.key}\` has expired and premium has been removed from its server if it was enabled.`,
-                    client: null
                 });
             }
+        }
+    },
+
+    cleanInactiveTickets: async(client, pg) => {
+        let expiredChannels = await pg.any('SELECT * FROM inactive WHERE expires < NOW();');
+        for(let ticket of expiredChannels) {
+            let channelId = ticket.ticketid;
+            let guildId = ticket.serverid;
+            let channel = client.channels.get(channelId);
+            if(!channel) return;
+            let guild = client.guilds.get(guildId);
+            if(!guild) return;
+            let channelName = channel.name;
+            let data = await ticketUtils.closeInactiveTicket(client, guild, channel);
+
+            if(!data) return;
+
+            let createdAt = data.createdAt;
+            let originalAuthor = data.originalAuthor;
+            let channelHistory = data.channelHistory;
+            let authorObject = data.authorObject;
+            let subject = data.subject;
+            
+            let elapsedTime = Date.now() - createdAt;
+            let timeString = utils.timeConversion(elapsedTime);
+            await messageUtils.sendClosedTicket(client, channelName, originalAuthor, authorObject, "Inactive Ticket", timeString, guild, client.user, channelHistory, subject);
+            await pg.none("DELETE FROM inactive WHERE ticketid = $1", channelId);
         }
     }
 };

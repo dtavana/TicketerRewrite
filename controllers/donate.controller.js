@@ -28,7 +28,7 @@ module.exports = {
         await manager.broadcastEval(`
             const messageUtils = require('../../../../utils/messageUtils');
             const channel = this.channels.get('${process.env.DONATE_LOG}');
-            const user = this.channels.get('${userId}');
+            const user = this.users.get('${userId}');
             let userString;
             if(user) userString = '\`' + user.tag + '\`';
             else userString = '\`${userId}\`';
