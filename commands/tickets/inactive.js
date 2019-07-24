@@ -73,9 +73,7 @@ module.exports = class InactiveCommand extends PremiumCommand {
         await messageUtils.sendSuccess({
             target: msg.channel, 
             valString: `${channel.toString()} has been marked as inactive and will be deleted in **${inactiveTime} minutes**. Use the \`${msg.guild.commandPrefix}active\` command to reactivate this ticket`,
-            client: this.client,
-            messages: [msg].concat(result.prompts, result.answers),
-            guild: msg.guild
+            client: null
         });
         if(ticketOwner) {
             await messageUtils.sendNotice({
