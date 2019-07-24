@@ -25,6 +25,7 @@ class TicketerProvider extends SettingProvider {
         await this.pg.none('CREATE TABLE IF NOT EXISTS blacklist(userid varchar, serverid varchar, adminid varchar);');
         await this.pg.none('CREATE TABLE IF NOT EXISTS payments(userid varchar, paymentid varchar);');
         await this.pg.none('CREATE TABLE IF NOT EXISTS votes(userid varchar PRIMARY KEY, count smallint);');
+        await this.pg.none('CREATE TABLE IF NOT EXISTS inactive(ticketid varchar PRIMARY KEY, serverid varchar, expires TIMESTAMP);');
 
         // Load all settings
         const guilds = await this.pg.manyOrNone('SELECT serverid FROM premium WHERE enabled = True;');
