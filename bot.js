@@ -36,7 +36,7 @@ client.registry
 
 client.once('ready', async() => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
-    client.user.setActivity('-help | v2.2', {type: 'WATCHING'});
+    client.user.setActivity('-help | v3', {type: 'WATCHING'});
     await events.initEvents(client);
     setInterval(async() => {
         await cleanup.cleanExpiredCredits(client, pg);
