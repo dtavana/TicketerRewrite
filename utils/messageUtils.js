@@ -27,6 +27,29 @@ module.exports = {
         client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages);
         return embedMessage;
     },
+    sendNotice: async(options) => {
+        const successEmbed = new Discord.MessageEmbed()
+            .setTitle('Action Needed ⚠️')
+            .setColor('YELLOW')
+            .setTimestamp()
+            .setFooter(process.env.FOOTER_TEXT)
+            .setDescription(options.valString);
+        
+        let embedMessage = await options.target.send(successEmbed);
+
+        let client = options.client || null;
+        if(client === null){
+            return embedMessage;
+        }
+        let messages = options.messages;
+        messages.push(embedMessage);
+
+        let guild = options.guild;
+
+        let cleanAll = await client.provider.get(guild.id, 'cleanAll');
+        client.setTimeout(utils.cleanMessages, 10000, cleanAll, messages);
+        return embedMessage;
+    },
     sendError: async(options) => {
         const errorEmbed = new Discord.MessageEmbed()
             .setTitle('Error ❌')
