@@ -18,7 +18,8 @@ module.exports = class PremiumCommand extends TicketerCommand {
         }
 
         if(message.channel.type === 'text' && this.userPermissions) {
-            const missing = message.channel.permissionsFor(message.author).missing(this.userPermissions);
+            const permissions = message.channel.permissionsFor(message.member);
+            const missing = permissions.missing(this.userPermissions);
             if(missing.length > 0) {
                 if(missing.length === 1) {
                     return `The \`${this.name}\` command requires you to have the "${permissions[missing[0]]}" permission.`;
