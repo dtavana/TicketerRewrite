@@ -47,7 +47,7 @@ module.exports = class InactiveCommand extends PremiumCommand {
                 guild: msg.guild
             });
         }
-        await this.client.provider.pg.none("INSERT INTO inactive (ticketid, serverid, expires) VALUES ($1, $2, date_trunc(\'day\', NOW() + interval \'2 hours\'));", [channel.id, msg.guild.id]);
+        await this.client.provider.pg.none("INSERT INTO inactive (ticketid, serverid, expires) VALUES ($1, $2, date_trunc(\'minute\', NOW() + interval \'2 hours\'));", [channel.id, msg.guild.id]);
         await messageUtils.sendSuccess({
             target: msg.channel, 
             valString: `${channel.toString()} has been marked as inactive and will be deleted in **2 hours**. Use the \`${msg.guild.commandPrefix}active\` command to reactivate this ticket`,
