@@ -36,6 +36,7 @@ module.exports = class CloseCommand extends TicketerCommand {
                 guild: msg.guild
             });
         }
+        await this.client.provider.pg.none("DELETE FROM inactive WHERE ticketid = $1;", msg.channel.id);
 
         if(!reason) {
             reason = 'None provided';
