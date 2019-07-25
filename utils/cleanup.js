@@ -30,24 +30,21 @@ module.exports = {
             let channelId = ticket.ticketid;
             let guildId = ticket.serverid;
             let channel = client.channels.get(channelId);
-            if(!channel) return;
+            await pg.none("DELETE FROM inactive WHERE ticketid = $1", channelId);
+            if(!channel) continue;
             let guild = client.guilds.get(guildId);
-            if(!guild) return;
+            if(!guild) continue;
             let channelName = channel.name;
             let data = await ticketUtils.closeInactiveTicket(client, guild, channel);
-
-            if(!data) return;
-
+            if(!data) continue;
             let createdAt = data.createdAt;
             let originalAuthor = data.originalAuthor;
             let channelHistory = data.channelHistory;
             let authorObject = data.authorObject;
             let subject = data.subject;
-            
             let elapsedTime = Date.now() - createdAt;
             let timeString = utils.timeConversion(elapsedTime);
             await messageUtils.sendClosedTicket(client, channelName, originalAuthor, authorObject, "Inactive Ticket", timeString, guild, client.user, channelHistory, subject);
-            await pg.none("DELETE FROM inactive WHERE ticketid = $1", channelId);
         }
     }
 };
