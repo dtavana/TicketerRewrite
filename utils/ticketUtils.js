@@ -276,9 +276,8 @@ module.exports = {
         ticketData = JSON.parse(ticketData);
         let author = ticketData.author;
         let subject = ticketData.subject;
-
         let createdAt = channel.createdAt;
-        let channelHistory = await channel.messages.fetch();
+        let channelHistory = await channel.messages;
 
         let openTickets = await client.provider.get(guild, 'openTickets', null);
         let closedTickets = await client.provider.get(guild, 'closedTickets', null);
@@ -335,7 +334,11 @@ module.exports = {
             await client.provider.set(`${guild.id}-channels`, authorObject.id, currentUserOpenTickets);
         }
 
-        await channel.delete('Closing Ticketer Ticket');
+        try {
+            await channel.delete('Closing Ticketer Ticket');
+        }
+        catch {}
+
         await client.provider.remove(`${guild.id}-channels`, channel.id);
         await client.provider.set(guild, 'openTickets', openTickets);
         await client.provider.set(guild, 'closedTickets', closedTickets);

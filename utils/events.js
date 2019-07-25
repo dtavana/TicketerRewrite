@@ -1,5 +1,6 @@
 const messageUtils = require('./messageUtils');
 const ticketUtils = require('./ticketUtils');
+const utils = require('./utils');
 
 module.exports = { 
     initEvents: async(client) => {
@@ -37,6 +38,10 @@ module.exports = {
                 }
                 await messageUtils.sendOpenedTicket(client, channel, welcomeMessage, 'New Member Ticket', member.guild, member.user);
             }
+        });
+
+        client.on('channelDelete', async(channel) => {
+            await client.provider.pg.none("DELETE FROM inactive WHERE ticketid = $1;", channel.id);
         });
     },
 };
