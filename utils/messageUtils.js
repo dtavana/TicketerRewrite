@@ -11,8 +11,15 @@ module.exports = {
             .setTimestamp()
             .setFooter(process.env.FOOTER_TEXT)
             .setDescription(options.valString);
+
+        let embedMessage;
         
-        let embedMessage = await options.target.send(successEmbed);
+        try {
+            embedMessage = await options.target.send(successEmbed);
+        }
+        catch {
+            return;
+        }
 
         let client = options.client || null;
         if(client === null){
@@ -35,7 +42,14 @@ module.exports = {
             .setFooter(process.env.FOOTER_TEXT)
             .setDescription(options.valString);
         
-        let embedMessage = await options.target.send(successEmbed);
+        let embedMessage;
+        
+        try {
+            embedMessage = await options.target.send(successEmbed);
+        }
+        catch {
+            return;
+        }
 
         let client = options.client || null;
         if(client === null){

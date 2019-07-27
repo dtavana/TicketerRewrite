@@ -39,6 +39,17 @@ module.exports = class InactiveCommand extends PremiumCommand {
 
         let adminClose = await this.client.provider.get(msg.guild.id, 'adminClose', null);
 
+        let exists = await this.client.provider.pg.oneOrNone(`SELECT * FROM inactive where ticketid = $1;`, channel.id);
+        if(exists) {
+            return await messageUtils.sendError({
+                target: msg.channel, 
+                valString: `${channel.toString()} has already been marked as inactive`,
+                client: this.client,
+                messages: [msg].concat(result.prompts, result.answers),
+                guild: msg.guild
+            });
+        }
+
         if(adminClose) {
             let hasAdmin = await this.checkAdminRole(this.client, msg.member, msg.guild);
             if(!hasAdmin.state) {

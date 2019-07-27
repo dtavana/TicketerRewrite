@@ -15,6 +15,18 @@ module.exports = class ActiveCommand extends PremiumCommand {
     
     async run(msg, fromPattern, result) {
         let channel = msg.channel;
+
+        let exists = await this.client.provider.pg.oneOrNone(`SELECT * FROM inactive where ticketid = $1;`, channel.id);
+        if (!exists) {
+            return await messageUtils.sendError({
+                target: msg.channel, 
+                valString: `${channel.toString()} is already active`,
+                client: this.client,
+                messages: [msg].concat(result.prompts, result.answers),
+                guild: msg.guild
+            });
+        }
+
         let ticketData = await this.client.provider.get(`${msg.guild.id}-channels`, channel.id, null);
         if(!ticketData) {
             return await messageUtils.sendError({
