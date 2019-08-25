@@ -1,6 +1,5 @@
 const { SettingProvider } = require('discord.js-commando');
 const Discord = require('discord.js');
-require('dotenv').config();
 const subpubController = require('../controllers/subpub.controller');
 const messageUtils = require('./messageUtils');
 

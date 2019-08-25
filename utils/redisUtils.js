@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 module.exports = {
     setFetch: async(client, guildId, key, newValue) => {
         let oldValue = await client.provider.redis.hget(guildId, key);

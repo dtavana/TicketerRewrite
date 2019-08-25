@@ -1,5 +1,4 @@
 const redis = require('async-redis');
-require('dotenv').config();
 var db;
 
 function init() {

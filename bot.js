@@ -1,5 +1,5 @@
-const { CommandoClient } = require('discord.js-commando');
 require('dotenv').config();
+const { CommandoClient } = require('discord.js-commando');
 const path = require('path');
 const StrictUserArgumentType = require('./utils/strict-user-argument-type');
 const pg = require('./controllers/postgres.controller');
@@ -9,7 +9,6 @@ const pub = require('./controllers/publish.controller');
 const TicketerProvider = require('./utils/ticketer-provider');
 const events = require('./utils/events');
 const cleanup = require('./utils/cleanup');
-const DBL = require('dblapi.js');
 
 const client = new CommandoClient({
     commandPrefix: process.env.DEFAULT_PREFIX,
@@ -36,7 +35,7 @@ client.registry
 
 client.once('ready', async() => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
-    client.user.setActivity('-help | v3', {type: 'WATCHING'});
+    client.user.setActivity(process.env.ACTIVITY_TEXT, {type: 'WATCHING'});
     await events.initEvents(client);
     setInterval(async() => {
         await cleanup.cleanExpiredCredits(client, pg);
