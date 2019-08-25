@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { CommandoClient } = require('discord.js-commando');
 const path = require('path');
 const StrictUserArgumentType = require('./utils/strict-user-argument-type');
