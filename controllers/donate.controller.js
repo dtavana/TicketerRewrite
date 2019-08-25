@@ -4,16 +4,12 @@ const Discord = require('discord.js');
 const pg = require('./postgres.controller');
 
 module.exports = {
-    send: async(manager, message) => {
-        let data = JSON.parse(message);
-
-        let userId = data.userId;
-        let added = data.added;
-        let paymentId = data.paymentId;
+    send: async(manager, data) => {
+        const { status, buyer_id: userId, txn_id: paymentId } = data;
+        let added = true;
         let key;
-        if(added) {
+        if(status === "completed") {
             let keyExists = true;
-            let key;
             while(keyExists) {
                 key = await donateUtils.generateKey();
                 keyExists = await donateUtils.checkKey(pg, key);
@@ -21,6 +17,7 @@ module.exports = {
             await donateUtils.saveCredit(pg, {'userid': userId, 'key': key, 'paymentid': paymentId});
         }
         else {
+            added = false;
             key = await donateUtils.removeCredit(pg, paymentId);
         }
 
@@ -34,10 +31,11 @@ module.exports = {
             let publicString;
             let privateString;
             if(${added}) {
-                publicString = userString + ' just purchased one month of premium. Key: \`${key}\`';
+                publicString = userString + ' just purchased premium. Key: \`${key}\`';
                 privateString = 'You have had one premium credit: \`${key}\` added to your account! Use the \`redeem\` command to get started!';
             }
             else {
+                
                 publicString =  userString + ' just had a premium credited removed. Key: \`${key}\`';
                 privateString = 'You have had one premium credit removed: \`${key}\` added to your account! Use the \`redeem\` command to get started!';
             }
