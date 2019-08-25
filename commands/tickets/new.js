@@ -8,7 +8,7 @@ module.exports = class NewCommand extends TicketerCommand {
     constructor(client) {
         super(client, {
             name: 'new',
-            aliases: ['ticket'],
+            aliases: ['ticket', 'support'],
             group: 'tickets',
             memberName: 'new',
             description: 'Opens a new ticket',

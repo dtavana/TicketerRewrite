@@ -4,10 +4,9 @@ const messageUtils = require('../../utils/messageUtils');
 module.exports = class SupportCommand extends TicketerCommand {
     constructor(client) {
         super(client, {
-            name: 'support',
-            aliases: ['supportserver'],
+            name: 'supportserver',
             group: 'info',
-            memberName: 'supprt',
+            memberName: 'supportserver',
             description: 'Displays information on the official support server.'
         });
     }
