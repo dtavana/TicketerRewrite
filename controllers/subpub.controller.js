@@ -1,4 +1,3 @@
-require('dotenv').config();
 const votesController = require('./votes.controller');
 const donateController = require('./donate.controller');
 

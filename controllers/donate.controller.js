@@ -2,7 +2,6 @@ const messageUtils = require('../utils/messageUtils');
 const donateUtils = require('../utils/donateUtils');
 const Discord = require('discord.js');
 const pg = require('./postgres.controller');
-require('dotenv').config();
 
 module.exports = {
     send: async(manager, message) => {

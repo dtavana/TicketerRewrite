@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const utils = require('./utils');
 const transcripts = require('./transcripts');
-require('dotenv').config();
 
 module.exports = {
     sendSuccess: async(options) => {
