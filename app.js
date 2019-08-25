@@ -1,17 +1,19 @@
+require('dotenv').config();
 const { ShardingManager } = require('discord.js');
 const DBL = require('dblapi.js');
-const server = require('./utils/webhookServer');
+const express = require('express');
+const bodyParser = require('body-parser');
 const votesController = require('./controllers/votes.controller');
+const donateController = require('./controllers/donate.controller');
 
-require('dotenv').config();
 const manager = new ShardingManager('./bot.js', { 
     token: process.env.BOT_TOKEN
 });
 
-const dbl = new DBL(process.env.DBL_TOKEN, {webhookAuth: process.env.DBL_AUTHENTICATION, webhookServer: server});
+const dbl = new DBL(process.env.DBL_TOKEN, {webhookPort: parseInt(process.env.DBL_HOOK_PORT), webhookAuth: process.env.DBL_AUTHENTICATION});
 
-dbl.webhook.on('ready', hook => {
-    console.log(`Webhook running with path ${hook.path}`);
+dbl.webhook.on('ready', () => {
+    console.log(`Vote webhook server listening`);
 });
 dbl.webhook.on('vote', async(vote) => {
     await votesController.send(manager, vote);
@@ -22,8 +24,19 @@ manager.on('shardCreate', async(shard) => {
 });
 manager.spawn().then();
 
-server.listen(8080, () => {
-    console.log('Webhook server listening');
+const app = express();
+app.use(bodyParser.json());
+app.post('/donatewebhook', (req, res) => {
+        if(req.get('authorization') === process.env.DB_AUTHENTICATION) {
+            donateController.send(manager, req.body).then()
+        } 
+        else {
+            res.status(400).send()
+        };  
+    }
+);
+app.listen(parseInt(process.env.DB_HOOK_PORT), () => {
+    console.log('Premium webhook server listening');
 });
 
 setInterval(async() => {
