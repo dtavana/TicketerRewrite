@@ -46,5 +46,6 @@ client.once('ready', async() => {
 });
 
 client.on('error', console.error);
+client.on('debug',console.debug);
 
 client.login(process.env.BOT_TOKEN);
