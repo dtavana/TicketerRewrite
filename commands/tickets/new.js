@@ -74,6 +74,7 @@ module.exports = class NewCommand extends TicketerCommand {
             }
         }
 
+
         let channel = await ticketUtils.openTicket(this.client, msg.guild, msg.channel, target, subject);
 
         if(typeof channel === 'string') {
