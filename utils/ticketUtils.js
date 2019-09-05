@@ -151,7 +151,7 @@ module.exports = {
                 type: 'text',
                 parent: category,
                 permissionOverwrites: [
-                    {id: guild.role.severyone, deny: ['SEND_MESSAGES', 'VIEW_CHANNEL'], type: 'role'},
+                    {id: guild.roles.everyone, deny: ['SEND_MESSAGES', 'VIEW_CHANNEL'], type: 'role'},
                     {id: adminRole, allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS', 'ATTACH_FILES','READ_MESSAGE_HISTORY'], type: 'role'},
                     {id: moderatorRole, allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS', 'ATTACH_FILES','READ_MESSAGE_HISTORY'], type: 'role'},
                     {id: user, allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS', 'ATTACH_FILES', 'READ_MESSAGE_HISTORY'], type: 'member'},
