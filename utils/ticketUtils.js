@@ -225,6 +225,7 @@ module.exports = {
         else {
             handledTickets = parseInt(handledTickets);
         }
+
         allOpenTickets -= 1;
         openTickets -= 1;
         closedTickets += 1;
@@ -248,7 +249,11 @@ module.exports = {
                 currentUserOpenTickets = parseInt(currentUserOpenTickets);
             }
             currentUserOpenTickets -= 1;
-            await client.provider.set(`${guild.id}-channels`, authorObject.id, currentUserOpenTickets);
+            if(currentUserOpenTickets <= 0) {
+                await client.provider.remove(guild, 'openTickets', null);
+            } else {
+                await client.provider.set(`${guild.id}-channels`, authorObject.id, currentUserOpenTickets);
+            }
         }
 
         await channel.delete('Closing Ticketer Ticket');
@@ -331,7 +336,11 @@ module.exports = {
                 currentUserOpenTickets = parseInt(currentUserOpenTickets);
             }
             currentUserOpenTickets -= 1;
-            await client.provider.set(`${guild.id}-channels`, authorObject.id, currentUserOpenTickets);
+            if(currentUserOpenTickets <= 0) {
+                await client.provider.remove(guild, 'openTickets', null);
+            } else {
+                await client.provider.set(`${guild.id}-channels`, authorObject.id, currentUserOpenTickets);
+            }
         }
 
         try {
