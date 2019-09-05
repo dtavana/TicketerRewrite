@@ -31,7 +31,7 @@ module.exports = {
         channels = JSON.parse(channels);
 
         if(channels.length === 0) {
-            return `The guild administrators have not setup a ticket channel yet! If you are a guild administrator, please use the \`${guild.commandPrefix}\`setupchannel in order to setup the guild.`;
+            return `The guild administrators have not setup a ticket channel yet! If you are a guild administrator, please use the \`${guild.commandPrefix}setupchannel\` in order to setup the guild.`;
         }
 
         let found = false;
