@@ -10,14 +10,6 @@ const manager = new ShardingManager('./bot.js', {
     token: process.env.BOT_TOKEN
 });
 
-const dbl = new DBL(process.env.DBL_TOKEN, {webhookPort: parseInt(process.env.DBL_HOOK_PORT), webhookAuth: process.env.DBL_AUTHENTICATION});
-
-dbl.webhook.on('ready', () => {
-    console.log(`Vote webhook server listening`);
-});
-dbl.webhook.on('vote', async(vote) => {
-    await votesController.send(manager, vote);
-});
 
 manager.on('shardCreate', async(shard) => {
     console.log(`Launched shard ${shard.id}`);
@@ -35,15 +27,27 @@ app.post('/donatewebhook', (req, res) => {
         };  
     }
 );
+
 app.listen(parseInt(process.env.DB_HOOK_PORT), () => {
     console.log('Premium webhook server listening');
 });
 
-setInterval(async() => {
-    let guildsArray = await manager.fetchClientValues('guilds.size');
-    let totalGuilds = guildsArray.reduce((prev, guildCount) => prev + guildCount, 0); 
-    await dbl.postStats(totalGuilds);
-}, 900000);
+if(process.env.NODE_ENV === 'production') {
+    const dbl = new DBL(process.env.DBL_TOKEN, {webhookPort: parseInt(process.env.DBL_HOOK_PORT), webhookAuth: process.env.DBL_AUTHENTICATION});
+
+    dbl.webhook.on('ready', () => {
+        console.log(`Vote webhook server listening`);
+    });
+    dbl.webhook.on('vote', async(vote) => {
+        await votesController.send(manager, vote);
+    });
+
+    setInterval(async() => {
+        let guildsArray = await manager.fetchClientValues('guilds.size');
+        let totalGuilds = guildsArray.reduce((prev, guildCount) => prev + guildCount, 0); 
+        await dbl.postStats(totalGuilds);
+    }, 900000);
+}
 
 
 
