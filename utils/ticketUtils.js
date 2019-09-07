@@ -170,6 +170,7 @@ module.exports = {
 
     closeTicket: async(client, guild, channel, member) => {
         let adminRole = await client.provider.get(guild, 'adminRole', null);
+        let moderatorRole = await client.provider.get(guild, 'moderatorRole', null);
 
         let adminClose = await client.provider.get(guild, 'adminClose', null);
 
@@ -226,6 +227,25 @@ module.exports = {
             handledTickets = parseInt(handledTickets);
         }
 
+        if(member.roles.has(adminRole) || member.roles.has(moderatorRole)) {
+            let ticketTracking = await client.provider.get(guild, 'ticketTracking', null);
+            if(!ticketTracking) {
+                ticketTracking = {};
+                ticketTracking[member.id] = 1;
+            }
+            else {
+                ticketTracking = JSON.parse(ticketTracking);
+                if(!ticketTracking[member.id]) {
+                    ticketTracking[member.id] = 1;
+                }
+                else {
+                    ticketTracking[member.id] += 1;
+                }  
+            }
+            ticketTracking = JSON.stringify(ticketTracking);
+            await client.provider.set(guild, 'ticketTracking', ticketTracking);
+            console.log(ticketTracking)
+        }
         allOpenTickets -= 1;
         openTickets -= 1;
         closedTickets += 1;
@@ -260,9 +280,9 @@ module.exports = {
         await client.provider.remove(`${guild.id}-channels`, channel.id);
         await client.provider.set(guild, 'openTickets', openTickets);
         await client.provider.set(guild, 'closedTickets', closedTickets);
+        await client.provider.set(guild, 'closedTickets', closedTickets);
         await client.provider.redis.set('allOpenTickets', allOpenTickets);
         await client.provider.redis.set('handledTickets', handledTickets);
-
 
         return {
             'createdAt': createdAt,
