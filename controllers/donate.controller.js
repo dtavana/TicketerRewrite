@@ -5,7 +5,13 @@ const pg = require('./postgres.controller');
 
 module.exports = {
     send: async(manager, data) => {
-        const { status, buyer_id: userId, txn_id: paymentId } = data;
+        const { status, txn_id: paymentId } = data;
+        let userId = data.buyer_id;
+        const prefixText = "nonrole:";
+        const rolePrefix = userId.indexOf(prefixText);
+        if(rolePrefix !== -1) {
+            userId = userId.substring(prefixText.length)
+        }
         let added = true;
         let key;
         if(status === "completed") {
@@ -35,7 +41,6 @@ module.exports = {
                 privateString = 'You have had one premium credit: \`${key}\` added to your account! Use the \`redeem\` command to get started!';
             }
             else {
-                
                 publicString =  userString + ' just had a premium credited removed. Key: \`${key}\`';
                 privateString = 'You have had one premium credit removed: \`${key}\` added to your account! Use the \`redeem\` command to get started!';
             }

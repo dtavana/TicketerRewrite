@@ -1,6 +1,5 @@
 const messageUtils = require('./messageUtils');
 const ticketUtils = require('./ticketUtils');
-const utils = require('./utils');
 
 module.exports = { 
     initEvents: async(client) => {

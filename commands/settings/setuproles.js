@@ -17,7 +17,6 @@ module.exports = class SetupRolesCommand extends TicketerCommand {
     
     async run(msg, fromPattern, result) {
         let roles = await settingsUtils.initializeRoles(this.client, msg.guild);
-
         if(typeof roles === 'string') {
             return await messageUtils.sendError({
                 target: msg.channel, 

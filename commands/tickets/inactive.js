@@ -1,5 +1,6 @@
 const PremiumCommand  = require('../premium-command');
 const messageUtils = require('../../utils/messageUtils');
+const utils = require('../../utils/utils');
 
 module.exports = class InactiveCommand extends PremiumCommand {
     constructor(client) {
@@ -81,15 +82,16 @@ module.exports = class InactiveCommand extends PremiumCommand {
         }
 
         await this.client.provider.pg.none(`INSERT INTO inactive (ticketid, serverid, expires) VALUES ($1, $2, date_trunc(\'minute\', NOW() + interval \'${inactiveTime} minutes\'));`, [channel.id, msg.guild.id]);
+        let inactiveTimeParsed = utils.timeConversion(inactiveTime * 60000);
         await messageUtils.sendSuccess({
             target: msg.channel, 
-            valString: `${channel.toString()} has been marked as inactive and will be deleted in **${inactiveTime} minutes**. Use the \`${msg.guild.commandPrefix}active\` command to reactivate this ticket`,
+            valString: `${channel.toString()} has been marked as inactive and will be deleted in **${inactiveTimeParsed}**. Use the \`${msg.guild.commandPrefix}active\` command to reactivate this ticket`,
             client: null
         });
         if(ticketOwner) {
             await messageUtils.sendNotice({
                 target: ticketOwner, 
-                valString: `\`${channel.name}\` in **${msg.guild.name}** has been marked as inactive and will be deleted in **${inactiveTime} minutes**. Use the \`${msg.guild.commandPrefix}active\` command to reactivate your ticket`,
+                valString: `\`${channel.name}\` in **${msg.guild.name}** has been marked as inactive and will be deleted in **${inactiveTimeParsed}**. Use the \`${msg.guild.commandPrefix}active\` command to reactivate your ticket`,
                 client: this.null
             });
         }
@@ -100,7 +102,7 @@ module.exports = class InactiveCommand extends PremiumCommand {
             null,
             channel.name,
             'YELLOW',
-            `\`${channel.name}\` has been marked as inactive and will be deleted in **${inactiveTime} minutes**`
+            `\`${channel.name}\` has been marked as inactive and will be deleted in **${inactiveTimeParsed}**`
         );
     }
 };
