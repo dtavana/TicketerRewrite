@@ -1,15 +1,12 @@
 const { SettingProvider } = require('discord.js-commando');
 const Discord = require('discord.js');
-const subpubController = require('../controllers/subpub.controller');
 const messageUtils = require('./messageUtils');
 
 class TicketerProvider extends SettingProvider {
-    constructor(pg, redis, sub, pub) {
+    constructor(pg, redis) {
         super();
         this.pg = pg;
         this.redis = redis;
-        this.sub = sub;
-        this.pub = pub;
         Object.defineProperty(this, 'client', { value: null, writable: true });
 
         this.guilds = [];
@@ -38,23 +35,6 @@ class TicketerProvider extends SettingProvider {
             }
             this.setupGuild(guildId, settings);
         }
-		
-        //Redis pipelines
-        this.sub.on('message', async(channel, message) => {
-            await subpubController.handleIncomingMessage(client, channel, message);
-        });
-        /*
-        this.sub.subscribe(process.env.VOTE_CHANNEL, (err) => {
-            if(err) {
-                throw new Error(err);
-            }
-        });
-        */
-        this.sub.subscribe(process.env.DONATE_CHANNEL, (err) => {
-            if(err) {
-                throw new Error(err);
-            }
-        });
 		
 		
         // Listen for changes
