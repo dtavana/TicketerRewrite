@@ -31,7 +31,7 @@ module.exports = class SetupRolesCommand extends TicketerCommand {
 
         await messageUtils.sendSuccess({
             target: msg.channel, 
-            valString: `I have deleted the old Ticketer Roles if they existed and created ${roles.adminRole.toString()} and ${roles.moderatorRole.toString()}. Both roles have access to view tickets but only the admin role may manipulate the ticket (\`${msg.guild.commandPrefix}close\`). **DO NOT** delete these roles. If you do, you should rerun this command. Feel free to rename and manipulate these in any other way.`,
+            valString: `I have deleted the old Ticketer Roles if they existed and created ${roles.adminRole.toString()} and ${roles.moderatorRole.toString()}. Both roles have access to view tickets. If your server has premium, the \`${msg.guild.commandPrefix}adminclose\` command will allow only the admin role to close tickets. **DO NOT** delete these roles. If you do, you should rerun this command. Feel free to rename and change these in any other way.`,
             client: this.client,
             messages: [msg].concat(result.prompts, result.answers),
             guild: msg.guild
