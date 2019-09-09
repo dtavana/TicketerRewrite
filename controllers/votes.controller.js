@@ -20,9 +20,6 @@ module.exports = {
         let finalVotes;
         let key;
 
-        let publicString;
-        let privateString;
-
         if(receiveCredit) {
             let keyExists = true;
             key;
@@ -43,6 +40,8 @@ module.exports = {
             const channel = this.channels.get('${process.env.VOTES_LOG}');
             const user = this.users.get('${userId}');
             let userString;
+            let publicString;
+            let privateString;
             if(user) userString = '\`' + user.tag + '\`';
             else userString = '\`${userId}\`';
             let publicString;
@@ -69,6 +68,6 @@ module.exports = {
                     client: null
                 }).then();
             }
-        `)
+        `);
     }
 };

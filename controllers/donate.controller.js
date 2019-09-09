@@ -1,20 +1,18 @@
-const messageUtils = require('../utils/messageUtils');
 const donateUtils = require('../utils/donateUtils');
-const Discord = require('discord.js');
 const pg = require('./postgres.controller');
 
 module.exports = {
     send: async(manager, data) => {
         const { status, txn_id: paymentId } = data;
         let userId = data.buyer_id;
-        const prefixText = "nonrole:";
+        const prefixText = 'nonrole:';
         const rolePrefix = userId.indexOf(prefixText);
         if(rolePrefix !== -1) {
-            userId = userId.substring(prefixText.length)
+            userId = userId.substring(prefixText.length);
         }
         let added = true;
         let key;
-        if(status === "completed") {
+        if(status === 'completed') {
             let keyExists = true;
             while(keyExists) {
                 key = await donateUtils.generateKey();
@@ -58,6 +56,6 @@ module.exports = {
                     client: null
                 }).then();
             }
-        `)
+        `);
     }
 };

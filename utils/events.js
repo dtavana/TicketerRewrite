@@ -42,7 +42,7 @@ module.exports = {
         });
 
         client.on('channelDelete', async(channel) => {
-            await client.provider.pg.none("DELETE FROM inactive WHERE ticketid = $1;", channel.id);
+            await client.provider.pg.none('DELETE FROM inactive WHERE ticketid = $1;', channel.id);
         });
     },
 };

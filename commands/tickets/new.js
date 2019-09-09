@@ -37,7 +37,7 @@ module.exports = class NewCommand extends TicketerCommand {
         }
 
         if(!!subject && subject.length > 500) {
-            subject = subject.substring(0, 500) + "** ...**";
+            subject = subject.substring(0, 500) + '** ...**';
         }
         
         let target;

@@ -1,7 +1,4 @@
-const { Command, permissions } = require('discord.js-commando');
-const messageUtils = require('../utils/messageUtils');
-const { oneLine, stripIndents } = require('common-tags');
-const { escapeMarkdown } = require('discord.js');
+const { Command } = require('discord.js-commando');
 
 module.exports = class TicketerCommand extends Command {
     constructor(client, info) {

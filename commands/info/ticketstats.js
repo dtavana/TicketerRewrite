@@ -15,21 +15,21 @@ module.exports = class TicketStatsCommand extends TicketerCommand {
     
     async run(msg, fromPattern, result) {
         let hasAdmin = await this.checkTicketerRole(this.client, msg.member, msg.guild);
-            if(!hasAdmin.state) {
-                return await messageUtils.sendError({
-                    target: msg.channel, 
-                    valString: `In order to view ticket stats, you must have the ${hasAdmin.admin} role or the ${hasAdmin.moderator} role`,
-                    client: this.client,
-                    messages: [msg].concat(result.prompts, result.answers),
-                    guild: msg.guild
-                });
-            }
+        if(!hasAdmin.state) {
+            return await messageUtils.sendError({
+                target: msg.channel, 
+                valString: `In order to view ticket stats, you must have the ${hasAdmin.admin} role or the ${hasAdmin.moderator} role`,
+                client: this.client,
+                messages: [msg].concat(result.prompts, result.answers),
+                guild: msg.guild
+            });
+        }
             
         let ticketTracking = await this.client.provider.get(msg.guild, 'ticketTracking', null);
         if(!ticketTracking || _.isEmpty(ticketTracking)) {
             return await messageUtils.sendError({
                 target: msg.channel, 
-                valString: `No stats for this guild have been tracked.`,
+                valString: 'No stats for this guild have been tracked.',
                 client: this.client,
                 messages: [msg].concat(result.prompts, result.answers),
                 guild: msg.guild
@@ -46,14 +46,14 @@ module.exports = class TicketStatsCommand extends TicketerCommand {
             sorted.splice(index, 0, el);
         }
 
-        let res = "";
+        let res = '';
 
         for (let staff of sorted) {
             let member = msg.guild.members.get(staff[0]);
             if(!member) continue;
             let staffHasAdmin = await this.checkTicketerRole(this.client, member, msg.guild);
             if(!staffHasAdmin.state) continue;
-            res += `\`${member.user.tag}\` | **${staff[1]}**\n`
+            res += `\`${member.user.tag}\` | **${staff[1]}**\n`;
         }
         await messageUtils.sendSuccess({
             target: msg.channel, 

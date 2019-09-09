@@ -50,7 +50,7 @@ module.exports = class CloseAllCommand extends TicketerCommand {
                                     messages: [msg].concat(result.prompts, result.answers),
                                     guild: msg.guild
                                 });
-                                await this.client.provider.pg.none("DELETE FROM inactive WHERE ticketid = $1;", channel.id);
+                                await this.client.provider.pg.none('DELETE FROM inactive WHERE ticketid = $1;', channel.id);
                             }
                             else {
                                 let closeReason = 'Closing all tickets.';

@@ -16,7 +16,7 @@ module.exports = class ActiveCommand extends PremiumCommand {
     async run(msg, fromPattern, result) {
         let channel = msg.channel;
 
-        let exists = await this.client.provider.pg.oneOrNone(`SELECT * FROM inactive where ticketid = $1;`, channel.id);
+        let exists = await this.client.provider.pg.oneOrNone('SELECT * FROM inactive where ticketid = $1;', channel.id);
         if (!exists) {
             return await messageUtils.sendError({
                 target: msg.channel, 
@@ -41,7 +41,7 @@ module.exports = class ActiveCommand extends PremiumCommand {
         let ticketOwner = ticketData.author;
         ticketOwner = this.client.users.get(ticketOwner);
 
-        await this.client.provider.pg.none("DELETE FROM inactive WHERE ticketid = $1;", channel.id);
+        await this.client.provider.pg.none('DELETE FROM inactive WHERE ticketid = $1;', channel.id);
         await messageUtils.sendSuccess({
             target: msg.channel, 
             valString: `${channel.toString()} has been marked as active again`,

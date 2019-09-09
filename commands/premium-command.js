@@ -1,5 +1,4 @@
 const TicketerCommand = require('./ticketer-command');
-const { permissions } = require('discord.js-commando');
 const { oneLine } = require('common-tags');
 
 module.exports = class PremiumCommand extends TicketerCommand {

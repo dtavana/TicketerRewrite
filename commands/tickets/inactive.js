@@ -40,7 +40,7 @@ module.exports = class InactiveCommand extends PremiumCommand {
 
         let adminClose = await this.client.provider.get(msg.guild.id, 'adminClose', null);
 
-        let exists = await this.client.provider.pg.oneOrNone(`SELECT * FROM inactive where ticketid = $1;`, channel.id);
+        let exists = await this.client.provider.pg.oneOrNone('SELECT * FROM inactive where ticketid = $1;', channel.id);
         if(exists) {
             return await messageUtils.sendError({
                 target: msg.channel, 
@@ -81,7 +81,7 @@ module.exports = class InactiveCommand extends PremiumCommand {
             inactiveTime = 120;
         }
 
-        await this.client.provider.pg.none(`INSERT INTO inactive (ticketid, serverid, expires) VALUES ($1, $2, date_trunc(\'minute\', NOW() + interval \'${inactiveTime} minutes\'));`, [channel.id, msg.guild.id]);
+        await this.client.provider.pg.none(`INSERT INTO inactive (ticketid, serverid, expires) VALUES ($1, $2, date_trunc(\'minute\', NOW() + interval \'${inactiveTime} minutes\'));`, [channel.id, msg.guild.id]); // eslint-disable-line no-useless-escape
         let inactiveTimeParsed = utils.timeConversion(inactiveTime * 60000);
         await messageUtils.sendSuccess({
             target: msg.channel, 
