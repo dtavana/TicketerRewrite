@@ -1,14 +1,15 @@
 require('dotenv').config();
 const { CommandoClient } = require('discord.js-commando');
-const path = require('path');
-const StrictUserArgumentType = require('./utils/strict-user-argument-type');
 const pg = require('./controllers/postgres.controller');
 const redis = require('./controllers/redis.controller');
 const sub = require('./controllers/subscribe.controller');
 const pub = require('./controllers/publish.controller');
 const TicketerProvider = require('./utils/ticketer-provider');
+const path = require('path');
+const StrictUserArgumentType = require('./utils/strict-user-argument-type');
 const events = require('./utils/events');
 const cleanup = require('./utils/cleanup');
+
 
 const client = new CommandoClient({
     commandPrefix: process.env.DEFAULT_PREFIX,
