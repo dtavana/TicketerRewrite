@@ -1,9 +1,8 @@
 require('dotenv').config();
+require('./utils/configToProcess');
 const { CommandoClient } = require('discord.js-commando');
 const pg = require('./controllers/postgres.controller');
 const redis = require('./controllers/redis.controller');
-const sub = require('./controllers/subscribe.controller');
-const pub = require('./controllers/publish.controller');
 const TicketerProvider = require('./utils/ticketer-provider');
 const path = require('path');
 const StrictUserArgumentType = require('./utils/strict-user-argument-type');
@@ -13,11 +12,11 @@ const cleanup = require('./utils/cleanup');
 
 const client = new CommandoClient({
     commandPrefix: process.env.DEFAULT_PREFIX,
-    owner: process.env.OWNERS.split(','),
+    owner: process.env.OWNERS,
     invite: process.env.INVITE
 });
 
-client.setProvider(new TicketerProvider(pg, redis, sub, pub));
+client.setProvider(new TicketerProvider(pg, redis));
 
 client.registry
     .registerDefaultTypes()
@@ -47,6 +46,5 @@ client.once('ready', async() => {
 });
 
 client.on('error', console.error);
-client.on('debug',console.debug);
 
 client.login(process.env.BOT_TOKEN);
