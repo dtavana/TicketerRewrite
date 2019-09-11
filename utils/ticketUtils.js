@@ -244,7 +244,6 @@ module.exports = {
             }
             ticketTracking = JSON.stringify(ticketTracking);
             await client.provider.set(guild, 'ticketTracking', ticketTracking);
-            console.log(ticketTracking)
         }
         allOpenTickets -= 1;
         openTickets -= 1;
