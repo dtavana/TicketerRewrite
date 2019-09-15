@@ -35,6 +35,10 @@ module.exports = class RedisFetchCommand extends TicketerCommand {
                     let resString = '';
                     for(let pair of Object.entries(data)) {
                         resString += `**Key:** \`${key}\` | **Field:** \`${pair[0]}\` | **Result:** \`${pair[1]}\`\n`;
+                        if(resString.length >= 2000) {
+                            resString += '...\n';
+                            break;
+                        }
                     }
                     await messageUtils.sendSuccess({
                         target: msg.channel, 
@@ -68,6 +72,5 @@ module.exports = class RedisFetchCommand extends TicketerCommand {
                 valString: `The following error occured: \`${error.message}\``
             });
         }
-
     }
 };
