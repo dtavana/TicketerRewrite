@@ -16,23 +16,22 @@ manager.on('shardCreate', async(shard) => {
 });
 manager.spawn().then();
 
-const app = express();
-app.use(bodyParser.json());
-app.post('/donatewebhook', (req, res) => {
-    if(req.get('authorization') === process.env.DB_AUTHENTICATION) {
-        donateController.send(manager, req.body).then();
-    } 
-    else {
-        res.status(400).send();
-    }  
-}
-);
-
-app.listen(parseInt(process.env.DB_HOOK_PORT), () => {
-    console.log('Premium webhook server listening');
-});
-
 if(process.env.NODE_ENV === 'production') {
+    const app = express();
+    app.use(bodyParser.json());
+    app.post('/donatewebhook', (req, res) => {
+        if(req.get('authorization') === process.env.DB_AUTHENTICATION) {
+            donateController.send(manager, req.body).then();
+        } 
+        else {
+            res.status(400).send();
+        }  
+    });
+    
+    app.listen(parseInt(process.env.DB_HOOK_PORT), () => {
+        console.log('Premium webhook server listening');
+    });
+
     const dbl = new DBL(process.env.DBL_TOKEN, {webhookPort: parseInt(process.env.DBL_HOOK_PORT), webhookAuth: process.env.DBL_AUTHENTICATION});
 
     dbl.webhook.on('ready', () => {
