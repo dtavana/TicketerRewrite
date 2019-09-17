@@ -44,8 +44,6 @@ module.exports = {
             let privateString;
             if(user) userString = '\`' + user.tag + '\`';
             else userString = '\`${userId}\`';
-            let publicString;
-            let privateString;
             if(${receiveCredit}) {
                 publicString = userString + ' just voted for Ticketer and received a premium credit with key \`${key}\`';
                 privateString = 'You have had one premium credit: \`${key}\` added to your account! Use the \`redeem\` command to get started! Thank you for voting for Ticketer!';
