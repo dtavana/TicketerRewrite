@@ -1,9 +1,8 @@
 const votesUtils = require('../utils/votesUtils');
 const donateUtils = require('../utils/donateUtils');
-const pg = require('./postgres.controller');
 
 module.exports = {
-    send: async(manager, data) => {
+    send: async(manager, data, pg) => {
         let votesToAdd;
         let isWeekend = data.isWeekend;
         isWeekend ? votesToAdd = 2 : votesToAdd = 1;

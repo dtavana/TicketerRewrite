@@ -5,6 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const votesController = require('./controllers/votes.controller');
 const donateController = require('./controllers/donate.controller');
+const pg = require('./controllers/postgres.controller');
 
 const manager = new ShardingManager('./bot.js', { 
     token: process.env.BOT_TOKEN
@@ -21,7 +22,7 @@ if(process.env.NODE_ENV === 'production') {
     app.use(bodyParser.json());
     app.post('/donatewebhook', (req, res) => {
         if(req.get('authorization') === process.env.DB_AUTHENTICATION) {
-            donateController.send(manager, req.body).then();
+            donateController.send(manager, req.body, pg).then();
         } 
         else {
             res.status(400).send();
@@ -38,7 +39,7 @@ if(process.env.NODE_ENV === 'production') {
         console.log('Vote webhook server listening');
     });
     dbl.webhook.on('vote', async(vote) => {
-        await votesController.send(manager, vote);
+        await votesController.send(manager, vote, pg);
     });
 
     setInterval(async() => {

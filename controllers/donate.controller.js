@@ -1,8 +1,7 @@
 const donateUtils = require('../utils/donateUtils');
-const pg = require('./postgres.controller');
 
 module.exports = {
-    send: async(manager, data) => {
+    send: async(manager, data, pg) => {
         const { status, txn_id: paymentId } = data;
         let userId = data.buyer_id;
         const prefixText = 'nonrole:';
