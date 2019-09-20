@@ -269,7 +269,7 @@ module.exports = {
             }
             currentUserOpenTickets -= 1;
             if(currentUserOpenTickets <= 0) {
-                await client.provider.remove(guild, 'openTickets', null);
+                await client.provider.remove(`${guild.id}-channels`, authorObject.id);
             } else {
                 await client.provider.set(`${guild.id}-channels`, authorObject.id, currentUserOpenTickets);
             }
@@ -278,7 +278,6 @@ module.exports = {
         await channel.delete('Closing Ticketer Ticket');
         await client.provider.remove(`${guild.id}-channels`, channel.id);
         await client.provider.set(guild, 'openTickets', openTickets);
-        await client.provider.set(guild, 'closedTickets', closedTickets);
         await client.provider.set(guild, 'closedTickets', closedTickets);
         await client.provider.redis.set('allOpenTickets', allOpenTickets);
         await client.provider.redis.set('handledTickets', handledTickets);
