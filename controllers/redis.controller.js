@@ -1,12 +1,12 @@
 const redis = require('async-redis');
-var db;
-
 function init() {
+    let db;
     db = redis.createClient();
     db.on('error',(err)=>{
         console.log('error',err);
         return err;
     });
+    console.log('Redis connected');
     return db;
 }
 
