@@ -279,6 +279,7 @@ module.exports = {
         await client.provider.remove(`${guild.id}-channels`, channel.id);
         await client.provider.set(guild, 'openTickets', openTickets);
         await client.provider.set(guild, 'closedTickets', closedTickets);
+        await client.provider.set(guild, 'closedTickets', closedTickets);
         await client.provider.redis.set('allOpenTickets', allOpenTickets);
         await client.provider.redis.set('handledTickets', handledTickets);
 
@@ -355,7 +356,7 @@ module.exports = {
             }
             currentUserOpenTickets -= 1;
             if(currentUserOpenTickets <= 0) {
-                await client.provider.remove(guild, 'openTickets', null);
+                await client.provider.remove(`${guild.id}-channels`, authorObject.id);
             } else {
                 await client.provider.set(`${guild.id}-channels`, authorObject.id, currentUserOpenTickets);
             }
@@ -375,10 +376,6 @@ module.exports = {
 
         return {
             'createdAt': createdAt,
-            'originalAuthor': author,
-            'channelHistory': channelHistory,
-            'authorObject': authorObject,
-            'subject': subject
         };
     }
     
