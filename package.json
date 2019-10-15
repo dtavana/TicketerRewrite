@@ -5,6 +5,7 @@
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js",
+    "prod": "node bot.js --max_old_space_size=1500",
     "dev": "nodemon",
     "debug": "node debug bot.js",
     "lint": "eslint ./"

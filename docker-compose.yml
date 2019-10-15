@@ -1,0 +1,33 @@
+version: '3'
+services:
+  bot:
+    build: .
+    restart: always
+    container_name: TicketerBot
+    ports:
+      - '5000:5000'
+      - '8080:8080'
+    depends_on:
+      - postgres
+      - redis
+  postgres:
+    image: postgres:alpine
+    restart: always
+    container_name: TicketerDatabase
+    volumes:
+      - postgres_data:/var/lib/TicketerDatabase/data
+      - postgres_backup:/var/lib/TicketerDatabase/backups
+    environment:
+      POSTGRES_DB: Ticketer
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+  redis:
+    image: redis:alpine
+    restart: always
+    container_name: TicketerCache
+    volumes:
+      - redis_data:/var/lib/TicketerCache/data
+volumes:
+  postgres_data:
+  postgres_backup:
+  redis_data:

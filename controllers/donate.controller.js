@@ -27,7 +27,7 @@ module.exports = {
         const channel = client.channels.get(process.env.DONATE_LOG);
         const user = client.users.get(userId);
         let userString;
-        if(user) userString = '\`' + user.tag + '\`';
+        if(user) userString = `\`${user.tag}\``;
         else userString = `\`${userId}\``;
         let publicString;
         let privateString;
@@ -39,14 +39,14 @@ module.exports = {
             publicString =  `${userString} just had a premium credited removed. Key: \`${key}\``;
             privateString = `You have had one premium credit removed: \`${key}\` from your account.`;
         }
-        if(!!channel) {
+        if(channel) {
             await messageUtils.sendCleanSuccess({
                 target: channel,
                 valString: publicString,
                 client: null
             });
         }
-        if(!!user) {
+        if(user) {
             await messageUtils.sendCleanSuccess({
                 target: user,
                 valString: privateString,
