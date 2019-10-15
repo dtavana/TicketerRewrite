@@ -49,14 +49,14 @@ module.exports = {
             publicString =  `${userString} just voted for Ticketer and has **${curVotes} vote(s)**`;
             privateString = `Thank you for voting for Ticketer! You currently have **${curVotes} vote(s)**. You need **${neededVotes - curVotes} vote(s)** to get a premium credit`;
         }
-        if(!!channel) {
+        if(channel) {
             await messageUtils.sendCleanSuccess({
                 target: channel,
                 valString: publicString,
                 client: null
             });
         }
-        if(!!user) {
+        if(user) {
             await messageUtils.sendCleanSuccess({
                 target: user,
                 valString: privateString,
