@@ -1,7 +1,7 @@
 const redis = require('async-redis');
 function init() {
     let db;
-    db = redis.createClient();
+    db = redis.createClient(process.env.REDIS_CONNECTION_STRING);
     db.on('error',(err)=>{
         console.log('error',err);
         return err;
