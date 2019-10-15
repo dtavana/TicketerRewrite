@@ -3,7 +3,7 @@ name: Ticketer Deploy To Production
 on: 
   push:
     branches:
-      - develop
+      - master
 
 jobs:
   build:
