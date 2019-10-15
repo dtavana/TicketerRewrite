@@ -1,0 +1,21 @@
+name: Ticketer Deploy To Production
+
+on: 
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deploying to development using SSH Script
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: ~/Projects/TicketerProduction/scripts/deploytoproduction.sh
