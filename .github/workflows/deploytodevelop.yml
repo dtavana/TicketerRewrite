@@ -18,4 +18,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        script: ~/Projects/TicketerDevelopment/scripts/deploytoproduction.sh
+        script: ~/Projects/TicketerDevelopment/scripts/deploytodevelopment.sh
