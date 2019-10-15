@@ -1,0 +1,30 @@
+version: '3'
+services:
+  bot:
+    build: .
+    restart: always
+    container_name: TicketerBotDevelopment
+    depends_on:
+      - postgres
+      - redis
+  postgres:
+    image: postgres:alpine
+    restart: always
+    container_name: TicketerDatabaseDevelopment
+    volumes:
+      - postgres_data:/var/lib/TicketerDatabaseDevelopment/data
+      - postgres_backup:/var/lib/TicketerDatabaseDevelopment/backups
+    environment:
+      POSTGRES_DB: Ticketer
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+  redis:
+    image: redis:alpine
+    restart: always
+    container_name: TicketerCacheDevelopment
+    volumes:
+      - redis_data:/var/lib/TicketerCacheDevelopment/data
+volumes:
+  postgres_data:
+  postgres_backup:
+  redis_data:

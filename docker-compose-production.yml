@@ -3,7 +3,7 @@ services:
   bot:
     build: .
     restart: always
-    container_name: TicketerBot
+    container_name: TicketerBotProduction
     ports:
       - '5000:5000'
       - '8080:8080'
@@ -13,10 +13,10 @@ services:
   postgres:
     image: postgres:alpine
     restart: always
-    container_name: TicketerDatabase
+    container_name: TicketerDatabaseProduction
     volumes:
-      - postgres_data:/var/lib/TicketerDatabase/data
-      - postgres_backup:/var/lib/TicketerDatabase/backups
+      - postgres_data:/var/lib/TicketerDatabaseProduction/data
+      - postgres_backup:/var/lib/TicketerDatabaseProduction/backups
     environment:
       POSTGRES_DB: Ticketer
       POSTGRES_USER: user
@@ -24,9 +24,9 @@ services:
   redis:
     image: redis:alpine
     restart: always
-    container_name: TicketerCache
+    container_name: TicketerCacheProduction
     volumes:
-      - redis_data:/var/lib/TicketerCache/data
+      - redis_data:/var/lib/TicketerCacheProduction/data
 volumes:
   postgres_data:
   postgres_backup:

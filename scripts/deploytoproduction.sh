@@ -2,4 +2,4 @@
 cd ~/Projects/TicketerProduction || exit
 git pull
 git checkout master
-docker-compose up -d --build
+docker-compose -f docker-compose-production.yml up -d --build
