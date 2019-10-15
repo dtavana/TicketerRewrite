@@ -23,8 +23,7 @@ services:
     restart: always
     container_name: TicketerCacheDevelopment
     volumes:
-      - redis_data:/var/lib/TicketerCacheDevelopment/data
+      - ~/redisdata:/data
 volumes:
   postgres_data:
   postgres_backup:
-  redis_data:
