@@ -1,4 +1,4 @@
-name: Ticketer Deploy To Production
+name: Ticketer Deploy To Development
 
 on: 
   push:
