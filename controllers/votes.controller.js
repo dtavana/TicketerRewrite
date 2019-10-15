@@ -1,8 +1,9 @@
 const votesUtils = require('../utils/votesUtils');
 const donateUtils = require('../utils/donateUtils');
+const messageUtils = require('../utils/messageUtils');
 
 module.exports = {
-    send: async(manager, data, pg) => {
+    send: async(client, data, pg) => {
         let votesToAdd;
         let isWeekend = data.isWeekend;
         isWeekend ? votesToAdd = 2 : votesToAdd = 1;
@@ -21,7 +22,6 @@ module.exports = {
 
         if(receiveCredit) {
             let keyExists = true;
-            key;
             while(keyExists) {
                 key = await donateUtils.generateKey();
                 keyExists = await donateUtils.checkKey(pg, key);
@@ -34,37 +34,34 @@ module.exports = {
         }
         await pg.none('UPDATE votes SET count = $1 WHERE userid = $2;', [finalVotes, userId]);
 
-        await manager.broadcastEval(`
-            const messageUtils = require('../../../../utils/messageUtils');
-            const channel = this.channels.get('${process.env.VOTES_LOG}');
-            const user = this.users.get('${userId}');
-            let userString;
-            let publicString;
-            let privateString;
-            if(user) userString = '\`' + user.tag + '\`';
-            else userString = '\`${userId}\`';
-            if(${receiveCredit}) {
-                publicString = userString + ' just voted for Ticketer and received a premium credit with key \`${key}\`';
-                privateString = 'You have had one premium credit: \`${key}\` added to your account! Use the \`redeem\` command to get started! Thank you for voting for Ticketer!';
-            }
-            else {
-                publicString =  userString + ' just voted for Ticketer and has **${curVotes} vote(s)**';
-                privateString = 'Thank you for voting for Ticketer! You currently have **${curVotes} vote(s)**. You need **${neededVotes - curVotes} vote(s)** to get a premium credit';
-            }
-            if(!!channel) {
-                messageUtils.sendCleanSuccess({
-                    target: channel, 
-                    valString: publicString,
-                    client: null
-                }).then();
-            }
-            if(!!user) {
-                messageUtils.sendCleanSuccess({
-                    target: user, 
-                    valString: privateString,
-                    client: null
-                }).then();
-            }
-        `);
+        const channel = client.channels.get(process.env.VOTES_LOG);
+        const user = client.users.get(userId);
+        let userString;
+        let publicString;
+        let privateString;
+        if(user) userString = `\`${user.tag}\``;
+        else userString = `\`${userId}\``;
+        if(receiveCredit) {
+            publicString = `${userString} just voted for Ticketer and received a premium credit with key \`${key}\``;
+            privateString = `You have had one premium credit: \`${key}\` added to your account! Use the \`redeem\` command to get started! Thank you for voting for Ticketer!`;
+        }
+        else {
+            publicString =  `${userString} just voted for Ticketer and has **${curVotes} vote(s)**`;
+            privateString = `Thank you for voting for Ticketer! You currently have **${curVotes} vote(s)**. You need **${neededVotes - curVotes} vote(s)** to get a premium credit`;
+        }
+        if(!!channel) {
+            await messageUtils.sendCleanSuccess({
+                target: channel,
+                valString: publicString,
+                client: null
+            });
+        }
+        if(!!user) {
+            await messageUtils.sendCleanSuccess({
+                target: user,
+                valString: privateString,
+                client: null
+            });
+        }
     }
 };
