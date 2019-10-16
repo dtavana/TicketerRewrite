@@ -87,3 +87,5 @@ tickets/
 core
 
 .idea/
+
+config.json
