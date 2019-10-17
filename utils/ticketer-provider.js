@@ -151,7 +151,6 @@ class TicketerProvider extends SettingProvider {
         // Load the command prefix
         if(typeof settings.prefix !== 'undefined') {
             if(guild) guild._commandPrefix = settings.prefix;
-            else this.client._commandPrefix = settings.prefix;
         }
 
         //Set ticket channel cleanup
