@@ -14,7 +14,6 @@ const bodyParser = require('body-parser');
 const votesController = require('./controllers/votes.controller');
 const donateController = require('./controllers/donate.controller');
 
-
 const client = new CommandoClient({
     commandPrefix: process.env.DEFAULT_PREFIX,
     owner: process.env.OWNERS,
