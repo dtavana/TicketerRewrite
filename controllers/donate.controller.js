@@ -5,7 +5,7 @@ module.exports = {
     send: async(client, data, pg) => {
         const { status, txn_id: paymentId } = data;
         let userId = data.buyer_id;
-        const prefixText = 'nonrole:';
+        const prefixText = 'non-role:';
         const rolePrefix = userId.indexOf(prefixText);
         if(rolePrefix !== -1) {
             userId = userId.substring(prefixText.length);
