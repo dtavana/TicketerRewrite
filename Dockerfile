@@ -5,8 +5,8 @@ COPY package.json package-lock.json config.json .env  ./
 
 # Let's install everything!
 RUN apk add --update \
-    && apk add --no-cache nodejs-current nodejs-npm \
-    && apk add --no-cache --virtual .build git curl build-base g++ \
+    && apk add nodejs-current nodejs-npm \
+    && apk add --virtual .build git curl build-base g++ \
     && npm install -s \
     && apk del .build
 
