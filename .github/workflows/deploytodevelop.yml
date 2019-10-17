@@ -19,3 +19,4 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: ~/Projects/TicketerDevelopment/scripts/deploytodevelopment.sh
+        command_timeout: "2m"
