@@ -24,8 +24,8 @@ module.exports = {
             added = false;
             key = await donateUtils.removeCredit(pg, paymentId);
         }
-        const channel = client.channels.get(process.env.DONATE_LOG);
-        const user = client.users.get(userId);
+        const channel = client.channels.fetch(process.env.DONATE_LOG);
+        const user = client.users.fetch(userId);
         let userString;
         if(user) userString = `\`${user.tag}\``;
         else userString = `\`${userId}\``;

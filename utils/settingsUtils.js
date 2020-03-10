@@ -82,19 +82,18 @@ module.exports = {
         }
         else {
             ticketchannelname = ticketchannel.name;
-            ticketchannelid = ticketchannel.id
+            ticketchannelid = ticketchannel.id;
             try {
-                await ticketchannel.overwritePermissions(client.user, {
-                    'SEND_MESSAGES': true,
-                    'VIEW_CHANNEL': true,
-                    'USE_EXTERNAL_EMOJIS': true
-        
-                },
-                "Ticketer Setup"
-                );
+                await ticketchannel.overwritePermissions([
+                    {
+                        id: client.user.id,
+                        allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'USE_EXTERNAL_EMOJIS']
+                    }
+                ])
                 await ticketchannel.setRateLimitPerUser(15);
             }
-            catch {
+            catch(e) {
+                console.log(e);
                 return `I do not have permissions to setup ${ticketchannel.toString()}. I need the **Manage Channels** permission in order to proceed.`
             }
         

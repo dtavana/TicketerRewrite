@@ -68,13 +68,13 @@ module.exports = {
         if(!adminRole || !moderatorRole) {
             return  `The guild administrators have not setup the Ticketer Admin roles. If you are an administrator, please run the \`${guild.commandPrefix}setuproles\` command.`;
         }
-        adminRole = await guild.roles.get(adminRole);
-        moderatorRole = await guild.roles.get(moderatorRole);
+        adminRole = await guild.roles.fetch(adminRole);
+        moderatorRole = await guild.roles.fetch(moderatorRole);
         if(!adminRole || !moderatorRole) {
             return  `The Ticketer Admin roles can not be found. If you are an administrator, please run the \`${guild.commandPrefix}setuproles\` command to reset the roles.`;
         }
         let categoryid = targetchannel.categoryid;
-        category = await guild.channels.get(categoryid);
+        category = await guild.channels.resolve(categoryid);
         if(!category) {
             return `The Ticketer Category for ${context.toString()} could not be found. If you are an administrator, please run the ${guild.commandPrefix}setupchannel command to reset the ticket channel.`;
         }
@@ -138,13 +138,13 @@ module.exports = {
         await client.provider.set(guild, 'currentTicket', currentTicket + 1);
         let adminRole = await client.provider.get(guild, 'adminRole', null);
         let moderatorRole = await client.provider.get(guild, 'moderatorRole', null);
-        adminRole = await guild.roles.get(adminRole);
-        moderatorRole = await guild.roles.get(moderatorRole);
+        adminRole = await guild.roles.fetch(adminRole);
+        moderatorRole = await guild.roles.fetch(moderatorRole);
         if(!adminRole || !moderatorRole) {
             return `I could not open a welcome ticket for \`${user.tag}\` because you have not setup the Ticketer Roles. Please run \`${guild.commandPrefix}setuproles\` command.`;
         }
         let category = await client.provider.get(guild.id, 'ticketOnJoinCategory', null);
-        category = await guild.channels.get(category);
+        category = await guild.channels.resolve(category);
         let createdChannel = await guild.channels.create(
             `${user.username}-jointicket`,
             {
@@ -174,8 +174,8 @@ module.exports = {
 
         let adminClose = await client.provider.get(guild, 'adminClose', null);
 
-        if(member && !member.roles.has(adminRole) && adminClose) {
-            let aRole = await guild.roles.get(adminRole);
+        if(member && !member.roles.cache.has(adminRole) && adminClose) {
+            let aRole = await guild.roles.fetch(adminRole);
             if(!aRole) {
                 aRole = '**NOT FOUND**';
             }
@@ -227,7 +227,7 @@ module.exports = {
             handledTickets = parseInt(handledTickets);
         }
 
-        if(member.roles.has(adminRole) || member.roles.has(moderatorRole)) {
+        if(member.roles.cache.has(adminRole) || member.roles.cache.has(moderatorRole)) {
             let ticketTracking = await client.provider.get(guild, 'ticketTracking', null);
             if(!ticketTracking) {
                 ticketTracking = {};
@@ -252,7 +252,7 @@ module.exports = {
 
         let currentUserOpenTickets = await client.provider.get(`${guild.id}-channels`, author, null);
 
-        author = await client.users.get(author);
+        author = await client.users.fetch(author);
         let authorObject = author;
         if(!author) {
             author = 'Not found';
@@ -339,7 +339,7 @@ module.exports = {
 
         let currentUserOpenTickets = await client.provider.get(`${guild.id}-channels`, author, null);
 
-        author = await client.users.get(author);
+        author = await client.users.fetch(author);
         let authorObject = author;
         if(!author) {
             author = 'Not found';

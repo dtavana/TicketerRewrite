@@ -39,7 +39,7 @@ module.exports = class ActiveCommand extends PremiumCommand {
         }
         ticketData = JSON.parse(ticketData);
         let ticketOwner = ticketData.author;
-        ticketOwner = this.client.users.get(ticketOwner);
+        ticketOwner = this.client.users.fetch(ticketOwner);
 
         await this.client.provider.pg.none('DELETE FROM inactive WHERE ticketid = $1;', channel.id);
         await messageUtils.sendSuccess({

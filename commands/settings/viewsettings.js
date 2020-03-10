@@ -32,12 +32,12 @@ module.exports = class ViewSettingsCommand extends TicketerCommand {
             let key = setting[0];
             let value = setting[1];
             if(channels.includes(key)) {
-                value = msg.guild.channels.get(value);
+                value = msg.guild.channels.resolve(value);
                 if(!value) value = '**NOT FOUND**';
                 else value = value.toString();
             }
             else if(roles.includes(key)) {
-                value = msg.guild.roles.get(value);
+                value = msg.guild.roles.fetch(value);
                 if(!value) value = '**NOT FOUND**';
                 else value = value.toString();
             }

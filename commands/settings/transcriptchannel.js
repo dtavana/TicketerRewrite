@@ -52,7 +52,7 @@ module.exports = class TranscriptChannelCommand extends PremiumCommand {
             
         }
 
-        res = await msg.guild.channels.get(res);
+        res = await msg.guild.channels.resolve(res);
         if(!res) {
             res = '`Not found`';
         }

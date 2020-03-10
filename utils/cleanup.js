@@ -13,7 +13,7 @@ module.exports = {
                 await client.provider.clear(`${serverid}-channels`);
             }
             await pg.none('DELETE FROM premium WHERE key = $1;', credit.key);
-            let user = client.users.get(userId);
+            let user = client.users.fetch(userId);
             if(!user) return;
             else {
                 await messageUtils.sendCleanSuccess({
@@ -29,10 +29,10 @@ module.exports = {
         for(let ticket of expiredChannels) {
             let channelId = ticket.ticketid;
             let guildId = ticket.serverid;
-            let channel = client.channels.get(channelId);
+            let channel = client.channels.fetch(channelId);
             await pg.none('DELETE FROM inactive WHERE ticketid = $1', channelId);
             if(!channel) continue;
-            let guild = client.guilds.get(guildId);
+            let guild = client.guilds.fetch(guildId);
             if(!guild) continue;
             let channelName = channel.name;
             let data = await ticketUtils.closeInactiveTicket(client, guild, channel);

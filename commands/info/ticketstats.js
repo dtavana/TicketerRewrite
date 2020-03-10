@@ -49,7 +49,7 @@ module.exports = class TicketStatsCommand extends TicketerCommand {
         let res = '';
 
         for (let staff of sorted) {
-            let member = msg.guild.members.get(staff[0]);
+            let member = msg.guild.members.fetch(staff[0]);
             if(!member) continue;
             let staffHasAdmin = await this.checkTicketerRole(this.client, member, msg.guild);
             if(!staffHasAdmin.state) continue;

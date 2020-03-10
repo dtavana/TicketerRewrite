@@ -36,7 +36,7 @@ module.exports = class CloseAllCommand extends TicketerCommand {
                     }
                     else {
                         for(let channelid of Object.keys(allTickets)) {
-                            let channel = await msg.guild.channels.get(channelid);
+                            let channel = await msg.guild.channels.resolve(channelid);
                             if(!channel) {
                                 return;
                             }

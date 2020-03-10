@@ -36,7 +36,7 @@ module.exports = class InactiveCommand extends PremiumCommand {
         }
         ticketData = JSON.parse(ticketData);
         let ticketOwner = ticketData.author;
-        ticketOwner = this.client.users.get(ticketOwner);
+        ticketOwner = this.client.users.fetch(ticketOwner);
 
         let adminClose = await this.client.provider.get(msg.guild.id, 'adminClose', null);
 

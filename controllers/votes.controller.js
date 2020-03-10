@@ -34,8 +34,8 @@ module.exports = {
         }
         await pg.none('UPDATE votes SET count = $1 WHERE userid = $2;', [finalVotes, userId]);
 
-        const channel = client.channels.get(process.env.VOTES_LOG);
-        const user = client.users.get(userId);
+        const channel = client.channels.fetch(process.env.VOTES_LOG);
+        const user = client.users.fetch(userId);
         let userString;
         let publicString;
         let privateString;

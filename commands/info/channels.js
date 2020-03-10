@@ -29,8 +29,8 @@ module.exports = class ChannelsCommands extends TicketerCommand {
         let resString = '';
 
         for(let channel of ticketChannels) {
-            let ticketChannel = await msg.guild.channels.get(channel.channelid);
-            let category = await msg.guild.channels.get(channel.categoryid);
+            let ticketChannel = await msg.guild.channels.resolve(channel.channelid);
+            let category = await msg.guild.channels.resolve(channel.categoryid);
 
             if(!ticketChannel) {
                 ticketChannel = `\`${channel.channelid}\` **NOT FOUND**`;

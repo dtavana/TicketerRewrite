@@ -175,7 +175,7 @@ module.exports = {
     },
     sendTicketManipulation: async(client, guild, user, target, ticket, color, text) => {
         let logChannel = await client.provider.get(guild, 'logChannel', null);
-        logChannel = await guild.channels.get(logChannel);
+        logChannel = await guild.channels.resolve(logChannel);
         if(!logChannel) return;
         const logEmbed = new Discord.MessageEmbed()
             .setTitle('Log :notepad_spiral:')
@@ -188,7 +188,7 @@ module.exports = {
     sendClosedTicket: async(client, channelName, originalAuthor, authorObject, reason, timeString, guild, closer, channelHistory, subject) => {
         let logChannel = await client.provider.get(guild, 'logChannel', null);
         let embedMessage;
-        logChannel = await guild.channels.get(logChannel);
+        logChannel = await guild.channels.resolve(logChannel);
         if(logChannel) {
            const closeEmbed = new Discord.MessageEmbed()
                 .setTitle('Log :notepad_spiral:')
@@ -213,7 +213,7 @@ module.exports = {
                 targetChannel = logChannel;
             }
             else {
-                targetChannel = guild.channels.get(transcriptChannel);
+                targetChannel = guild.channels.resolve(transcriptChannel);
             }
             let filePath = await transcripts.createTranscript(guild, channelName, channelHistory);
             if(targetChannel) {
@@ -268,7 +268,7 @@ module.exports = {
         let embedMessage = await target.send(openEmbed);
 
         let logChannel = await client.provider.get(guild, 'logChannel', null);
-        logChannel = await guild.channels.get(logChannel);
+        logChannel = await guild.channels.resolve(logChannel);
         if(!logChannel) {
             return;
         }

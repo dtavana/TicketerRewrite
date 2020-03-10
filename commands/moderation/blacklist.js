@@ -34,7 +34,7 @@ module.exports = class BlacklistCommand extends TicketerCommand {
         }
         let blacklist = await moderationUtils.getBlacklisted(this.client, target, msg.guild);
         if(blacklist) {
-            let banningAdmin = await this.client.users.get(blacklist.adminid);
+            let banningAdmin = await this.client.users.fetch(blacklist.adminid);
             if(!banningAdmin) {
                 banningAdmin = '**USER NOT FOUND**';
             }
