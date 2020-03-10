@@ -18,7 +18,7 @@ const client = new CommandoClient({
     commandPrefix: process.env.DEFAULT_PREFIX,
     owner: process.env.OWNERS,
     invite: process.env.INVITE,
-    shardCount: 'auto',
+    shards: 'auto',
 });
 
 client.setProvider(new TicketerProvider(pg, redis)).then();
