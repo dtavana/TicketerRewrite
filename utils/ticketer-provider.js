@@ -51,14 +51,14 @@ class TicketerProvider extends SettingProvider {
                 for(const guild of this.guilds) {
                     if(guild !== 'global' && !client.guilds.has(guild)) continue;
                     const settings = await this.getSettings(guild);
-                    this.setupGuildCommand(client.guilds.fetch(guild), command, settings);
+                    this.setupGuildCommand(client.guilds.resolve(guild), command, settings);
                 }
             })
             .set('groupRegister', async(group) => {
                 for(const guild of this.guilds) {
                     if(guild !== 'global' && !client.guilds.has(guild)) continue;
                     const settings = await this.getSettings(guild);
-                    this.setupGuildGroup(client.guilds.fetch(guild), group, settings);
+                    this.setupGuildGroup(client.guilds.resolve(guild), group, settings);
                 }
             });
         for(const [event, listener] of this.listeners) client.on(event, listener);
@@ -146,7 +146,7 @@ class TicketerProvider extends SettingProvider {
 	 */
     setupGuild(guild, settings) {
         if(typeof guild !== 'string') throw new TypeError('The guild must be a guild ID or "global".');
-        guild = this.client.guilds.fetch(guild) || null;
+        guild = this.client.guilds.resolve(guild) || null;
 
         // Load the command prefix
         if(typeof settings.prefix !== 'undefined') {

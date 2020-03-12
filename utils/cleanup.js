@@ -32,7 +32,7 @@ module.exports = {
             let channel = client.channels.fetch(channelId);
             await pg.none('DELETE FROM inactive WHERE ticketid = $1', channelId);
             if(!channel) continue;
-            let guild = client.guilds.fetch(guildId);
+            let guild = client.guilds.resolve(guildId);
             if(!guild) continue;
             let channelName = channel.name;
             let data = await ticketUtils.closeInactiveTicket(client, guild, channel);
