@@ -72,9 +72,9 @@ client.once('ready', async() => {
         dbl.webhook.on('vote', async(vote) => {
             await votesController.send(client, vote, pg);
         });
-        await dbl.postStats(client.guilds.size);
+        await dbl.postStats(client.guilds.cache.size);
         setInterval(async() => {
-            await dbl.postStats(client.guilds.size);
+            await dbl.postStats(client.guilds.cache.size);
         }, 900000);
     }
 });
