@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM nodejs
 # Setup Work directory.
 WORKDIR /usr/src/bot
 COPY package.json package-lock.json config.json .env  ./
@@ -7,7 +7,7 @@ COPY package.json package-lock.json config.json .env  ./
 RUN apk add --update \
     && apk add nodejs-current nodejs-npm \
     && apk add --virtual .build git curl build-base g++ \
-    && npm install -s \
+    && npm ci \
     && apk del .build
 
 # Copy project to our WORKDIR
