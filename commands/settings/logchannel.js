@@ -40,16 +40,13 @@ module.exports = class LogChannelCommand extends TicketerCommand {
         }
         else {
             res = await this.client.provider.set(msg.guild.id, 'logChannel', logChannel.id);
-            await logChannel.overwritePermissions(this.client.user, {
-                'SEND_MESSAGES': true,
-                'VIEW_CHANNEL': true,
-                'USE_EXTERNAL_EMOJIS': true
-    
-            },
-            'Ticketer Setup'
-            );
+	    await logChannel.overwritePermissions([
+		{
+		    id: this.client.user.id,
+		    allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'USE_EXTERNAL_EMOJIS'],
+		}
+	    ]);
             logChannel = logChannel.toString();
-            
         }
 
         res = await msg.guild.channels.resolve(res);

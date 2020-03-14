@@ -40,14 +40,12 @@ module.exports = class TranscriptChannelCommand extends PremiumCommand {
         }
         else {
             res = await this.client.provider.set(msg.guild.id, 'transcriptChannel', transcriptChannel.id);
-            await transcriptChannel.overwritePermissions(this.client.user, {
-                'SEND_MESSAGES': true,
-                'VIEW_CHANNEL': true,
-                'USE_EXTERNAL_EMOJIS': true
-    
-            },
-            'Ticketer Setup'
-            );
+            await transcriptChannel.overwritePermissions([
+		{
+		    id: this.client.user.id,
+		    allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'USE_EXTERNAL_EMOJIS'],
+		}
+	    ]);
             transcriptChannel = transcriptChannel.toString();
             
         }
