@@ -35,24 +35,24 @@ client.registry
         ['database', 'Database commands']
     ])
     .registerDefaultGroups()
-    .registerDefaultCommands({'prefix': false, 'unknownCommand': false})
+    .registerDefaultCommands({ 'prefix': false, 'unknownCommand': false })
     .registerCommandsIn(path.join(__dirname, 'commands'));
 
-client.once('ready', async() => {
+client.once('ready', async () => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
-    await client.user.setActivity(process.env.ACTIVITY_TEXT, {type: 'WATCHING'});
+    await client.user.setActivity(process.env.ACTIVITY_TEXT, { type: 'WATCHING' });
     await events.initEvents(client);
-    setInterval(async() => {
+    setInterval(async () => {
         await cleanup.cleanExpiredCredits(client, pg);
     }, 60000);
-    setInterval(async() => {
+    setInterval(async () => {
         await cleanup.cleanInactiveTickets(client, pg);
     }, 60000);
-    if(process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'production') {
         const app = express();
         app.use(bodyParser.json());
         app.post('/donatewebhook', (req, res) => {
-            if(req.get('authorization') === process.env.DB_AUTHENTICATION) {
+            if (req.get('authorization') === process.env.DB_AUTHENTICATION) {
                 donateController.send(client, req.body, pg).then();
             }
             else {
@@ -64,16 +64,16 @@ client.once('ready', async() => {
             console.log('Premium webhook server listening');
         });
 
-        const dbl = new DBL(process.env.DBL_TOKEN, {webhookPort: parseInt(process.env.DBL_HOOK_PORT), webhookAuth: process.env.DBL_AUTHENTICATION});
+        const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: parseInt(process.env.DBL_HOOK_PORT), webhookAuth: process.env.DBL_AUTHENTICATION });
 
         dbl.webhook.on('ready', () => {
             console.log('Vote webhook server listening');
         });
-        dbl.webhook.on('vote', async(vote) => {
+        dbl.webhook.on('vote', async (vote) => {
             await votesController.send(client, vote, pg);
         });
         await dbl.postStats(client.guilds.cache.size);
-        setInterval(async() => {
+        setInterval(async () => {
             await dbl.postStats(client.guilds.cache.size);
         }, 900000);
     }

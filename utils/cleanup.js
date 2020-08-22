@@ -3,40 +3,40 @@ const ticketUtils = require('./ticketUtils');
 const utils = require('./utils');
 
 module.exports = {
-    cleanExpiredCredits: async(client, pg) => {
+    cleanExpiredCredits: async (client, pg) => {
         let expiredCredits = await pg.any('SELECT * FROM premium WHERE expires < NOW();');
-        for(let credit of expiredCredits) {
+        for (let credit of expiredCredits) {
             let userId = credit.userid;
             let serverid = credit.serverid;
-            if(serverid) {
+            if (serverid) {
                 await client.provider.clear(serverid);
                 await client.provider.clear(`${serverid}-channels`);
             }
             await pg.none('DELETE FROM premium WHERE key = $1;', credit.key);
             let user = client.users.fetch(userId);
-            if(!user) return;
+            if (!user) return;
             else {
                 await messageUtils.sendCleanSuccess({
-                    target: user, 
+                    target: user,
                     valString: `Your vote credit with key \`${credit.key}\` has expired and premium has been removed from its server if it was enabled.`,
                 });
             }
         }
     },
 
-    cleanInactiveTickets: async(client, pg) => {
+    cleanInactiveTickets: async (client, pg) => {
         let expiredChannels = await pg.any('SELECT * FROM inactive WHERE expires < NOW();');
-        for(let ticket of expiredChannels) {
+        for (let ticket of expiredChannels) {
             let channelId = ticket.ticketid;
             let guildId = ticket.serverid;
-            let channel = client.channels.fetch(channelId);
+            let channel = await client.channels.fetch(channelId);
             await pg.none('DELETE FROM inactive WHERE ticketid = $1', channelId);
-            if(!channel) continue;
+            if (!channel) continue;
             let guild = client.guilds.resolve(guildId);
-            if(!guild) continue;
+            if (!guild) continue;
             let channelName = channel.name;
             let data = await ticketUtils.closeInactiveTicket(client, guild, channel);
-            if(!data) continue;
+            if (!data) continue;
             let createdAt = data.createdAt;
             let originalAuthor = data.originalAuthor;
             let channelHistory = data.channelHistory;
