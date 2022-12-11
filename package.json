@@ -30,7 +30,7 @@
     "discord.js": "github:discordjs/discord.js",
     "discord.js-commando": "github:discordjs/discord.js-commando",
     "dotenv": "^7.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "http": "0.0.0",
     "lodash": "^4.17.15",
     "node-fetch": "^2.3.0",
